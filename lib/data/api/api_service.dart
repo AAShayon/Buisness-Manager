@@ -20,7 +20,7 @@ class ApiService{
 
   ///Customer supplier
 
-  static const String customerOrSupplierList="";
+  static const String customerOrSupplierList="/admin/15/customer/4/transactions";
   static const String customerOrSupplierCreate="/admin/15/customer/create";
   static const String customerOrSupplierUpdate="/admin/15/customer/4/update";
   static const String customerOrSupplierDelete="/admin/2/customer/1/delete";
