@@ -64,13 +64,21 @@ class AuthViewModel extends ChangeNotifier{
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          // ScaffoldMessenger.of(context).showSnackBar(
-          // );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Center(child: Text('SuccessFully Send otp'),))
+          );
         }
       }else{
         setIsLoadingState(false);
         isOtpSend=false;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Center(child: Text('Sorry Your Number is Not Register Yet ,Please try again or sign up'),))
+          );
+        }
+
       }
 
     }catch(e){
