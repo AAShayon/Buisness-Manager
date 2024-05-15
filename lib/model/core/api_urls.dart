@@ -19,7 +19,7 @@ class ApiUrl{
   static const String branchList="/admin/branches";
   static const String branchCreate="/admin/branch/create";
   static String branchUpdate="/admin/branch/${branchId}/update";
-  static String branchDelete="/admin/branch/3/delete";
+  static String branchDelete="/admin/branch/${branchId}/delete";
 
   ///Customer supplier
 
