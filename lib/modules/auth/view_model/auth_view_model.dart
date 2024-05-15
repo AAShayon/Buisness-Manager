@@ -1,12 +1,17 @@
 
 
+import 'dart:developer';
+
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
-import 'package:buisness_manager/modules/auth/model/core/request_model/send_login_otp_request_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/request_model/login_send_otp_request_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/request_model/register_verify_otp_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_otp_response_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/response_model/register_request_response_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/response_model/register_verify_otp_response_model.dart';
 import 'package:buisness_manager/modules/auth/model/service/remote/auth_service.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuthViewModel extends ChangeNotifier{
@@ -19,6 +24,8 @@ class AuthViewModel extends ChangeNotifier{
   LogInOtpResponseModel? _logInOtpResponseModel;
   LogInResponseModel? _logInResponseModel;
   User? _user;
+  RegisterRequestResponseModel? _registerRequestResponseModel;
+  RegisterVerifyOtpResponseModel? _registerVerifyOtpResponseModel;
   /*
   * --------------------------setter----------------------------------------
   * */
@@ -39,6 +46,15 @@ class AuthViewModel extends ChangeNotifier{
     _user = user;
     notifyListeners();
   }
+
+  void setRegisterRequestResponseModel(RegisterRequestResponseModel? registerRequestResponseModel){
+    _registerRequestResponseModel = registerRequestResponseModel;
+    notifyListeners();
+  }
+  void setRegisterVerifyOtpResponseModel(RegisterVerifyOtpResponseModel? registerVerifyOtpResponseModel){
+    _registerVerifyOtpResponseModel =registerVerifyOtpResponseModel;
+    notifyListeners();
+  }
   /*
   * --------------------------getters----------------------------------------
   * */
@@ -46,9 +62,65 @@ class AuthViewModel extends ChangeNotifier{
   LogInOtpResponseModel? get logInOtpResponseModel=> _logInOtpResponseModel;
   LogInResponseModel? get logInResponseModel => _logInResponseModel;
   User? get user =>_user;
+  RegisterRequestResponseModel? get registerRequestResponseModel => _registerRequestResponseModel ;
+  RegisterVerifyOtpResponseModel? get registerVerifyOtpResponseModel => _registerVerifyOtpResponseModel;
   /*
   * --------------------------methods----------------------------------------
   * */
+
+  Future<bool> registration(RegisterRequestModel registerRequestModel)async{
+    _isLoadingState = true ;
+    bool isRegister= false;
+    _registerRequestResponseModel =null ;
+    try {
+      Response response=await _authService.register(registerRequestModel);
+      log("=======^&^&^&^&^&^&^&^&^&==>${response.statusCode}");
+      if(response.statusCode == 200){
+        _registerRequestResponseModel = RegisterRequestResponseModel.fromJson(response.data);
+        _isLoadingState= false;
+        isRegister = true ;
+        notifyListeners();
+      }
+      else {
+        _isLoadingState = false ;
+        isRegister = false ;
+        notifyListeners();
+      }
+    }
+        catch(e){
+          _isLoadingState = false ;
+          isRegister = false ;
+          notifyListeners();
+        }
+        return isRegister;
+  }
+  Future<bool> registrationVerifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel)async{
+    _isLoadingState = false ;
+    bool isRegister= false;
+    _registerVerifyOtpResponseModel = null ;
+    try{
+      Response response = await _authService.verifyOtp(verifyOtpRegisterRequestModel);
+      log("=============>${response.statusCode}");
+      if(response.statusCode == 200){
+        _registerVerifyOtpResponseModel = RegisterVerifyOtpResponseModel.fromJson(response.data);
+        _isLoadingState =false;
+        isRegister =true ;
+        notifyListeners();
+      }
+      else{
+        _isLoadingState = false ;
+        isRegister = false;
+        notifyListeners();
+      }
+    }
+        catch(e){
+          _isLoadingState = false ;
+          isRegister = false;
+          notifyListeners();
+        }
+        return isRegister;
+  }
+
   Future<bool> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel,BuildContext context)async{
     setIsLoadingState(true);
     bool isOtpSend=false;
@@ -116,4 +188,41 @@ class AuthViewModel extends ChangeNotifier{
     }
     return isLogIn;
   }
+
+  Future<void> logOut(BuildContext context) async {
+    try {
+      setIsLoadingState(true);
+      Response response = await _authService.logOut();
+      setIsLoadingState(false);
+
+      if (response.statusCode == 200) {
+        setUser(null);
+        if (context != null && context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Center(child: Text('Logged out successfully'))),
+          );
+        }
+        // Navigate to the login page or any other appropriate screen after logout
+      } else {
+        if (context != null && context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Center(child: Text('Failed to logout. Please try again later'))),
+          );
+        }
+      }
+    } catch (e) {
+      setIsLoadingState(false);
+      if (context != null && context.mounted) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Center(child: Text('Failed to logout. Please try again later'))),
+        );
+      }
+    }
+  }
+
+
+
 }
