@@ -11,7 +11,7 @@ class RoundedCircularButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.grey.withOpacity(.5),
+        backgroundColor: Colors.greenAccent.withOpacity(.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
