@@ -1,4 +1,4 @@
-import 'package:buisness_manager/modules/auth/model/core/request_model/send_login_otp_request_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/request_model/login_send_otp_request_model.dart';
 import 'package:buisness_manager/modules/auth/view/registration.dart';
 import 'package:buisness_manager/modules/auth/view_model/auth_view_model.dart';
 import 'package:buisness_manager/view/otp_sending.dart';
@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
             SizedBox(
               height: 25.h,
             ),
-            authViewModel.isLoadingState?CircularProgressIndicator(
+            authViewModel.isLoadingState?const CircularProgressIndicator(
               color: Colors.amber,
             ):RoundedCircularButton(
                 text: 'Next',
@@ -69,7 +69,7 @@ class _LoginState extends State<Login> {
                       // log("====>${ApiUrl.branchUpdate}");
                       await authViewModel.sendOtpForLogin(SendOtpRequestForLoginModel(identifier: phoneNumber),context).then((value){
                         if(value==true){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  OtpScreen(identifier: phoneNumber,)));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  OtpScreen(identifier: phoneNumber, isLoginPage:true,)));
                         }
                       });
                     }
