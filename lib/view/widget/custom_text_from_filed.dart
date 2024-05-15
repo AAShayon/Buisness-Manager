@@ -38,7 +38,7 @@ class CustomTextFormField extends StatelessWidget {
                 10,
               ),
             ),
-            border: Border.all(color: Colors.white)
+            border: Border.all(color: Colors.black)
           ),
           child: TextFormField(
             controller: controller,
@@ -54,12 +54,7 @@ class CustomTextFormField extends StatelessWidget {
               border: const OutlineInputBorder(borderSide: BorderSide.none),
               hintStyle: const TextStyle(
                 fontSize: 10,
-                color: Color.fromRGBO(
-                  131,
-                  143,
-                  160,
-                  100,
-                ),
+                color: Colors.black,
               ),
               hintText: hintText,
             ),
