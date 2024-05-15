@@ -1,11 +1,14 @@
-class ApiService{
+class ApiUrl{
+
+  static String branchId='';
+
   static const String baseUrl="https://skill-test.retinasoft.com.bd/api/v1";
 
   ///Auth
   static const String registration="/sign-up/store";
   static const String signUpVerifyOtp="/sign-up/verify-otp-code";
-  static const String login="";
-  static const String loginVerifyOtp="/send-login-otp";
+  static const String login="/login";
+  static const String sendLoginOtp="/send-login-otp";
   static const String logout="/logout";
 
   ///business
@@ -15,8 +18,8 @@ class ApiService{
   ///branch
   static const String branchList="/admin/branches";
   static const String branchCreate="/admin/branch/create";
-  // static const String branchUpdate="/admin/branch/16/update";
-  // static const String branchDelete="/admin/branch/3/delete";
+  static String branchUpdate="/admin/branch/${branchId}/update";
+  static String branchDelete="/admin/branch/3/delete";
 
   ///Customer supplier
 
