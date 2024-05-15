@@ -7,9 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'widget/text_size.dart';
 
 class OtpScreen extends StatefulWidget {
-  final String identifier;
+  final dynamic identifier;
+  final bool isLoginPage;
 
-  const OtpScreen({super.key, required this.identifier});
+  const OtpScreen({super.key, required this.identifier, required this.isLoginPage});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -23,7 +24,7 @@ class _OtpScreenState extends State<OtpScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => OtpReceive(identifier: widget.identifier),
+          builder: (context) => OtpReceive(identifier: widget.identifier, isLoginPage: widget.isLoginPage,),
         ),
       );
     });
@@ -48,7 +49,7 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           ),
           HeadLineSmallText(
-            text: widget.identifier,
+            text: widget.identifier.toString(),
             color: Colors.white,
           ),
           Padding(
