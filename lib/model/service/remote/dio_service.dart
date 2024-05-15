@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class DioService{
   static final DioService _singleton=DioService._internal();
@@ -48,7 +49,9 @@ class DioService{
       log("${response.statusCode}");
       return response;
     }
-    catch (e){print(e);}
+    catch (e){if (kDebugMode) {
+      print(e);
+    }}
     return null;
   }
   Future<Response?> get(String path,{Map<String,dynamic>? data}) async {
