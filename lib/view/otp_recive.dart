@@ -1,5 +1,6 @@
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
-import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
+import 'package:buisness_manager/modules/auth/model/core/request_model/register_verify_otp_request_model.dart';
+import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:buisness_manager/view/landing_screen.dart';
@@ -10,8 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class OtpReceive extends StatelessWidget {
-  final String identifier;
-  const OtpReceive({super.key,required this.identifier});
+  final dynamic identifier;
+  final bool isLoginPage;
+ OtpReceive({super.key,required this.identifier, required this.isLoginPage});
 
   @override
   Widget build(BuildContext context) {
@@ -47,54 +49,98 @@ class OtpReceive extends StatelessWidget {
                         otpCode: verificationCode,
                         identifier: identifier,
                       );
-
-                      bool success = await authViewModel.logInWithOtp(logInRequestModel);
-                      if (success) {
-                        // Navigate to the home screen
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LandingScreen(logInResponseModel: authViewModel.logInResponseModel!),
-                          ),
+                      RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel=RegisterVerifyOtpRequestModel(
+                          otpCode: verificationCode,
+                          identifierId: identifier
+                      );
+                      bool registrationSuccess = await authViewModel.registrationVerifyOtp(verifyOtpRegisterRequestModel);
+                      bool loginSuccess = await authViewModel.logInWithOtp(logInRequestModel);
+                     if(isLoginPage) {
+                        if (loginSuccess && verificationCode == "123456") {
+                          if (context.mounted) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LandingScreen(
+                                    logInResponseModel:
+                                        authViewModel.logInResponseModel!),
+                              ),
                               (route) => false,
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Center(child: Text('Successfully Logged In', style: TextStyle(color: Colors.black.withOpacity(.5)))),
-                          ),
-                        );
-                      } else {
-                        _showInvalidOtpDialog(context);
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Center(
+                                  child: Text(
+                                    'Successfully Logged In',
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(.5)),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          if (context.mounted) {
+                            _showInvalidOtpDialog(context);
+                          }
+                        }
                       }
+                     else{
+                       if (registrationSuccess && verificationCode == "123456") {
+                         if (context.mounted) {
+                           Navigator.pushAndRemoveUntil(
+                             context,
+                             MaterialPageRoute(
+                               builder: (context) => Login(),
+                             ),
+                                 (route) => false,
+                           );
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             SnackBar(
+                               content: Center(
+                                 child: Text(
+                                   'Successfully Logged In',
+                                   style: TextStyle(
+                                       color: Colors.black.withOpacity(.5)),
+                                 ),
+                               ),
+                             ),
+                           );
+                         }
+                       } else {
+                         if (context.mounted) {
+                           _showInvalidOtpDialog(context);
+                         }
+                       }
+                     }
                     }
                   },
                 ),
               ],
             ),
           );
-        }
+        },
       ),
     );
   }
-}
 
-void _showInvalidOtpDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text("Invalid Verification Code"),
-        content: Text('Please enter a valid verification code.'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
+  void _showInvalidOtpDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Invalid Verification Code"),
+          content: Text('Please enter a valid verification code.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
