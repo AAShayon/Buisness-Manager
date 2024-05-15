@@ -1,9 +1,9 @@
-import 'package:buisness_manager/view/screens/home/home.dart';
+import 'package:buisness_manager/view/landing_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:buisness_manager/view/screens/widgets/custom_circular_button.dart';
-import 'package:buisness_manager/view/screens/widgets/custom_container.dart';
-import 'package:buisness_manager/view/screens/widgets/custom_text_from_filed.dart';
-import 'package:buisness_manager/view/screens/widgets/text_size.dart';
+import 'package:buisness_manager/view/widget/custom_circular_button.dart';
+import 'package:buisness_manager/view/widget/custom_container.dart';
+import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
+import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -164,7 +164,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => LandingScreen()),
                           (route) => false,
                     );
                   }
