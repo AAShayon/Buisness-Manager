@@ -6,8 +6,8 @@ LogInRequestModel logInRequestModelFromJson(String str) => LogInRequestModel.fro
 String logInRequestModelToJson(LogInRequestModel data) => json.encode(data.toJson());
 class LogInRequestModel {
   LogInRequestModel({
-      String? otpCode, 
-      String? identifier,}){
+      dynamic otpCode, 
+      dynamic identifier,}){
     _otpCode = otpCode;
     _identifier = identifier;
 }
@@ -16,15 +16,15 @@ class LogInRequestModel {
     _otpCode = json['otp_code'];
     _identifier = json['identifier'];
   }
-  String? _otpCode;
-  String? _identifier;
-LogInRequestModel copyWith({  String? otpCode,
-  String? identifier,
+  dynamic _otpCode;
+  dynamic _identifier;
+LogInRequestModel copyWith({  dynamic otpCode,
+  dynamic identifier,
 }) => LogInRequestModel(  otpCode: otpCode ?? _otpCode,
   identifier: identifier ?? _identifier,
 );
-  String? get otpCode => _otpCode;
-  String? get identifier => _identifier;
+  dynamic get otpCode => _otpCode;
+  dynamic get identifier => _identifier;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
