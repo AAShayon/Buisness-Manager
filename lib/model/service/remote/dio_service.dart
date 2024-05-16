@@ -22,6 +22,9 @@ class DioService{
       };
       if(bearerToken != null){
         headers['Authorization']='Bearer $bearerToken';
+        if (kDebugMode) {
+          print("Bearer token: $bearerToken");
+        }
       }
       final options=BaseOptions(
           baseUrl: ApiUrl.baseUrl,
@@ -39,7 +42,9 @@ class DioService{
       _dio.options=options;
 
     }catch(e){
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
   Future<Response?> post(String path , {Map? data})async{
