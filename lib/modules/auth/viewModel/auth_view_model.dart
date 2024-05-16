@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/login_send_otp_request_model.dart';
@@ -172,6 +173,8 @@ class AuthViewModel extends ChangeNotifier{
       if(response.statusCode==200){
         _logInResponseModel=LogInResponseModel.fromJson(response.data);
         _user = _logInResponseModel!.user;
+        String? token = _user?.apiToken;
+        DioService().setup(bearerToken: token);
         _isLoadingState=false;
         isLogIn=true;
         notifyListeners();
