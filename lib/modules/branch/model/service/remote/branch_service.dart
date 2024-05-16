@@ -2,11 +2,10 @@
 import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_create_request_model.dart';
-import 'package:buisness_manager/modules/branch/model/core/response_model/branch_list_response_model.dart';
 import 'package:dio/dio.dart';
 
 abstract class BranchService{
-  Future<Response> branchList(BranchListResponseModel branchListResponseModel);
+  Future<Response> branchList();
   Future<Response> branchCreate(BranchCreateRequestModel branchCreateRequestModel);
 }
 
@@ -25,9 +24,10 @@ BranchRemoteDataSource._internal();
   }
 
   @override
-  Future<Response> branchList(BranchListResponseModel branchListResponseModel) {
-    // TODO: implement branchList
-    throw UnimplementedError();
+  Future<Response> branchList() async {
+  Response? response=await _dioService.get(ApiUrl.branchList);
+  return response!;
   }
+
 
 }
