@@ -1,9 +1,9 @@
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
-import 'package:buisness_manager/modules/auth/view_model/auth_view_model.dart';
+import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/view/otp_sending.dart';
 import 'package:flutter/material.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
-import 'package:buisness_manager/view/widget/custom_container.dart';
+import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -173,16 +173,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(height: 15.h),
                     authViewModel.isLoadingState?const CircularProgressIndicator(
                       color: Colors.amber,
-                    ):RoundedCircularButton(
+                    ):CustomCircularButton(
                       text: 'Next',
                       onPressed: () async {
 
                         if (_formKey.currentState!.validate()) {
-                          // Navigator.pushAndRemoveUntil(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => OtpScreen(identifier: registerRequestResponseModel.identifierId)),
-                          //       (route) => false,
-                          // );
                           final registerRequestModel=RegisterRequestModel(
                             phone: phoneNumberController.text,
                             email: emailController.text,
