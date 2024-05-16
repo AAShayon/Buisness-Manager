@@ -3,10 +3,10 @@ import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/view/branch_list.dart';
 import 'package:buisness_manager/modules/branch/view/widgets/branch_create.dart';
+import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,10 +27,18 @@ class _LandingScreenState extends State<LandingScreen> {
   void initState(){
     super.initState();
     user = widget.logInResponseModel!.user;
+    _loadData();
+  }
+  Future<void> _loadData() async {
+    final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
+    await branchViewModel.branchListFetch();
+    setState(() {}); // Trigger UI update after data fetch
   }
 
   @override
   Widget build(BuildContext context) {
+    final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
+    final branches = branchViewModel.branches?.branches;
     return Consumer<AuthViewModel>(builder: (context, authViewModel, child) {
       return CustomContainer(
         appBar: AppBar(
@@ -92,7 +100,18 @@ class _LandingScreenState extends State<LandingScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  BranchListGridView(user: user!, length: 2,),
+                  const BranchListGridView(),
+                  ///-----
+                  // CustomCircularButton(
+                  //     text: 'BranchList',
+                  //     onPressed: () async {
+                  //       await branchViewModel.branchListFetch();
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(builder: (context) => MyBranchList() )
+                  //       );
+                  //     }
+                  // )
                 ] else
                   const Text('No user data available', style: TextStyle(fontSize: 20)),
               ],
