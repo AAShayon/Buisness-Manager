@@ -35,9 +35,9 @@ class ApiUrl{
  static const String transactionDelete="/admin/2/customer/transaction/1/delete";
 
  ///User Profile
-static const String profile="/admin/profile";
-static const String profileUpdate="/admin/profile/update";
-static const String accountDelete="/admin/account-delete";
+static const String userProfile="/admin/profile";
+static const String userProfileUpdate="/admin/profile/update";
+static const String userAccountDelete="/admin/account-delete";
 
 
 
