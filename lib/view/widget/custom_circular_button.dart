@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class RoundedCircularButton extends StatelessWidget {
+class CustomCircularButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const RoundedCircularButton({super.key, required this.text, required this.onPressed});
+  const CustomCircularButton({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
