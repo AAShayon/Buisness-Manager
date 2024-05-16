@@ -1,10 +1,10 @@
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_verify_otp_request_model.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
-import 'package:buisness_manager/modules/auth/view_model/auth_view_model.dart';
+import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:buisness_manager/view/landing_screen.dart';
-import 'package:buisness_manager/view/widget/custom_container.dart';
+import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
