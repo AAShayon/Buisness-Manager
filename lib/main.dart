@@ -1,6 +1,7 @@
+import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
-import 'package:buisness_manager/modules/auth/view_model/auth_view_model.dart';
-import 'package:buisness_manager/view/widget/custom_container.dart';
+import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
+import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context)=>AuthViewModel()),
+          ChangeNotifierProvider(create: (context)=>UserProfileViewModel()),
+          ChangeNotifierProvider(create: (context)=>BranchViewModel()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
