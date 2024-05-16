@@ -34,8 +34,8 @@ class AuthRemoteDataSource extends AuthService{
     return response!;
   }
   @override
-  Future<Response> sendOtpForLogin(SendOtpRequestForLoginModel sendLoginOtpRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl.sendLoginOtp,data: sendLoginOtpRequestModel.toJson());
+  Future<Response> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel) async{
+    Response? response= await _dioService.post(ApiUrl.sendLoginOtp,data: sendOtpRequestForLoginModel.toJson());
     return response!;
   }
 
