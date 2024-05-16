@@ -1,9 +1,9 @@
 import 'package:buisness_manager/modules/auth/model/core/request_model/login_send_otp_request_model.dart';
 import 'package:buisness_manager/modules/auth/view/registration.dart';
-import 'package:buisness_manager/modules/auth/view_model/auth_view_model.dart';
+import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/view/otp_sending.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
-import 'package:buisness_manager/view/widget/custom_container.dart';
+import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
             ),
             authViewModel.isLoadingState?const CircularProgressIndicator(
               color: Colors.amber,
-            ):RoundedCircularButton(
+            ):CustomCircularButton(
                 text: 'Next',
                 onPressed: () async{
                   if(!authViewModel.isLoadingState){
@@ -96,7 +96,7 @@ class _LoginState extends State<Login> {
             SizedBox(
               height: 25.h,
             ),
-            RoundedCircularButton(
+            CustomCircularButton(
                 text: 'Signup',
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationPage()));
