@@ -6,15 +6,21 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final String hintText;
   final IconData prefixIcon;
-  final TextInputType textInputTypeKeyboard;
-  final TextEditingController controller;
+  final TextInputType? textInputTypeKeyboard;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final bool readOnly;  // Add a readOnly flag
 
-  const CustomTextFormField(
-      {super.key,
-        this.obscureText = false,
-        required this.hintText,
-        required this.prefixIcon, required this.textInputTypeKeyboard, required this.controller, this.validator});
+  const CustomTextFormField({
+    super.key,
+    this.obscureText = false,
+    required this.hintText,
+    required this.prefixIcon,
+    this.textInputTypeKeyboard,
+    this.controller,
+    this.validator,
+    this.readOnly = false,  // Initialize readOnly
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +38,17 @@ class CustomTextFormField extends StatelessWidget {
       ),
       child: Center(
         child: Container(
-          decoration:  BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                10,
-              ),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10),
             ),
-            border: Border.all(color: Colors.black)
+            border: Border.all(color: Colors.black),
           ),
           child: TextFormField(
             controller: controller,
             keyboardType: textInputTypeKeyboard,
             validator: validator,
             decoration: InputDecoration(
-
-
               prefixIcon: Icon(
                 prefixIcon,
                 color: Colors.blue,
@@ -59,6 +61,7 @@ class CustomTextFormField extends StatelessWidget {
               hintText: hintText,
             ),
             obscureText: obscureText,
+            readOnly: readOnly,  // Set the readOnly property
           ),
         ),
       ),
