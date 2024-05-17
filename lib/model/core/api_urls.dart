@@ -1,6 +1,8 @@
 class ApiUrl{
 
-  static String branchId='';
+  static const String branchId='';
+  static const String customerOrSupplierID= '';
+  static const String customerOrSuppliertype= '';
 
   static const String baseUrl="https://skill-test.retinasoft.com.bd/api/v1";
 
@@ -22,17 +24,20 @@ class ApiUrl{
   static String branchDelete="/admin/branch/${branchId}/delete";
 
   ///Customer supplier
+  ///0 form Customer and 1 for supplier
 
-  static const String customerOrSupplierList="/admin/15/customer/4/transactions";
-  static const String customerOrSupplierCreate="/admin/15/customer/create";
-  static const String customerOrSupplierUpdate="/admin/15/customer/4/update";
-  static const String customerOrSupplierDelete="/admin/2/customer/1/delete";
+  static const String customerList="{{BASE_URL}}/admin/${branchId}/0/customers";
+  static const String supplierList="{{BASE_URL}}/admin/${branchId}/1/customers";
+  static const String customerOrSupplierCreate="/admin/${branchId}/customer/create";
+  static const String customerUpdate="/admin/${branchId}/customer/${customerOrSupplierID}/update";
+  static const String customerOrSupplierDelete="/admin/${branchId}/customer/${customerOrSupplierID}/delete";
 
   ///Transaction
- static const String transactionList="/admin/15/customer/4/transactions";
- static const String transactionCreate="/admin/15/customer/transaction/create";
- static const String transactionUpdate="/admin/15/customer/transaction/3/update";
- static const String transactionDelete="/admin/2/customer/transaction/1/delete";
+ static const String transactionList="/admin/${branchId}/customer/${customerOrSupplierID}/transactions";
+ static const String transactionCreate="/admin/${branchId}/customer/transaction/create";
+ static const String transactionUpdate="/admin/${branchId}/customer/transaction/${customerOrSupplierID}/update";
+///pronlem in transection delete
+ // static const String transactionDelete="/admin/2/customer/transaction/1/delete";
 
  ///User Profile
 static const String userProfile="/admin/profile";
