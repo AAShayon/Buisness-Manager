@@ -62,8 +62,10 @@ class OtpReceive extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LandingScreen(
-                                    logInResponseModel:
-                                        authViewModel.logInResponseModel!),
+                                    // logInResponseModel:
+                                    //     authViewModel.logInResponseModel!
+
+                                ),
                               ),
                               (route) => false,
                             );

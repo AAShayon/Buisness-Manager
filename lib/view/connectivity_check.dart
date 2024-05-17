@@ -1,9 +1,6 @@
 import 'dart:async';
-
-import 'package:buisness_manager/modules/transaction/view/widget/transaction_list.dart';
 import 'package:buisness_manager/view/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:connectivity/connectivity.dart';
 
 class CheckConnectivity extends StatefulWidget {
@@ -65,7 +62,7 @@ class _CheckConnectivityState extends State<CheckConnectivity> {
     return Scaffold(
       body: Center(
         child: _isLoading
-            ? Column(
+            ? const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
