@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_data_response_model.dart';
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_card.dart';
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_update_form.dart';
 import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
+import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
@@ -10,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatelessWidget {
-  const UserProfile({super.key});
+  const UserProfile({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class UserProfile extends StatelessWidget {
                   SizedBox(height: 25.h),
                   CircleAvatar(
                     radius: 50.r,
-                    backgroundImage: const NetworkImage( 'https://via.placeholder.com/150'),
+                    backgroundImage: const NetworkImage('https://via.placeholder.com/150'),
                   ),
                   SizedBox(height: 15.h),
                   HeadlineLargeText(text: user.name, color: Colors.lightBlueAccent),
@@ -47,10 +50,24 @@ class UserProfile extends StatelessWidget {
                         },
                       ),
                       SizedBox(width: 20.w),
-                      CustomCircularButton(
+                      userProfileViewModel.isLoadingState
+                          ? CircularProgressIndicator(color: Colors.amber)
+                          : CustomCircularButton(
                         text: 'Delete',
-                        onPressed: () {
-                          // Add delete functionality here
+                        onPressed: () async {
+                          bool? deleteConfirmed = await _confirmDelete(context);
+                          if (deleteConfirmed ?? false) {
+                            log("Starting deletion process...");
+                            bool isDeleted = await userProfileViewModel.deleteUserProfile(context);
+                            log("Deletion process completed. IsDeleted: $isDeleted");
+                            if (isDeleted) {
+                              // Navigate to the login page after successful deletion
+                              log("Navigating to login page after successful deletion...");
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                            } else {
+                              log("Deletion failed. Please check logs for more details.");
+                            }
+                          }
                         },
                       ),
                     ],
@@ -64,6 +81,31 @@ class UserProfile extends StatelessWidget {
       },
     );
   }
+
+  Future<bool?> _confirmDelete(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete your profile from this app?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
-
-
