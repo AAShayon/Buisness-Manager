@@ -200,15 +200,15 @@ class AuthViewModel extends ChangeNotifier{
 
       if (response.statusCode == 200) {
         setUser(null);
-        if (context != null && context.mounted) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Center(child: Text('Logged out successfully'))),
           );
         }
-        // Navigate to the login page or any other appropriate screen after logout
+
       } else {
-        if (context != null && context.mounted) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Center(child: Text('Failed to logout. Please try again later'))),
@@ -217,7 +217,7 @@ class AuthViewModel extends ChangeNotifier{
       }
     } catch (e) {
       setIsLoadingState(false);
-      if (context != null && context.mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Center(child: Text('Failed to logout. Please try again later'))),
