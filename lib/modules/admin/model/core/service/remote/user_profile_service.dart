@@ -1,12 +1,12 @@
 import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
-import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_response.dart';
+import 'package:buisness_manager/modules/admin/model/core/request_model/user_profile_update_request_model.dart';
 import 'package:dio/dio.dart';
 
 abstract class UserProfileService{
   
   Future<Response> userProfile();
-  
+  Future<Response> userProfileUpdate(UserProfileUpdateRequestModel userProfileUpdateRequestModel);
   
 }
 
@@ -22,6 +22,12 @@ class UserProfileDataSource extends UserProfileService{
   Future<Response> userProfile() async {
    Response? response= await  _dioService.get(ApiUrl.userProfile);
     return response!;
+  }
+
+  @override
+  Future<Response> userProfileUpdate(UserProfileUpdateRequestModel userProfileUpdateRequestModel) async{
+   Response? response = await _dioService.post(ApiUrl.userProfileUpdate,data: userProfileUpdateRequestModel.toJson());
+   return response!;
   }
 
 
