@@ -7,6 +7,7 @@ abstract class UserProfileService{
   
   Future<Response> userProfile();
   Future<Response> userProfileUpdate(UserProfileUpdateRequestModel userProfileUpdateRequestModel);
+  Future<Response> userDeleteProfile();
   
 }
 
@@ -27,6 +28,12 @@ class UserProfileDataSource extends UserProfileService{
   @override
   Future<Response> userProfileUpdate(UserProfileUpdateRequestModel userProfileUpdateRequestModel) async{
    Response? response = await _dioService.post(ApiUrl.userProfileUpdate,data: userProfileUpdateRequestModel.toJson());
+   return response!;
+  }
+
+  @override
+  Future<Response> userDeleteProfile() async {
+   Response? response=await _dioService.delete(ApiUrl.userAccountDelete);
    return response!;
   }
 
