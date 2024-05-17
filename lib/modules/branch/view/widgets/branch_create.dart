@@ -50,7 +50,10 @@ class BranchCreate extends StatelessWidget {
                 );
                 branchViewModel.createBranch(branchCreateRequestModel).then((isCreate) {
                   if(isCreate){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingScreen(logInResponseModel: authViewModel.logInResponseModel!,)));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingScreen(
+                      // logInResponseModel: authViewModel.logInResponseModel!,
+
+                    )));
                   }
                   else{
                     ScaffoldMessenger.of(context).showSnackBar(

@@ -45,7 +45,10 @@ class BranchUpdate extends StatelessWidget {
                   branchViewModel.isLoadingState?const CircularProgressIndicator(color: Colors.amber,):
                   CustomCircularButton(text: 'Create', onPressed: (){
                     if(_branchUpdateFormKey.currentState!.validate()){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingScreen(logInResponseModel: authViewModel.logInResponseModel!,)));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingScreen(
+                        // logInResponseModel: authViewModel.logInResponseModel!,
+
+                      )));
                     }
                     else{
                       ScaffoldMessenger.of(context).showSnackBar(
