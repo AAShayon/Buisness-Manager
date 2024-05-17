@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? textInputTypeKeyboard;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final VoidCallback? onTap;
   final bool readOnly;  // Add a readOnly flag
 
   const CustomTextFormField({
@@ -19,7 +20,7 @@ class CustomTextFormField extends StatelessWidget {
     this.textInputTypeKeyboard,
     this.controller,
     this.validator,
-    this.readOnly = false,  // Initialize readOnly
+    this.readOnly = false, this.onTap,  // Initialize readOnly
   });
 
   @override
