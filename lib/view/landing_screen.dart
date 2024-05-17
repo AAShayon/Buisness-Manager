@@ -2,7 +2,7 @@ import 'package:buisness_manager/modules/admin/view/user_profile.dart';
 import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
-import 'package:buisness_manager/modules/branch/view/branch_list.dart';
+import 'package:buisness_manager/modules/branch/view/widgets/branch_list.dart';
 import 'package:buisness_manager/modules/branch/view/widgets/branch_create.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
@@ -104,17 +104,6 @@ class _LandingScreenState extends State<LandingScreen> {
                     height: 20.h,
                   ),
                   const BranchListGridView(),
-                  ///-----
-                  // CustomCircularButton(
-                  //     text: 'BranchList',
-                  //     onPressed: () async {
-                  //       await branchViewModel.branchListFetch();
-                  //       Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(builder: (context) => MyBranchList() )
-                  //       );
-                  //     }
-                  // )
                 ] else
                   const Text('No user data available', style: TextStyle(fontSize: 20)),
               ],
@@ -130,20 +119,17 @@ class _LandingScreenState extends State<LandingScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.white,
           title: Text('Branch Options'),
-          content: CommonUseContainer(
-              width: 180.w,
-              height: 70.h,
-              child:  TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BranchCreate()));
+          content: TextButton(
+            onPressed: (){
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>BranchCreate()));
 
-                },
-                child: HeadLineMediumText(
-                    text: 'CreateBranch', color: Colors.black),
-              ))
+            },
+            child: HeadLineMediumText(
+                text: 'CreateBranch', color: Colors.black),
+          )
         );
       },
     );
