@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 
 abstract class UserProfileService{
   
-  Future<Response> userProfileData(UserProfileResponse userProfileResponse);
+  Future<Response> userProfile();
   
   
 }
@@ -17,11 +17,13 @@ class UserProfileDataSource extends UserProfileService{
     return _singleton;
   }
   UserProfileDataSource._internal();
-  
+
   @override
-  Future<Response> userProfileData(UserProfileResponse userProfileResponse) async{
-   Response? response= await _dioService.get(ApiUrl.userProfile);
-   return response!;
+  Future<Response> userProfile() async {
+   Response? response= await  _dioService.get(ApiUrl.userProfile);
+    return response!;
   }
+
+
   
 }
