@@ -1,3 +1,4 @@
+import 'package:buisness_manager/modules/branch/view/branch.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +68,7 @@ class BranchListGridView extends StatelessWidget {
                 leading: const Icon(Icons.remove_red_eye_rounded),
                 title: const Text('View'),
                 onTap: () {
-                  Navigator.pop(context);
-                  // Add your update logic here
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> BranchView()));
                 },
               ),
               ListTile(
