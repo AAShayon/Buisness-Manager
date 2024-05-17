@@ -2,6 +2,7 @@ import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
+import 'package:buisness_manager/view/connectivity_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Business Manager',
-          home: Login(),
+          home: CheckConnectivity(),
 
         ),
       ),
