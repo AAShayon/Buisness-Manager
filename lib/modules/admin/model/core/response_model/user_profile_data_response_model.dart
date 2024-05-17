@@ -2,15 +2,15 @@ import 'dart:convert';
 /// status : 200
 /// msg : "OK"
 /// description : "User Profile"
-/// response_user : {"id":11,"name":"Test","email":"testaccount@gmail.com","phone":"01900000020","image":null,"image_full_path":null,"business_name":"Test Account","business_type":"Others","business_type_id":7,"branch":"Test Account","company_id":11,"branch_id":15}
+/// response_user : {"id":51,"name":"Ans","email":"shayonasif@gmail.com","phone":"01652355529","image":null,"image_full_path":null,"business_name":"E-Digital Selling","business_type":"Manufacturer","business_type_id":4,"branch":"E-Digital Selling","company_id":51,"branch_id":58}
 
-UserProfileDataResponse userProfileDataResponseFromJson(String str) => UserProfileDataResponse.fromJson(json.decode(str));
-String userProfileDataResponseToJson(UserProfileDataResponse data) => json.encode(data.toJson());
-class UserProfileDataResponse {
-  UserProfileDataResponse({
-      num? status, 
-      String? msg, 
-      String? description, 
+UserProfileDataResponseModel userProfileDataResponseModelFromJson(String str) => UserProfileDataResponseModel.fromJson(json.decode(str));
+String userProfileDataResponseModelToJson(UserProfileDataResponseModel data) => json.encode(data.toJson());
+class UserProfileDataResponseModel {
+  UserProfileDataResponseModel({
+      dynamic status, 
+      dynamic msg, 
+      dynamic description, 
       ResponseUser? responseUser,}){
     _status = status;
     _msg = msg;
@@ -18,28 +18,28 @@ class UserProfileDataResponse {
     _responseUser = responseUser;
 }
 
-  UserProfileDataResponse.fromJson(dynamic json) {
+  UserProfileDataResponseModel.fromJson(dynamic json) {
     _status = json['status'];
     _msg = json['msg'];
     _description = json['description'];
     _responseUser = json['response_user'] != null ? ResponseUser.fromJson(json['response_user']) : null;
   }
-  num? _status;
-  String? _msg;
-  String? _description;
+  dynamic _status;
+  dynamic _msg;
+  dynamic _description;
   ResponseUser? _responseUser;
-UserProfileDataResponse copyWith({  num? status,
-  String? msg,
-  String? description,
+UserProfileDataResponseModel copyWith({  dynamic status,
+  dynamic msg,
+  dynamic description,
   ResponseUser? responseUser,
-}) => UserProfileDataResponse(  status: status ?? _status,
+}) => UserProfileDataResponseModel(  status: status ?? _status,
   msg: msg ?? _msg,
   description: description ?? _description,
   responseUser: responseUser ?? _responseUser,
 );
-  num? get status => _status;
-  String? get msg => _msg;
-  String? get description => _description;
+  dynamic get status => _status;
+  dynamic get msg => _msg;
+  dynamic get description => _description;
   ResponseUser? get responseUser => _responseUser;
 
   Map<String, dynamic> toJson() {
@@ -55,35 +55,35 @@ UserProfileDataResponse copyWith({  num? status,
 
 }
 
-/// id : 11
-/// name : "Test"
-/// email : "testaccount@gmail.com"
-/// phone : "01900000020"
+/// id : 51
+/// name : "Ans"
+/// email : "shayonasif@gmail.com"
+/// phone : "01652355529"
 /// image : null
 /// image_full_path : null
-/// business_name : "Test Account"
-/// business_type : "Others"
-/// business_type_id : 7
-/// branch : "Test Account"
-/// company_id : 11
-/// branch_id : 15
+/// business_name : "E-Digital Selling"
+/// business_type : "Manufacturer"
+/// business_type_id : 4
+/// branch : "E-Digital Selling"
+/// company_id : 51
+/// branch_id : 58
 
 ResponseUser responseUserFromJson(String str) => ResponseUser.fromJson(json.decode(str));
 String responseUserToJson(ResponseUser data) => json.encode(data.toJson());
 class ResponseUser {
   ResponseUser({
-      num? id, 
-      String? name, 
-      String? email, 
-      String? phone, 
+      dynamic id, 
+      dynamic name, 
+      dynamic email, 
+      dynamic phone, 
       dynamic image, 
       dynamic imageFullPath, 
-      String? businessName, 
-      String? businessType, 
-      num? businessTypeId, 
-      String? branch, 
-      num? companyId, 
-      num? branchId,}){
+      dynamic businessName, 
+      dynamic businessType, 
+      dynamic businessTypeId, 
+      dynamic branch, 
+      dynamic companyId, 
+      dynamic branchId,}){
     _id = id;
     _name = name;
     _email = email;
@@ -112,30 +112,30 @@ class ResponseUser {
     _companyId = json['company_id'];
     _branchId = json['branch_id'];
   }
-  num? _id;
-  String? _name;
-  String? _email;
-  String? _phone;
+  dynamic _id;
+  dynamic _name;
+  dynamic _email;
+  dynamic _phone;
   dynamic _image;
   dynamic _imageFullPath;
-  String? _businessName;
-  String? _businessType;
-  num? _businessTypeId;
-  String? _branch;
-  num? _companyId;
-  num? _branchId;
-ResponseUser copyWith({  num? id,
-  String? name,
-  String? email,
-  String? phone,
+  dynamic _businessName;
+  dynamic _businessType;
+  dynamic _businessTypeId;
+  dynamic _branch;
+  dynamic _companyId;
+  dynamic _branchId;
+ResponseUser copyWith({  dynamic id,
+  dynamic name,
+  dynamic email,
+  dynamic phone,
   dynamic image,
   dynamic imageFullPath,
-  String? businessName,
-  String? businessType,
-  num? businessTypeId,
-  String? branch,
-  num? companyId,
-  num? branchId,
+  dynamic businessName,
+  dynamic businessType,
+  dynamic businessTypeId,
+  dynamic branch,
+  dynamic companyId,
+  dynamic branchId,
 }) => ResponseUser(  id: id ?? _id,
   name: name ?? _name,
   email: email ?? _email,
@@ -149,18 +149,18 @@ ResponseUser copyWith({  num? id,
   companyId: companyId ?? _companyId,
   branchId: branchId ?? _branchId,
 );
-  num? get id => _id;
-  String? get name => _name;
-  String? get email => _email;
-  String? get phone => _phone;
+  dynamic get id => _id;
+  dynamic get name => _name;
+  dynamic get email => _email;
+  dynamic get phone => _phone;
   dynamic get image => _image;
   dynamic get imageFullPath => _imageFullPath;
-  String? get businessName => _businessName;
-  String? get businessType => _businessType;
-  num? get businessTypeId => _businessTypeId;
-  String? get branch => _branch;
-  num? get companyId => _companyId;
-  num? get branchId => _branchId;
+  dynamic get businessName => _businessName;
+  dynamic get businessType => _businessType;
+  dynamic get businessTypeId => _businessTypeId;
+  dynamic get branch => _branch;
+  dynamic get companyId => _companyId;
+  dynamic get branchId => _branchId;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
