@@ -18,19 +18,22 @@ class BranchListResponseModel {
     this.branches,
   });
 
-  factory BranchListResponseModel.fromJson(Map<String, dynamic> json) => BranchListResponseModel(
-    status: json['status'],
-    msg: json['msg'],
-    description: json['description'],
-    branches: json['branches'] != null ? Branches.fromJson(json['branches']) : null,
-  );
+  factory BranchListResponseModel.fromJson(Map<String, dynamic> json) =>
+      BranchListResponseModel(
+        status: json['status'],
+        msg: json['msg'],
+        description: json['description'],
+        branches: json['branches'] != null
+            ? Branches.fromJson(json['branches'])
+            : null,
+      );
 
   Map<String, dynamic> toJson() => {
-    'status': status,
-    'msg': msg,
-    'description': description,
-    'branches': branches?.toJson(),
-  };
+        'status': status,
+        'msg': msg,
+        'description': description,
+        'branches': branches?.toJson(),
+      };
 }
 
 /// per_page : 10
@@ -73,32 +76,33 @@ class Branches {
   });
 
   factory Branches.fromJson(Map<String, dynamic> json) => Branches(
-    perPage: json['per_page'],
-    from: json['from'],
-    to: json['to'],
-    total: json['total'],
-    currentPage: json['current_page'],
-    lastPage: json['last_page'],
-    prevPageUrl: json['prev_page_url'],
-    firstPageUrl: json['first_page_url'],
-    nextPageUrl: json['next_page_url'],
-    lastPageUrl: json['last_page_url'],
-    branches: List<Branch>.from(json['branches'].map((x) => Branch.fromJson(x))),
-  );
+        perPage: json['per_page'],
+        from: json['from'],
+        to: json['to'],
+        total: json['total'],
+        currentPage: json['current_page'],
+        lastPage: json['last_page'],
+        prevPageUrl: json['prev_page_url'],
+        firstPageUrl: json['first_page_url'],
+        nextPageUrl: json['next_page_url'],
+        lastPageUrl: json['last_page_url'],
+        branches:
+            List<Branch>.from(json['branches'].map((x) => Branch.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    'per_page': perPage,
-    'from': from,
-    'to': to,
-    'total': total,
-    'current_page': currentPage,
-    'last_page': lastPage,
-    'prev_page_url': prevPageUrl,
-    'first_page_url': firstPageUrl,
-    'next_page_url': nextPageUrl,
-    'last_page_url': lastPageUrl,
-    'branches': List<dynamic>.from(branches.map((x) => x.toJson())),
-  };
+        'per_page': perPage,
+        'from': from,
+        'to': to,
+        'total': total,
+        'current_page': currentPage,
+        'last_page': lastPage,
+        'prev_page_url': prevPageUrl,
+        'first_page_url': firstPageUrl,
+        'next_page_url': nextPageUrl,
+        'last_page_url': lastPageUrl,
+        'branches': List<dynamic>.from(branches.map((x) => x.toJson())),
+      };
 }
 
 /// id : 58
@@ -114,12 +118,12 @@ class Branch {
   });
 
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
-    id: json['id'],
-    name: json['name'],
-  );
+        id: json['id'],
+        name: json['name'],
+      );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-  };
+        'id': id,
+        'name': name,
+      };
 }
