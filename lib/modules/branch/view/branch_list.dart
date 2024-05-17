@@ -1,9 +1,5 @@
-import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_response.dart';
-import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
-import 'package:buisness_manager/modules/branch/view/widgets/branch_custom_card.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
-import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +16,7 @@ class BranchListGridView extends StatelessWidget {
     final branches = branchViewModel.branches?.branches;
     // return branches != null && branches.isNotEmpty?
     return SizedBox(
-      height: 500.h,
+      height:700.h,
       width: 300.w,
       child: branches != null && branches.isNotEmpty
           ? GridView.builder(
@@ -49,20 +45,12 @@ class BranchListGridView extends StatelessWidget {
                        ],
                       ),
                     ),
-
                     )
-                    // ListTile(
-                    //   title: Text(branch.name ?? ''),
-                    //   subtitle: Text(branch.id.toString() ?? ''),
-                    //   onTap: () {
-                    //     // Handle branch item tap
-                    //   },
-                    // ),
                   ),
                 );
               },
             )
-          : Center(child: Text('No branches available')),
+          : const Center(child: Text('No branches available')),
     );
   }
 
