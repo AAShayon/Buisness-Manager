@@ -168,10 +168,8 @@ class _TransactionUpdateState extends State<TransactionUpdate> {
             SizedBox(height: 15.h),
             CustomCircularButton(text: 'Create', onPressed: () {
               if (_transactionFormKey.currentState!.validate()) {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                    builder: (context) =>
-                        TransactionList(customerSupplierID: '45')), (
-                    route) => false);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> TransactionList(customerSupplierID: '45')));
+
               }
 
             })
