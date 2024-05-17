@@ -43,6 +43,7 @@ class BranchCreate extends StatelessWidget {
                 return null;
               },),
             ),
+            branchViewModel.isLoadingState?const CircularProgressIndicator(color: Colors.amber,):
             CustomCircularButton(text: 'Create', onPressed: (){
               if (_formKey1.currentState!.validate()){
                 final branchCreateRequestModel=BranchCreateRequestModel(
