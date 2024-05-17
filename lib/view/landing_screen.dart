@@ -1,3 +1,4 @@
+import 'package:buisness_manager/modules/admin/view/user_profile.dart';
 import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
@@ -10,6 +11,7 @@ import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -43,6 +45,7 @@ class _LandingScreenState extends State<LandingScreen> {
       return CustomContainer(
         appBar: AppBar(
           backgroundColor: Colors.greenAccent,
+          leading: IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfile()));}, icon: Icon(Iconsax.user)),
           title: Center(
               child: user!= null
                   ? Text('Welcome, ${user!.name ?? "User"}')
