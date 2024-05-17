@@ -20,6 +20,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final TextEditingController phoneNumberController = TextEditingController();
+
   final RegExp phoneRegex = RegExp(r'^(\+880\d{10}|01\d{9})$');
 
   @override
@@ -62,12 +63,12 @@ class _LoginState extends State<Login> {
             ):CustomCircularButton(
                 text: 'Next',
                 onPressed: () async{
-                  if(!authViewModel.isLoadingState){
+                  if(!authViewModel.isLoadingState)
+                  {
                     String phoneNumber = phoneNumberController.text.trim();
                     if (phoneRegex.hasMatch(phoneNumber)){
-                      // ApiUrl.branchId="dfg";
-                      // log("====>${ApiUrl.branchUpdate}");
-                      await authViewModel.sendOtpForLogin(SendOtpRequestForLoginModel(identifier: phoneNumber),context).then((value){
+                      await authViewModel.sendOtpForLogin(
+                          SendOtpRequestForLoginModel(identifier: phoneNumber),context).then((value){
                         if(value==true){
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  OtpScreen(identifier: phoneNumber, isLoginPage:true,)));
                         }
