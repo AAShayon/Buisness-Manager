@@ -58,7 +58,8 @@ class _LoginState extends State<Login> {
             SizedBox(
               height: 25.h,
             ),
-            authViewModel.isLoadingState?const CircularProgressIndicator(
+            authViewModel.isLoadingState?
+            const CircularProgressIndicator(
               color: Colors.amber,
             ):CustomCircularButton(
                 text: 'Next',
@@ -83,7 +84,8 @@ class _LoginState extends State<Login> {
                       );
                     }
                   }
-                }),
+                }
+                ),
             SizedBox(
               height: 25.h,
             ),
