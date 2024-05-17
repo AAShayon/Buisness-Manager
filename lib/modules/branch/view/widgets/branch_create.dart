@@ -2,7 +2,6 @@ import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_create_request_model.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/landing_screen.dart';
-import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
@@ -16,7 +15,7 @@ class BranchCreate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey1 = GlobalKey<FormState>();
+    final _branchCreateFormKey = GlobalKey<FormState>();
     final TextEditingController branchNameController = TextEditingController();
     final authViewModel=Provider.of<AuthViewModel>(context);
 
@@ -30,7 +29,7 @@ class BranchCreate extends StatelessWidget {
                     HeadlineLargeText(text: 'Branch Create', color: Colors.white),
             SizedBox(height: 50.h,),
             Form(
-              key: _formKey1,
+              key: _branchCreateFormKey,
               child: CustomTextFormField(
                   hintText: 'Branch Name',
                   prefixIcon: Icons.add,
@@ -45,7 +44,7 @@ class BranchCreate extends StatelessWidget {
             ),
             branchViewModel.isLoadingState?const CircularProgressIndicator(color: Colors.amber,):
             CustomCircularButton(text: 'Create', onPressed: (){
-              if (_formKey1.currentState!.validate()){
+              if (_branchCreateFormKey.currentState!.validate()){
                 final branchCreateRequestModel=BranchCreateRequestModel(
                   name: branchNameController.text
                 );

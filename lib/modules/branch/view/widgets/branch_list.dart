@@ -1,4 +1,4 @@
-import 'package:buisness_manager/modules/branch/view/branch.dart';
+import 'package:buisness_manager/modules/branch/view/branch_screen.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,9 @@ class BranchListGridView extends StatelessWidget {
                     child:Padding(padding: EdgeInsets.symmetric(vertical: 8.h,horizontal: 8.w)
                     ,child: InkWell(
                         onTap: (){
-                          _showBranchOption(context);
+                          _showBranchOption(context,branch.name,
+                          branch.id.toString()
+                          );
                         },
                       child: Column(
                        mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +57,7 @@ class BranchListGridView extends StatelessWidget {
     );
   }
 
-  void _showBranchOption(BuildContext context) {
+  void _showBranchOption(BuildContext context,String? name, String? id) {
     showDialog(
       context: context,
       builder: (context) {
@@ -68,7 +70,8 @@ class BranchListGridView extends StatelessWidget {
                 leading: const Icon(Icons.remove_red_eye_rounded),
                 title: const Text('View'),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> BranchView()));
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> BranchViewScreen(name:name ,id:id ,)));
                 },
               ),
               ListTile(
