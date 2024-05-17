@@ -7,6 +7,7 @@ import 'package:buisness_manager/modules/admin/model/core/service/remote/user_pr
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_update_form.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class UserProfileViewModel extends ChangeNotifier{
   final UserProfileService _userProfileService=UserProfileDataSource();
@@ -110,6 +111,41 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
   return isUpdate;
 
 }
+  Future<bool> deleteUserProfile(BuildContext context) async {
+    _isLoadingState = true;
+    bool isDeleted = false;
+    try {
+      Response response = await _userProfileService.userDeleteProfile();
+      log("Delete Profile Response Status Code: ${response.statusCode}");
+      log("Delete Profile Response Data: ${response.data}");
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Center(child: Text('User profile deleted successfully'))),
+        );
+        isDeleted = true;
+      } else {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Center(child: Text('Failed to delete user profile. Please try again later'))),
+        );
+        isDeleted = false;
+      }
+    } catch (e) {
+      log("Error deleting user profile: $e");
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Center(child: Text('Failed to delete user profile. Please try again later'))),
+      );
+      isDeleted = false;
+    } finally {
+      _isLoadingState = false;
+      notifyListeners();
+    }
+    return isDeleted;
+  }
+
+
 
 
 
