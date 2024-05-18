@@ -1,4 +1,4 @@
-import 'package:buisness_manager/modules/branch/view/widgets/branch_list.dart';
+import 'package:buisness_manager/modules/branch/view/branch_list_screen.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_create.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class BranchViewScreen extends StatefulWidget {
-  final String? name;
+  final dynamic name;
   final String? id;
 
   const BranchViewScreen({super.key, this.name, this.id});

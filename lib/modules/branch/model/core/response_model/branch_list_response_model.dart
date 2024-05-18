@@ -6,9 +6,9 @@ import 'dart:convert';
 /// branches : {"per_page":10,"from":1,"to":4,"total":4,"current_page":1,"last_page":1,"prev_page_url":null,"first_page_url":"https://skill-test.retinasoft.com.bd/api/v1/admin/branches?page=1","next_page_url":null,"last_page_url":"https://skill-test.retinasoft.com.bd/api/v1/admin/branches?page=1","branches":[{"id":58,"name":"E-Digital Selling"},{"id":59,"name":"Altratect"},{"id":61,"name":"SuperTech"},{"id":62,"name":"Walton Aftabnagar"}]}
 
 class BranchListResponseModel {
-  num? status;
-  String? msg;
-  String? description;
+  dynamic status;
+  dynamic msg;
+  dynamic description;
   Branches? branches;
 
   BranchListResponseModel({
@@ -49,16 +49,16 @@ class BranchListResponseModel {
 /// branches : [{"id":58,"name":"E-Digital Selling"},{"id":59,"name":"Altratect"},{"id":61,"name":"SuperTech"},{"id":62,"name":"Walton Aftabnagar"}]
 
 class Branches {
-  num? perPage;
-  num? from;
-  num? to;
-  num? total;
-  num? currentPage;
-  num? lastPage;
+  dynamic perPage;
+  dynamic from;
+  dynamic to;
+  dynamic total;
+  dynamic currentPage;
+  dynamic lastPage;
   dynamic prevPageUrl;
-  String? firstPageUrl;
+  dynamic firstPageUrl;
   dynamic nextPageUrl;
-  String? lastPageUrl;
+  dynamic lastPageUrl;
   List<Branch> branches;
 
   Branches({
@@ -109,8 +109,8 @@ class Branches {
 /// name : "E-Digital Selling"
 
 class Branch {
-  num? id;
-  String? name;
+  dynamic id;
+  dynamic name;
 
   Branch({
     this.id,

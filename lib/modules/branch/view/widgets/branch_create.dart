@@ -48,7 +48,7 @@ class BranchCreate extends StatelessWidget {
                 final branchCreateRequestModel=BranchCreateRequestModel(
                   name: branchNameController.text
                 );
-                branchViewModel.createBranch(branchCreateRequestModel).then((isCreate) {
+                branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate) {
                   if(isCreate){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingScreen(
                       // logInResponseModel: authViewModel.logInResponseModel!,
