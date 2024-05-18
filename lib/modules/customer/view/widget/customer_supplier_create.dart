@@ -1,4 +1,4 @@
-import 'package:buisness_manager/modules/branch/view/branch_screen.dart';
+import 'package:buisness_manager/modules/branch/view/widgets/branch_screen.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
