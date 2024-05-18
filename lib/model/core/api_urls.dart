@@ -20,22 +20,22 @@ class ApiUrl{
   ///branch
   static const String branchList="/admin/branches";
   static const String branchCreate="/admin/branch/create";
-  static String branchUpdate="/admin/branch/${branchId}/update";
-  static String branchDelete="/admin/branch/${branchId}/delete";
+  static String branchUpdate="/admin/branch/$branchId/update";
+  static String branchDelete="/admin/branch/$branchId/delete";
 
   ///Customer supplier
   ///0 form Customer and 1 for supplier
 
-  static const String customerList="{{BASE_URL}}/admin/${branchId}/0/customers";
-  static const String supplierList="{{BASE_URL}}/admin/${branchId}/1/customers";
-  static const String customerOrSupplierCreate="/admin/${branchId}/customer/create";
-  static const String customerUpdate="/admin/${branchId}/customer/${customerOrSupplierID}/update";
-  static const String customerOrSupplierDelete="/admin/${branchId}/customer/${customerOrSupplierID}/delete";
+  static const String customerList="{{BASE_URL}}/admin/$branchId/0/customers";
+  static const String supplierList="{{BASE_URL}}/admin/$branchId/1/customers";
+  static const String customerOrSupplierCreate="/admin/$branchId/customer/create";
+  static const String customerUpdate="/admin/$branchId/customer/$customerOrSupplierID/update";
+  static const String customerOrSupplierDelete="/admin/$branchId/customer/$customerOrSupplierID/delete";
 
   ///Transaction
- static const String transactionList="/admin/${branchId}/customer/${customerOrSupplierID}/transactions";
- static const String transactionCreate="/admin/${branchId}/customer/transaction/create";
- static const String transactionUpdate="/admin/${branchId}/customer/transaction/${customerOrSupplierID}/update";
+ static const String transactionList="/admin/$branchId/customer/$customerOrSupplierID/transactions";
+ static const String transactionCreate="/admin/$branchId/customer/transaction/create";
+ static const String transactionUpdate="/admin/$branchId/customer/transaction/$customerOrSupplierID/update";
 ///pronlem in transection delete
  // static const String transactionDelete="/admin/2/customer/transaction/1/delete";
 
