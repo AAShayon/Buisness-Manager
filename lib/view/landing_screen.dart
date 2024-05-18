@@ -3,7 +3,7 @@ import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model
 import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
-import 'package:buisness_manager/modules/branch/view/widgets/branch_list.dart';
+import 'package:buisness_manager/modules/branch/view/branch_list_screen.dart';
 import 'package:buisness_manager/modules/branch/view/widgets/branch_create.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
