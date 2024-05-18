@@ -1,8 +1,8 @@
 class ApiUrl{
 
-  static const String branchId='';
+  static  String branchId='';
   static const String customerOrSupplierID= '';
-  static const String customerOrSuppliertype= '';
+  static const String customerOrSupplierType= '';
 
   static const String baseUrl="https://skill-test.retinasoft.com.bd/api/v1";
 
@@ -26,16 +26,16 @@ class ApiUrl{
   ///Customer supplier
   ///0 form Customer and 1 for supplier
 
-  static const String customerList="{{BASE_URL}}/admin/$branchId/0/customers";
-  static const String supplierList="{{BASE_URL}}/admin/$branchId/1/customers";
-  static const String customerOrSupplierCreate="/admin/$branchId/customer/create";
-  static const String customerUpdate="/admin/$branchId/customer/$customerOrSupplierID/update";
-  static const String customerOrSupplierDelete="/admin/$branchId/customer/$customerOrSupplierID/delete";
+  static  String customerList="{{BASE_URL}}/admin/$branchId/0/customers";
+  static String supplierList="{{BASE_URL}}/admin/$branchId/1/customers";
+  static  String customerOrSupplierCreate="/admin/$branchId/customer/create";
+  static  String customerUpdate="/admin/$branchId/customer/$customerOrSupplierID/update";
+  static  String customerOrSupplierDelete="/admin/$branchId/customer/$customerOrSupplierID/delete";
 
   ///Transaction
- static const String transactionList="/admin/$branchId/customer/$customerOrSupplierID/transactions";
- static const String transactionCreate="/admin/$branchId/customer/transaction/create";
- static const String transactionUpdate="/admin/$branchId/customer/transaction/$customerOrSupplierID/update";
+ static  String transactionList="/admin/$branchId/customer/$customerOrSupplierID/transactions";
+ static  String transactionCreate="/admin/$branchId/customer/transaction/create";
+ static  String transactionUpdate="/admin/$branchId/customer/transaction/$customerOrSupplierID/update";
 ///pronlem in transection delete
  // static const String transactionDelete="/admin/2/customer/transaction/1/delete";
 
