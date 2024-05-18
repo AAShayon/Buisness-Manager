@@ -81,6 +81,13 @@ class AuthViewModel extends ChangeNotifier{
         _isLoadingState= false;
         isRegister = true ;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
       else {
         _isLoadingState = false ;
@@ -99,6 +106,13 @@ class AuthViewModel extends ChangeNotifier{
       _isLoadingState = false ;
       isRegister = false ;
       notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          backgroundColor: const Color(0xffFF0000),
+          content: Text('$e',style: const TextStyle(color: Colors.white),),
+        ));
+      }
     }
     return isRegister;
   }
@@ -114,6 +128,13 @@ class AuthViewModel extends ChangeNotifier{
         _isLoadingState =false;
         isRegister =true ;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
       else{
         _isLoadingState = false ;
@@ -136,7 +157,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e}',style: const TextStyle(color: Colors.white),),
+          content: Text('$e',style: const TextStyle(color: Colors.white),),
         ));
       }
     }
@@ -158,9 +179,10 @@ class AuthViewModel extends ChangeNotifier{
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Center(child: Text('SuccessFully Send otp'),))
-          );
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
         }
       }else{
         setIsLoadingState(false);
@@ -168,9 +190,10 @@ class AuthViewModel extends ChangeNotifier{
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Center(child: Text('Sorry Your Number is Not Register Yet ,Please try again or sign up'),))
-          );
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
         }
 
       }
@@ -183,7 +206,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e}',style: const TextStyle(color: Colors.white),),
+          content: Text('$e',style: const TextStyle(color: Colors.white),),
         ));
       }
     }
@@ -206,6 +229,13 @@ class AuthViewModel extends ChangeNotifier{
         _isLoadingState=false;
         isLogIn=true;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }else{
         _isLoadingState=false;
         isLogIn=false;
@@ -227,7 +257,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e}',style: const TextStyle(color: Colors.white),),
+          content: Text('$e',style: const TextStyle(color: Colors.white),),
         ));
       }
     }
@@ -242,19 +272,21 @@ class AuthViewModel extends ChangeNotifier{
 
       if (response.statusCode == 200) {
         setUser(null);
-        if (context.mounted) {
+        if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Center(child: Text('Logged out successfully'))),
-          );
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
         }
 
       } else {
-        if (context.mounted) {
+        if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Center(child: Text('Failed to logout. Please try again later'))),
-          );
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
         }
       }
     } catch (e) {
