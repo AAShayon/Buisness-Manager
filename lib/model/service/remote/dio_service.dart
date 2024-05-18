@@ -70,7 +70,7 @@ class DioService{
   }
   Future<Response?> delete(String path) async {
     try {
-      final response = await _dio.delete(path);
+      final response = await _dio.request(path);
       log("Response Status Code: ${response.statusCode}");
       log("Response Data: ${response.data}");
       return response;
