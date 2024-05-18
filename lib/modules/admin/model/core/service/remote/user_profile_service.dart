@@ -33,7 +33,7 @@ class UserProfileDataSource extends UserProfileService{
 
   @override
   Future<Response> userDeleteProfile() async {
-   Response? response=await _dioService.delete(ApiUrl.userAccountDelete);
+   Response? response=await _dioService.request(ApiUrl.userAccountDelete);
    return response!;
   }
 
