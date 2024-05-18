@@ -69,14 +69,14 @@ class AuthViewModel extends ChangeNotifier{
   * --------------------------methods----------------------------------------
   * */
 
-  Future<bool> registration(RegisterRequestModel registerRequestModel)async{
+  Future<bool> registration(RegisterRequestModel registerRequestModel,BuildContext context)async{
     _isLoadingState = true ;
     bool isRegister= false;
     _registerRequestResponseModel =null ;
     try {
       Response response=await _authService.register(registerRequestModel);
       log("=======^&^&^&^&^&^&^&^&^&==>${response.statusCode}");
-      if(response.statusCode == 200){
+      if(response.statusCode == 200 && response.data["status"]==200){
         _registerRequestResponseModel = RegisterRequestResponseModel.fromJson(response.data);
         _isLoadingState= false;
         isRegister = true ;
@@ -86,23 +86,30 @@ class AuthViewModel extends ChangeNotifier{
         _isLoadingState = false ;
         isRegister = false ;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
     }
-        catch(e){
-          _isLoadingState = false ;
-          isRegister = false ;
-          notifyListeners();
-        }
-        return isRegister;
+    catch(e){
+      _isLoadingState = false ;
+      isRegister = false ;
+      notifyListeners();
+    }
+    return isRegister;
   }
-  Future<bool> registrationVerifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel)async{
+  Future<bool> registrationVerifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel,BuildContext context)async{
     _isLoadingState = false ;
     bool isRegister= false;
     _registerVerifyOtpResponseModel = null ;
     try{
       Response response = await _authService.verifyOtp(verifyOtpRegisterRequestModel);
       log("=============>${response.statusCode}");
-      if(response.statusCode == 200){
+      if(response.statusCode == 200 && response.data["status"]==200){
         _registerVerifyOtpResponseModel = RegisterVerifyOtpResponseModel.fromJson(response.data);
         _isLoadingState =false;
         isRegister =true ;
@@ -112,14 +119,28 @@ class AuthViewModel extends ChangeNotifier{
         _isLoadingState = false ;
         isRegister = false;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
     }
-        catch(e){
-          _isLoadingState = false ;
-          isRegister = false;
-          notifyListeners();
-        }
-        return isRegister;
+    catch(e){
+      _isLoadingState = false ;
+      isRegister = false;
+      notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          backgroundColor: const Color(0xffFF0000),
+          content: Text('$e}',style: const TextStyle(color: Colors.white),),
+        ));
+      }
+    }
+    return isRegister;
   }
 
   Future<bool> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel,BuildContext context)async{
@@ -158,11 +179,18 @@ class AuthViewModel extends ChangeNotifier{
       setIsLoadingState(false);
       isOtpSend=false;
       notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          backgroundColor: const Color(0xffFF0000),
+          content: Text('$e}',style: const TextStyle(color: Colors.white),),
+        ));
+      }
     }
     return isOtpSend;
   }
 
-  Future<bool> logInWithOtp(LogInRequestModel logInRequestModel)async{
+  Future<bool> logInWithOtp(LogInRequestModel logInRequestModel ,BuildContext context)async{
     _isLoadingState = true;
     bool isLogIn=false;
     _logInResponseModel=null;
@@ -170,7 +198,7 @@ class AuthViewModel extends ChangeNotifier{
     
     try{
       Response response= await _authService.logInWithOtp(logInRequestModel);
-      if(response.statusCode==200){
+      if(response.statusCode==200 && response.data["status"]==200){
         _logInResponseModel=LogInResponseModel.fromJson(response.data);
         _user = _logInResponseModel!.user;
         String? token = _user?.apiToken;
@@ -182,12 +210,26 @@ class AuthViewModel extends ChangeNotifier{
         _isLoadingState=false;
         isLogIn=false;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
       
     }catch(e){
       _isLoadingState=false;
       isLogIn=false;
       notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          backgroundColor: const Color(0xffFF0000),
+          content: Text('$e}',style: const TextStyle(color: Colors.white),),
+        ));
+      }
     }
     return isLogIn;
   }
