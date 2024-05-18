@@ -185,17 +185,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             businessName: businessNameController.text,
                             businessTypeId: selectedBusinessType!,
                           );
-                          authViewModel.registration(registerRequestModel).then((isRegistered) {
+                          authViewModel.registration(registerRequestModel,context).then((isRegistered) {
                             if(isRegistered){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpScreen(identifier: authViewModel.registerRequestResponseModel!.identifierId, isLoginPage: false,)));
-                            }
-                            else{
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Phone number or email is already registered'),
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
                             }
                           });
                         }
