@@ -45,76 +45,29 @@ class OtpReceive extends StatelessWidget {
                   },
                   onSubmit: (String verificationCode) async {
                     if (!authViewModel.isLoadingState) {
-                      LogInRequestModel logInRequestModel = LogInRequestModel(
-                        otpCode: verificationCode,
-                        identifier: identifier,
-                      );
-                      RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel=RegisterVerifyOtpRequestModel(
+                      if(isLoginPage){
+                        LogInRequestModel logInRequestModel = LogInRequestModel(
                           otpCode: verificationCode,
-                          identifierId: identifier
-                      );
-                      bool registrationSuccess = await authViewModel.registrationVerifyOtp(verifyOtpRegisterRequestModel);
-                      bool loginSuccess = await authViewModel.logInWithOtp(logInRequestModel);
-                     if(isLoginPage) {
-                        if (loginSuccess && verificationCode == "123456") {
-                          if (context.mounted) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LandingScreen(
-                                    // logInResponseModel:
-                                    //     authViewModel.logInResponseModel!
-
-                                ),
-                              ),
-                              (route) => false,
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Center(
-                                  child: Text(
-                                    'Successfully Logged In',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(.5)),
-                                  ),
-                                ),
-                              ),
-                            );
+                          identifier: identifier,
+                        );
+                        await authViewModel.logInWithOtp(logInRequestModel,context).then((loggedIn) {
+                          if(loggedIn){
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LandingScreen(),), (route) => false,);
                           }
-                        } else {
-                          if (context.mounted) {
-                            _showInvalidOtpDialog(context);
+                          return null;
+                        });
+                      }else{
+                        RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel=RegisterVerifyOtpRequestModel(
+                            otpCode: verificationCode,
+                            identifierId: identifier
+                        );
+                        await authViewModel.registrationVerifyOtp(verifyOtpRegisterRequestModel,context).then((registered) {
+                          if(registered){
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Login(),), (route) => false,);
                           }
-                        }
+                          return null;
+                        });
                       }
-                     else{
-                       if (registrationSuccess && verificationCode == "123456") {
-                         if (context.mounted) {
-                           Navigator.pushAndRemoveUntil(
-                             context,
-                             MaterialPageRoute(
-                               builder: (context) => Login(),
-                             ),
-                                 (route) => false,
-                           );
-                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(
-                               content: Center(
-                                 child: Text(
-                                   'Successfully Logged In',
-                                   style: TextStyle(
-                                       color: Colors.black.withOpacity(.5)),
-                                 ),
-                               ),
-                             ),
-                           );
-                         }
-                       } else {
-                         if (context.mounted) {
-                           _showInvalidOtpDialog(context);
-                         }
-                       }
-                     }
                     }
                   },
                 ),

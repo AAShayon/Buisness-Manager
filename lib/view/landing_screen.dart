@@ -40,93 +40,98 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AuthViewModel,UserProfileViewModel>(
-        builder: (context, authViewModel,userProfileViewModel, child) {
-          final user=userProfileViewModel.responseUser;
-          if(user != null || userProfileViewModel.isLoadingState )
-          {
-            return CustomContainer(
-            appBar: AppBar(
-              backgroundColor: Colors.greenAccent,
-              leading: userProfileViewModel.isLoadingState
-                  ? CircularProgressIndicator(color: Colors.amber)
-                  : IconButton(onPressed: () async {
-                    await userProfileViewModel.getUserProfile();
-                    if (context.mounted) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const UserProfile()));
-                    }
-                  },
-                  icon: const Icon(Iconsax.user)),
-              title: Center(
-                  child: user != null
-                      ? Text('Welcome, ${user.name ?? "User"}')
-                      : const Text('User !!!!!')),
-              actions: [ userProfileViewModel.isLoadingState
-                  ? CircularProgressIndicator(color: Colors.amber):
-                IconButton(
-                    icon: const Icon(Icons.logout),
-                    onPressed: () async {
-                      await authViewModel.logOut(context);
+    return RefreshIndicator(
+      onRefresh: ()async{
+        await _loadData();
+      },
+      child: Consumer2<AuthViewModel,UserProfileViewModel>(
+          builder: (context, authViewModel,userProfileViewModel, child) {
+            final user=userProfileViewModel.responseUser;
+            if(user != null || userProfileViewModel.isLoadingState )
+            {
+              return CustomContainer(
+              appBar: AppBar(
+                backgroundColor: Colors.greenAccent,
+                leading: userProfileViewModel.isLoadingState
+                    ? CircularProgressIndicator(color: Colors.amber)
+                    : IconButton(onPressed: () async {
+                      await userProfileViewModel.getUserProfile();
                       if (context.mounted) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const UserProfile()));
                       }
-                    })
-              ],
-            ),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                      SizedBox(height: 20.h),
-                      CommonUseContainer(
-                        width: 200.w,
-                        child: Column(
+                    },
+                    icon: const Icon(Iconsax.user)),
+                title: Center(
+                    child: user != null
+                        ? Text('Welcome, ${user.name ?? "User"}')
+                        : const Text('User !!!!!')),
+                actions: [ userProfileViewModel.isLoadingState
+                    ? CircularProgressIndicator(color: Colors.amber):
+                  IconButton(
+                      icon: const Icon(Icons.logout),
+                      onPressed: () async {
+                        await authViewModel.logOut(context);
+                        if (context.mounted) {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+                        }
+                      })
+                ],
+              ),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                        SizedBox(height: 20.h),
+                        CommonUseContainer(
+                          width: 200.w,
+                          child: Column(
+                            children: [
+                              const HeadlineLargeText(text: 'My Business ', color: Colors.white),
+                              HeadlineLargeText(
+                                text: user!.businessType ?? 'N/A',
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 50.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const HeadlineLargeText(text: 'My Business ', color: Colors.white),
-                            HeadlineLargeText(
-                              text: user!.businessType ?? 'N/A',
-                              color: Colors.white,
-                            ),
+                            CommonUseContainer(
+                                width: 150.w,
+                                height: 50.h,
+                                child: const HeadLineMediumText(text: 'My Branches', color: Colors.black)),
+                            SizedBox(width: 25.w),
+                            IconButton(onPressed: () {
+                              _showBranchOption(context);
+                            }, icon: Icon(Icons.add, size: 40)),
                           ],
                         ),
-                      ),
-                      SizedBox(height: 50.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CommonUseContainer(
-                              width: 150.w,
-                              height: 50.h,
-                              child: const HeadLineMediumText(text: 'My Branches', color: Colors.black)),
-                          SizedBox(width: 25.w),
-                          IconButton(onPressed: () {
-                            _showBranchOption(context);
-                          }, icon: Icon(Icons.add, size: 40)),
-                        ],
-                      ),
-                      SizedBox(height: 20.h),
-                      Consumer<BranchViewModel>(
-                        builder: (context, branchViewModel, child) {
-                          if (branchViewModel.isLoadingState) {
-                            return CircularProgressIndicator();
-                          } else if (branchViewModel.branches?.branches != null) {
-                            return BranchListGridView();
-                          } else {
-                            return Text('No branches available', style: TextStyle(fontSize: 20));
-                          }
-                        },
-                      ),
+                        SizedBox(height: 20.h),
+                        Consumer<BranchViewModel>(
+                          builder: (context, branchViewModel, child) {
+                            if (branchViewModel.isLoadingState) {
+                              return CircularProgressIndicator();
+                            } else if (branchViewModel.branches?.branches != null) {
+                              return BranchListGridView();
+                            } else {
+                              return Text('No branches available', style: TextStyle(fontSize: 20));
+                            }
+                          },
+                        ),
 
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );}
+            );}
 
-          return Center(child: const CircularProgressIndicator(color: Colors.amber,));
+            return Center(child: const CircularProgressIndicator(color: Colors.amber,));
 
-    });
+      }),
+    );
   }
 
   void _showBranchOption(BuildContext context) {
