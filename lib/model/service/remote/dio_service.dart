@@ -68,7 +68,7 @@ class DioService{
     }}
     return null;
   }
-  Future<Response?> delete(String path) async {
+  Future<Response?> request(String path) async {
     try {
       final response = await _dio.request(path);
       log("Response Status Code: ${response.statusCode}");
@@ -78,5 +78,17 @@ class DioService{
       log(e.toString());
     }
     return null;
+  }
+  Future<Response?> delete(String path) async{
+    try {
+      final response = await _dio.delete(path);
+      log("Response Status Code: ${response.statusCode}");
+      log("Response Data: ${response.data}");
+      return response;
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+
   }
 }
