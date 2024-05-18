@@ -173,16 +173,17 @@ class _UserProfileUpdateFormState extends State<UserProfileUpdateForm> {
                     email: emailController.text,
                     businessTypeId: selectedBusinessType!,
                   );
-                  userProfileViewModel.userProfileUpdateRequest(userProfileUpdateRequestModel).then((isUpdate) {
+                  userProfileViewModel.userProfileUpdateRequest(userProfileUpdateRequestModel,context).then((isUpdate) {
                     if (isUpdate) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LandingScreen()));
+                      Navigator.pushAndRemoveUntil(
+                          context, MaterialPageRoute(builder: (context) => const LandingScreen()),(route) => false,);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Phone number or email is needed to update'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   const SnackBar(
+                      //     content: Text('Phone number or email is needed to update'),
+                      //     duration: Duration(seconds: 3),
+                      //   ),
+                      // );
                     }
                   });
                 }
