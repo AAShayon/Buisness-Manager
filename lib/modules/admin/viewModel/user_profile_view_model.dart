@@ -119,16 +119,16 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
       log("Delete Profile Response Status Code: ${response.statusCode}");
       log("Delete Profile Response Data: ${response.data}");
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Center(child: Text('User profile deleted successfully'))),
-        );
+        // ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Center(child: Text('User profile deleted successfully'))),
+        // );
         isDeleted = true;
       } else {
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Center(child: Text('Failed to delete user profile. Please try again later'))),
-        );
+        // ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Center(child: Text('Failed to delete user profile. Please try again later'))),
+        // );
         isDeleted = false;
       }
     } catch (e) {
