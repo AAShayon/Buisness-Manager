@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_data_response_model.dart';
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_card.dart';
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_update_form.dart';
@@ -53,23 +54,47 @@ class UserProfile extends StatelessWidget {
                       userProfileViewModel.isLoadingState
                           ? CircularProgressIndicator(color: Colors.amber)
                           : CustomCircularButton(
+
                         text: 'Delete',
                         onPressed: () async {
-                          bool? deleteConfirmed = await _confirmDelete(context);
-                          if (deleteConfirmed ?? false) {
-                            log("Starting deletion process...");
+                          bool? confirmDelete = await showDialog<bool>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Confirm Delete'),
+                                content: Text('Are you sure you want to delete your profile from this app?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('No'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Yes'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (confirmDelete == true) {
                             bool isDeleted = await userProfileViewModel.deleteUserProfile(context);
-                            log("Deletion process completed. IsDeleted: $isDeleted");
                             if (isDeleted) {
-                              // Navigate to the login page after successful deletion
-                              log("Navigating to login page after successful deletion...");
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-                            } else {
-                              log("Deletion failed. Please check logs for more details.");
+                              if (context.mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Login()),
+                                );
+                              }
                             }
                           }
                         },
-                      ),
+                      )
                     ],
                   ),
                 ],
@@ -82,30 +107,5 @@ class UserProfile extends StatelessWidget {
     );
   }
 
-  Future<bool?> _confirmDelete(BuildContext context) async {
-    return showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete your profile from this app?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            TextButton(
-              child: Text('Yes'),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 }
