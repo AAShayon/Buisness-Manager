@@ -1,7 +1,3 @@
-import 'dart:developer';
-
-import 'package:buisness_manager/model/core/api_urls.dart';
-import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_data_response_model.dart';
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_card.dart';
 import 'package:buisness_manager/modules/admin/view/widget/user_profile_update_form.dart';
 import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
@@ -57,6 +53,7 @@ class UserProfile extends StatelessWidget {
 
                         text: 'Delete',
                         onPressed: () async {
+
                           bool? confirmDelete = await showDialog<bool>(
                             context: context,
                             barrierDismissible: false,
@@ -81,14 +78,13 @@ class UserProfile extends StatelessWidget {
                               );
                             },
                           );
-
                           if (confirmDelete == true) {
                             bool isDeleted = await userProfileViewModel.deleteUserProfile(context);
                             if (isDeleted) {
                               if (context.mounted) {
-                                Navigator.pushReplacement(
+                                Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Login()),
+                                  MaterialPageRoute(builder: (context) => const Login()),(route) => false,
                                 );
                               }
                             }
