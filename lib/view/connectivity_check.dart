@@ -63,34 +63,34 @@ class _CheckConnectivityState extends State<CheckConnectivity> {
       body: Center(
         child: _isLoading
             ? const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 20.0),
-            Text(
-              'Establishing connection...',
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ],
-        )
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 20.0),
+                Text(
+                  'Establishing connection...',
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ],
+            )
             : _isConnected
             ? OnboardingScreen()
             : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'No Internet Connection',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                _startLoading();
-              },
-              child: Text('Retry'),
-            ),
-          ],
-        ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'No Internet Connection',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      _startLoading();
+                    },
+                    child: Text('Retry'),
+                  ),
+                ],
+              ),
       ),
     );
   }

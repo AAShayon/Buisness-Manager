@@ -3,8 +3,8 @@ import 'package:buisness_manager/modules/auth/model/core/request_model/register_
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:buisness_manager/view/landing_screen.dart';
-import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
+import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
+import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,7 +52,7 @@ class OtpReceive extends StatelessWidget {
                         );
                         await authViewModel.logInWithOtp(logInRequestModel,context).then((loggedIn) {
                           if(loggedIn){
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LandingScreen(),), (route) => false,);
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen(),), (route) => false,);
                           }
                           return null;
                         });
