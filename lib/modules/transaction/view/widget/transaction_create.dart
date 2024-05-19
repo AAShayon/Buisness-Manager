@@ -1,12 +1,16 @@
+import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
+import 'package:buisness_manager/modules/transaction/model/core/request_model/transaction_create_request_model.dart';
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_list.dart';
+import 'package:buisness_manager/modules/transaction/viewModel/transaction_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
-import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
+import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TransactionCreate extends StatefulWidget {
   const TransactionCreate({super.key});
@@ -24,6 +28,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
   final TextEditingController transactionDateController = TextEditingController();
   final TextEditingController detailsController = TextEditingController();
   final TextEditingController billNoController = TextEditingController();
+  String? customerOrSupplier;
 
   @override
   void dispose() {
@@ -177,12 +182,21 @@ class _TransactionCreateState extends State<TransactionCreate> {
             ),
 
             SizedBox(height: 15.h),
-            CustomCircularButton(text: 'Create', onPressed: () {
+            CustomCircularButton(text: 'Create', onPressed: () async{
               if (_transactionFormKey.currentState!.validate()) {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                    builder: (context) =>
-                        TransactionList(customerSupplierID: '45')), (
-                    route) => false);
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=> TransactionList(customerSupplierID: '45')));
+                final transactionCreateRequestModel=TransactionCreateRequestModel(
+                  amount: amountController.text,
+                  billNo: billNoController.text,
+                  customerId: '',
+                  type: typeController,
+                  details: detailsController.text,
+                  transactionDate: transactionDateController.text,
+                );
+                final transactionViewModel=Provider.of<TransactionViewModel>(context);
+                await   transactionViewModel.createTransaction(transactionCreateRequestModel, context).then((value){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen()));
+                });
               }
 
             })

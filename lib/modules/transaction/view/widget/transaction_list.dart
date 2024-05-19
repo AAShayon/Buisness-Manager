@@ -2,7 +2,7 @@ import 'package:buisness_manager/modules/transaction/view/widget/transaction_cre
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_update.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
-import 'package:buisness_manager/view/widget/custom_main_use_container.dart';
+import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
@@ -15,35 +15,37 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomContainer(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 25.h),
-            Center(child: HeadlineLargeText(text: "Supplier/Customer", color: Colors.white)),
-            SizedBox(height: 25.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                HeadlineLargeText(text: 'UserName', color: Colors.white),
-                SizedBox(width: 50.w),
-                HeadlineLargeText(text: 'ID $customerSupplierID', color: Colors.white),
-              ],
-            ),
-            SizedBox(height: 10.h,),
-            Center(child: CustomCircularButton(text: 'Create Transaction', onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> TransactionCreate()));})),
-            Column(
-              children: [
-                SizedBox(height: 20.h),
-                SizedBox(
-                  height: 700.h,
-                  width: 300.w,
-                  child: _buildTransactionTable(context),
-                ),
-              ],
-            ),
-          ],
+    return Scaffold(
+      body:  CustomContainer(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 25.h),
+              Center(child: HeadlineLargeText(text: "Supplier/Customer", color: Colors.white)),
+              SizedBox(height: 25.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  HeadlineLargeText(text: 'UserName', color: Colors.white),
+                  SizedBox(width: 50.w),
+                  HeadlineLargeText(text: 'ID $customerSupplierID', color: Colors.white),
+                ],
+              ),
+              SizedBox(height: 10.h,),
+              Center(child: CustomCircularButton(text: 'Create Transaction', onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> TransactionCreate()));})),
+              Column(
+                children: [
+                  SizedBox(height: 20.h),
+                  SizedBox(
+                    height: 700.h,
+                    width: 300.w,
+                    child: _buildTransactionTable(context),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
