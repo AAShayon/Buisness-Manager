@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 
 class DioService{
   static final DioService _singleton=DioService._internal();
-  final _dio=Dio();
+  static Dio? _dio;
 
   factory DioService(){
     return _singleton;
@@ -17,6 +17,7 @@ class DioService{
 
   Future<void> setup({String? bearerToken})async{
     try{
+      _dio=Dio();
       final headers={
         'Content_type':'application/json',
       };
@@ -39,7 +40,7 @@ class DioService{
           }
 
       );
-      _dio.options=options;
+      _dio!.options=options;
 
     }catch(e){
       if (kDebugMode) {
@@ -50,7 +51,7 @@ class DioService{
   Future<Response?> post(String path , {Map? data})async{
     log(path);
     try{
-      final response= await _dio.post(path,data: data);
+      final response= await _dio!.post(path,data: data);
       log("${response.statusCode}");
       return response;
     }
@@ -61,7 +62,7 @@ class DioService{
   }
   Future<Response?> get(String path,{Map<String,dynamic>? data}) async {
     try{
-      final response=await _dio.get(path,queryParameters: data);
+      final response=await _dio!.get(path,queryParameters: data);
       return response;
     }catch(e){if (kDebugMode) {
       print(e);
@@ -70,7 +71,7 @@ class DioService{
   }
   Future<Response?> request(String path) async {
     try {
-      final response = await _dio.request(path);
+      final response = await _dio!.request(path);
       log("Response Status Code: ${response.statusCode}");
       log("Response Data: ${response.data}");
       return response;
@@ -81,7 +82,8 @@ class DioService{
   }
   Future<Response?> delete(String path) async{
     try {
-      final response = await _dio.delete(path);
+      log("=====>check delete path:${path}");
+      final response = await _dio!.delete(path);
       log("Response Status Code: ${response.statusCode}");
       log("Response Data: ${response.data}");
       return response;
