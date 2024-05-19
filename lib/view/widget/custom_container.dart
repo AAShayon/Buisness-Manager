@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomContainer extends StatelessWidget {
-  const CustomContainer({super.key, required this.child,  this.appBar});
+  const CustomContainer({super.key, required this.child,});
   final Widget child;
-  final AppBar? appBar;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        // backgroundColor: Colors.transparent,
-        appBar: appBar,
-        body: Container(
+      child: Container(
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(
@@ -22,7 +18,7 @@ class CustomContainer extends StatelessWidget {
             ),
            child: child,
           ),
-      ),
+
     );
   }
 }

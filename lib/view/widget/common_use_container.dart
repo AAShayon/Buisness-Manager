@@ -6,7 +6,7 @@ class CommonUseContainer extends StatelessWidget {
   final double width;
   final Color color;
 
-   CommonUseContainer({super.key, required this.child, this.height= 100,  this.width = 100,  this.color=Colors.transparent});
+   const CommonUseContainer({super.key, required this.child, this.height= 100,  this.width = 100,  this.color=Colors.transparent});
 
   @override
   Widget build(BuildContext context) {
