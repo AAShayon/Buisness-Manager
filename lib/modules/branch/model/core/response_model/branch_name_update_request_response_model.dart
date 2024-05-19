@@ -8,9 +8,9 @@ BranchNameUpdateRequestResponseModel branchNameUpdateRequestResponseModelFromJso
 String branchNameUpdateRequestResponseModelToJson(BranchNameUpdateRequestResponseModel data) => json.encode(data.toJson());
 class BranchNameUpdateRequestResponseModel {
   BranchNameUpdateRequestResponseModel({
-      num? status, 
-      String? msg, 
-      String? description, 
+      dynamic status, 
+      dynamic msg, 
+      dynamic description, 
       Branch? branch,}){
     _status = status;
     _msg = msg;
@@ -24,22 +24,22 @@ class BranchNameUpdateRequestResponseModel {
     _description = json['description'];
     _branch = json['branch'] != null ? Branch.fromJson(json['branch']) : null;
   }
-  num? _status;
-  String? _msg;
-  String? _description;
+  dynamic _status;
+  dynamic _msg;
+  dynamic _description;
   Branch? _branch;
-BranchNameUpdateRequestResponseModel copyWith({  num? status,
-  String? msg,
-  String? description,
+BranchNameUpdateRequestResponseModel copyWith({  dynamic status,
+  dynamic msg,
+  dynamic description,
   Branch? branch,
 }) => BranchNameUpdateRequestResponseModel(  status: status ?? _status,
   msg: msg ?? _msg,
   description: description ?? _description,
   branch: branch ?? _branch,
 );
-  num? get status => _status;
-  String? get msg => _msg;
-  String? get description => _description;
+  dynamic get status => _status;
+  dynamic get msg => _msg;
+  dynamic get description => _description;
   Branch? get branch => _branch;
 
   Map<String, dynamic> toJson() {
@@ -71,15 +71,15 @@ Branch branchFromJson(String str) => Branch.fromJson(json.decode(str));
 String branchToJson(Branch data) => json.encode(data.toJson());
 class Branch {
   Branch({
-      num? id, 
-      num? companyId, 
-      String? name, 
-      num? status, 
-      num? createdBy, 
-      String? createdAt, 
-      num? updatedBy, 
-      String? updatedAt, 
-      num? deleted, 
+      dynamic id, 
+      dynamic companyId, 
+      dynamic name, 
+      dynamic status, 
+      dynamic createdBy, 
+      dynamic createdAt, 
+      dynamic updatedBy, 
+      dynamic updatedAt, 
+      dynamic deleted, 
       dynamic deletedBy, 
       dynamic deletedAt,}){
     _id = id;
@@ -108,26 +108,26 @@ class Branch {
     _deletedBy = json['deleted_by'];
     _deletedAt = json['deleted_at'];
   }
-  num? _id;
-  num? _companyId;
-  String? _name;
-  num? _status;
-  num? _createdBy;
-  String? _createdAt;
-  num? _updatedBy;
-  String? _updatedAt;
-  num? _deleted;
+  dynamic _id;
+  dynamic _companyId;
+  dynamic _name;
+  dynamic _status;
+  dynamic _createdBy;
+  dynamic _createdAt;
+  dynamic _updatedBy;
+  dynamic _updatedAt;
+  dynamic _deleted;
   dynamic _deletedBy;
   dynamic _deletedAt;
-Branch copyWith({  num? id,
-  num? companyId,
-  String? name,
-  num? status,
-  num? createdBy,
-  String? createdAt,
-  num? updatedBy,
-  String? updatedAt,
-  num? deleted,
+Branch copyWith({  dynamic id,
+  dynamic companyId,
+  dynamic name,
+  dynamic status,
+  dynamic createdBy,
+  dynamic createdAt,
+  dynamic updatedBy,
+  dynamic updatedAt,
+  dynamic deleted,
   dynamic deletedBy,
   dynamic deletedAt,
 }) => Branch(  id: id ?? _id,
@@ -142,15 +142,15 @@ Branch copyWith({  num? id,
   deletedBy: deletedBy ?? _deletedBy,
   deletedAt: deletedAt ?? _deletedAt,
 );
-  num? get id => _id;
-  num? get companyId => _companyId;
-  String? get name => _name;
-  num? get status => _status;
-  num? get createdBy => _createdBy;
-  String? get createdAt => _createdAt;
-  num? get updatedBy => _updatedBy;
-  String? get updatedAt => _updatedAt;
-  num? get deleted => _deleted;
+  dynamic get id => _id;
+  dynamic get companyId => _companyId;
+  dynamic get name => _name;
+  dynamic get status => _status;
+  dynamic get createdBy => _createdBy;
+  dynamic get createdAt => _createdAt;
+  dynamic get updatedBy => _updatedBy;
+  dynamic get updatedAt => _updatedAt;
+  dynamic get deleted => _deleted;
   dynamic get deletedBy => _deletedBy;
   dynamic get deletedAt => _deletedAt;
 

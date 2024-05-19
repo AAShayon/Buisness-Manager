@@ -9,12 +9,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BranchViewModel extends ChangeNotifier {
-  final BranchService _branchService = BranchRemoteDataSource();
+  BranchService _branchService = BranchRemoteDataSource();
   bool _isLoadingState = false;
   BranchCreateResponseModel? _branchCreateResponseModel;
   BranchListResponseModel? _branchListResponseModel;
   BranchNameUpdateRequestResponseModel? _branchNameUpdateRequestResponseModel;
   Branches? _branches;
+  int? _branchesIndex;
 
 
   ///////////////////////////////////////////////////////////
@@ -23,9 +24,11 @@ class BranchViewModel extends ChangeNotifier {
     _isLoadingState = isLoading;
     notifyListeners();
   }
-
-  void setBranchCreateRequestResponseModel(
-      BranchCreateResponseModel branchCreateResponseModel) {
+  void setBranchIndex({required int branchIndex}){
+    _branchesIndex=branchIndex;
+    notifyListeners();
+  }
+  void setBranchCreateRequestResponseModel(BranchCreateResponseModel branchCreateResponseModel) {
     _branchCreateResponseModel = branchCreateResponseModel;
     notifyListeners();
   }
@@ -36,7 +39,7 @@ class BranchViewModel extends ChangeNotifier {
   }
 
   void setBranchListResponseModel(BranchListResponseModel branchCreateRequestModel){
-    _branchListResponseModel = _branchListResponseModel;
+    _branchListResponseModel = branchListResponseModel;
     notifyListeners();
   }
   void setBranchList(Branches? branches) {
@@ -50,7 +53,7 @@ class BranchViewModel extends ChangeNotifier {
 
   BranchCreateResponseModel? get branchCreateResponseModel => _branchCreateResponseModel;
   BranchNameUpdateRequestResponseModel? get branchNameUpdateRequestResponseModel => _branchNameUpdateRequestResponseModel;
-
+ int? get branchesIndex => _branchesIndex;
   BranchListResponseModel? get branchListResponseModel => _branchListResponseModel;
 
   Branches? get branches => _branches;
@@ -72,8 +75,8 @@ class BranchViewModel extends ChangeNotifier {
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor:  Colors.greenAccent,
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       } else {
@@ -103,15 +106,14 @@ class BranchViewModel extends ChangeNotifier {
     return isCreate;
   }
 
-  Future<bool> branchNameUpdateRequest(BranchNameUpdateRequestModel branchNameUpdateRequestModel,BuildContext context)async{
+  Future<bool> branchNameUpdateRequest(BranchNameUpdateRequestModel branchNameUpdateRequestModel,BuildContext context, {required String branchId})async{
     _isLoadingState =true ;
     bool isUpdate=false ;
     _branchNameUpdateRequestResponseModel = null ;
     try{
-      Response response= await _branchService.branchUpdate(branchNameUpdateRequestModel);
+      Response response= await _branchService.branchUpdate(branchNameUpdateRequestModel,branchId: branchId);
       if(response.statusCode == 200 && response.data["status"] == 200){
         _branchNameUpdateRequestResponseModel=BranchNameUpdateRequestResponseModel.fromJson(response.data);
-        // _branches=_branchNameUpdateRequestResponseModel.branch;
         _isLoadingState= false;
         isUpdate= true ;
         notifyListeners();
@@ -157,7 +159,7 @@ class BranchViewModel extends ChangeNotifier {
     _branchListResponseModel = null;
     try {
       Response response=await _branchService.branchList();
-      if(response.statusCode == 200){
+      if(response.statusCode == 200 && response.data["status"]==200){
         _branchListResponseModel = BranchListResponseModel.fromJson(response.data);
         _branches = _branchListResponseModel!.branches;
         _isLoadingState =false ;
@@ -175,13 +177,14 @@ class BranchViewModel extends ChangeNotifier {
       isBranchListFetch =false;
       notifyListeners();
     }
+    notifyListeners();
     return isBranchListFetch;
   }
-  Future<bool> deleteBranch(BuildContext context)async{
+  Future<bool> deleteBranch({required BuildContext context,required String branchId})async{
     _isLoadingState = true;
     bool isDeleted = false;
     try{
-    Response response= await _branchService.branchDelete();
+    Response response= await _branchService.branchDelete(branchId: branchId);
     if(response.statusCode == 200 && response.data["status"] == 200){
       _isLoadingState =false;
       isDeleted = true;
@@ -189,7 +192,7 @@ class BranchViewModel extends ChangeNotifier {
       if(context.mounted){
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor: const Color(0xffFF0000),
+          backgroundColor: Colors.green,
           content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
         ));
       }

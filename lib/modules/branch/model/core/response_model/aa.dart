@@ -8,15 +8,15 @@ BranchListResponseModel branchListResponseModelFromJson(String str) => BranchLis
 String branchListResponseModelToJson(BranchListResponseModel data) => json.encode(data.toJson());
 class BranchListResponseModel {
   BranchListResponseModel({
-    num? status,
-    String? msg,
-    String? description,
-    Branches? branches,}){
+      num? status, 
+      String? msg, 
+      String? description, 
+      Branches? branches,}){
     _status = status;
     _msg = msg;
     _description = description;
     _branches = branches;
-  }
+}
 
   BranchListResponseModel.fromJson(dynamic json) {
     _status = json['status'];
@@ -28,15 +28,15 @@ class BranchListResponseModel {
   String? _msg;
   String? _description;
   Branches? _branches;
-  BranchListResponseModel copyWith({  num? status,
-    String? msg,
-    String? description,
-    Branches? branches,
-  }) => BranchListResponseModel(  status: status ?? _status,
-    msg: msg ?? _msg,
-    description: description ?? _description,
-    branches: branches ?? _branches,
-  );
+BranchListResponseModel copyWith({  num? status,
+  String? msg,
+  String? description,
+  Branches? branches,
+}) => BranchListResponseModel(  status: status ?? _status,
+  msg: msg ?? _msg,
+  description: description ?? _description,
+  branches: branches ?? _branches,
+);
   num? get status => _status;
   String? get msg => _msg;
   String? get description => _description;
@@ -71,17 +71,17 @@ Branches branchesFromJson(String str) => Branches.fromJson(json.decode(str));
 String branchesToJson(Branches data) => json.encode(data.toJson());
 class Branches {
   Branches({
-    num? perPage,
-    num? from,
-    num? to,
-    num? total,
-    num? currentPage,
-    num? lastPage,
-    dynamic prevPageUrl,
-    String? firstPageUrl,
-    dynamic nextPageUrl,
-    String? lastPageUrl,
-    List<Branch>? branchList,}){
+      num? perPage, 
+      num? from, 
+      num? to, 
+      num? total, 
+      num? currentPage, 
+      num? lastPage, 
+      dynamic prevPageUrl, 
+      String? firstPageUrl, 
+      dynamic nextPageUrl, 
+      String? lastPageUrl, 
+      List<Branch>? branchList,}){
     _perPage = perPage;
     _from = from;
     _to = to;
@@ -93,7 +93,7 @@ class Branches {
     _nextPageUrl = nextPageUrl;
     _lastPageUrl = lastPageUrl;
     _branchList = branchList;
-  }
+}
 
   Branches.fromJson(dynamic json) {
     _perPage = json['per_page'];
@@ -124,29 +124,29 @@ class Branches {
   dynamic _nextPageUrl;
   String? _lastPageUrl;
   List<Branch>? _branchList;
-  Branches copyWith({  num? perPage,
-    num? from,
-    num? to,
-    num? total,
-    num? currentPage,
-    num? lastPage,
-    dynamic prevPageUrl,
-    String? firstPageUrl,
-    dynamic nextPageUrl,
-    String? lastPageUrl,
-    List<Branch>? branchList,
-  }) => Branches(  perPage: perPage ?? _perPage,
-    from: from ?? _from,
-    to: to ?? _to,
-    total: total ?? _total,
-    currentPage: currentPage ?? _currentPage,
-    lastPage: lastPage ?? _lastPage,
-    prevPageUrl: prevPageUrl ?? _prevPageUrl,
-    firstPageUrl: firstPageUrl ?? _firstPageUrl,
-    nextPageUrl: nextPageUrl ?? _nextPageUrl,
-    lastPageUrl: lastPageUrl ?? _lastPageUrl,
-    branchList: branchList ?? _branchList,
-  );
+Branches copyWith({  num? perPage,
+  num? from,
+  num? to,
+  num? total,
+  num? currentPage,
+  num? lastPage,
+  dynamic prevPageUrl,
+  String? firstPageUrl,
+  dynamic nextPageUrl,
+  String? lastPageUrl,
+  List<Branch>? branchList,
+}) => Branches(  perPage: perPage ?? _perPage,
+  from: from ?? _from,
+  to: to ?? _to,
+  total: total ?? _total,
+  currentPage: currentPage ?? _currentPage,
+  lastPage: lastPage ?? _lastPage,
+  prevPageUrl: prevPageUrl ?? _prevPageUrl,
+  firstPageUrl: firstPageUrl ?? _firstPageUrl,
+  nextPageUrl: nextPageUrl ?? _nextPageUrl,
+  lastPageUrl: lastPageUrl ?? _lastPageUrl,
+  branchList: branchList ?? _branchList,
+);
   num? get perPage => _perPage;
   num? get from => _from;
   num? get to => _to;
@@ -186,11 +186,11 @@ Branch branchFromJson(String str) => Branch.fromJson(json.decode(str));
 String branchToJson(Branch data) => json.encode(data.toJson());
 class Branch {
   Branch({
-    num? id,
-    String? name,}){
+      num? id, 
+      String? name,}){
     _id = id;
     _name = name;
-  }
+}
 
   Branch.fromJson(dynamic json) {
     _id = json['id'];
@@ -198,11 +198,11 @@ class Branch {
   }
   num? _id;
   String? _name;
-  Branch copyWith({  num? id,
-    String? name,
-  }) => Branch(  id: id ?? _id,
-    name: name ?? _name,
-  );
+Branch copyWith({  num? id,
+  String? name,
+}) => Branch(  id: id ?? _id,
+  name: name ?? _name,
+);
   num? get id => _id;
   String? get name => _name;
 
