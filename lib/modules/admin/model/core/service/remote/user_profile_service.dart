@@ -21,19 +21,19 @@ class UserProfileDataSource extends UserProfileService{
 
   @override
   Future<Response> userProfile() async {
-   Response? response= await  _dioService.get(ApiUrl.userProfile);
+   Response? response= await  _dioService.get(ApiUrl().userProfile);
     return response!;
   }
 
   @override
   Future<Response> userProfileUpdate(UserProfileUpdateRequestModel userProfileUpdateRequestModel) async{
-   Response? response = await _dioService.post(ApiUrl.userProfileUpdate,data: userProfileUpdateRequestModel.toJson());
+   Response? response = await _dioService.post(ApiUrl().userProfileUpdate,data: userProfileUpdateRequestModel.toJson());
    return response!;
   }
 
   @override
   Future<Response> userDeleteProfile() async {
-   Response? response=await _dioService.request(ApiUrl.userAccountDelete);
+   Response? response=await _dioService.request(ApiUrl().userAccountDelete);
    return response!;
   }
 

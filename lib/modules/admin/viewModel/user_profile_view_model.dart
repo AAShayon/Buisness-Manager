@@ -98,8 +98,8 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
       if(context.mounted){
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor: const Color(0xffFF0000),
-          content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          backgroundColor:  Colors.green,
+          content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
         ));
       }
     } else {
