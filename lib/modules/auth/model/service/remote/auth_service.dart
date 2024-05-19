@@ -22,43 +22,45 @@ abstract class AuthService{
 
 class AuthRemoteDataSource extends AuthService{
   static final AuthRemoteDataSource _singleton = AuthRemoteDataSource._internal();
-  final _dioService=DioService();
+  late DioService _dioService;
   factory AuthRemoteDataSource(){
   return _singleton;
   }
-  AuthRemoteDataSource._internal();
+  AuthRemoteDataSource._internal(){
+    _dioService=DioService();
+  }
 
   @override
   Future<Response> logInWithOtp(LogInRequestModel logInRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl.login, data:logInRequestModel.toJson());
+    Response? response= await _dioService.post(ApiUrl().login, data:logInRequestModel.toJson());
     return response!;
   }
   @override
   Future<Response> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel) async{
-    Response? response= await _dioService.post(ApiUrl.sendLoginOtp,data: sendOtpRequestForLoginModel.toJson());
+    Response? response= await _dioService.post(ApiUrl().sendLoginOtp,data: sendOtpRequestForLoginModel.toJson());
     return response!;
   }
 
   @override
   Future<Response> logOut() async{
-    Response? response= await _dioService.post(ApiUrl.logout);
+    Response? response= await _dioService.post(ApiUrl().logout);
     return response!;
   }
 
   @override
   Future<Response> register(RegisterRequestModel registerRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl.registration,data: registerRequestModel.toJson());
+    Response? response= await _dioService.post(ApiUrl().registration,data: registerRequestModel.toJson());
     return response!;
   }
   @override
   Future<Response> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl.signUpVerifyOtp,data: verifyOtpRegisterRequestModel.toJson());
+    Response? response= await _dioService.post(ApiUrl().signUpVerifyOtp,data: verifyOtpRegisterRequestModel.toJson());
     return response!;
   }
 
   @override
   Future<Response> resendOtpForRegister(ResendRegisterOtpRequestModel registerOtpRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl.registration,data: registerOtpRequestModel.toJson());
+    Response? response= await _dioService.post(ApiUrl().registration,data: registerOtpRequestModel.toJson());
     return response!;
   }
 

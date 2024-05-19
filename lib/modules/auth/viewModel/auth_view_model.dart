@@ -84,8 +84,8 @@ class AuthViewModel extends ChangeNotifier{
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor:  Colors.green,
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -97,7 +97,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -110,7 +110,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
     }
@@ -131,8 +131,8 @@ class AuthViewModel extends ChangeNotifier{
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -144,7 +144,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -157,7 +157,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
     }
@@ -180,8 +180,8 @@ class AuthViewModel extends ChangeNotifier{
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor: const Color(0xff00ff3c),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }else{
@@ -192,7 +192,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
 
@@ -232,8 +232,8 @@ class AuthViewModel extends ChangeNotifier{
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor: const Color(0xff00ff0d),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }else{
@@ -244,7 +244,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -257,7 +257,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
     }
@@ -275,8 +275,8 @@ class AuthViewModel extends ChangeNotifier{
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor: const Color(0xff22ff00),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
 
@@ -285,7 +285,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
