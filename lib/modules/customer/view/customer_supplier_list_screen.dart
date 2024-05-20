@@ -42,7 +42,6 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
     await customerViewModel.customerListFetch(branchId: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -68,39 +67,60 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
                 ),
                 Consumer<CustomerViewModel>(
                   builder: (context, customerViewModel, child) {
-                    final customers=customerViewModel.customers?.customerList;
-                   if(customerViewModel.isLoadingState){
-                     return CircularProgressIndicator(color: Colors.green,);
-                   } else if(customers == null){
-                     return Text('No data');
-                   }else{
-                     return  GridView.builder(
-                       shrinkWrap: true,
-                         itemCount: customers.length,
-                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                           crossAxisCount: 2,
-                           crossAxisSpacing: 10.0,
-                           mainAxisSpacing: 10.0,
-                         ), itemBuilder: (context ,index){
-                       final customer=customers[index];
-                       return Card(
-                         child: InkWell(
-                           onTap: (){
-                             _showCustomerSupplierOption(context, widget.branchId ,customer.id.toString());
-                           },
-                           child: Column(
-                             children: [
-                               Text('${customer.name}'),
-                               Text('${customer.id}'),
-                               Text('${customer.phone}'),
-                             ],
-                           ),
-                         ),
-                       );
-                     });
-                   }
-
-
+                    final customers = customerViewModel.customers?.customerList;
+                    if (customerViewModel.isLoadingState) {
+                      return CircularProgressIndicator(color: Colors.green);
+                    } else if (customers == null) {
+                      return Text('No data');
+                    } else {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          columns: const [
+                            DataColumn(label: Text('ID')),
+                            DataColumn(label: Text('Name')),
+                            DataColumn(label: Text('Phone')),
+                            DataColumn(label: Text('Actions')),
+                          ],
+                          rows: customers.map((customer) {
+                            return DataRow(cells: [
+                              DataCell(Text('${customer.id}')),
+                              DataCell(Text('${customer.name}')),
+                              DataCell(Text('${customer.phone}')),
+                              DataCell(
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.remove_red_eye_rounded),
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionList(customerSupplierID: customer.id.toString())));
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerOrSupplierUpdate(branchId: widget.branchId, customerOrSupplierId: customer.id.toString())));
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () async {
+                                        final customerViewModel = Provider.of<CustomerViewModel>(context, listen: false);
+                                        await customerViewModel.deleteCustomer(context, branchId: widget.branchId, customerOrSupplierId: customer.id.toString()).then((isDeleted) {
+                                          if (isDeleted) {
+                                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen()), (route) => false);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ]);
+                          }).toList(),
+                        ),
+                      );
+                    }
                   },
                 ),
               ],
@@ -108,50 +128,6 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
           ),
         ),
       ),
-    );
-  }
-
-  void _showCustomerSupplierOption(BuildContext context, String branchId ,String customerOrSupplierId) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Customer Supplier Options'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.remove_red_eye_rounded),
-                title: const Text('View Transaction'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionList(customerSupplierID: customerOrSupplierId)));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text('Update'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerOrSupplierUpdate(branchId: branchId, customerOrSupplierId: customerOrSupplierId,)));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text('Delete'),
-                onTap: () async {
-              final customerViewModel=Provider.of<CustomerViewModel>(context);
-              await customerViewModel.deleteCustomer(context, branchId: branchId, customerOrSupplierId: customerOrSupplierId).then((isDeleted){
-                if(isDeleted){
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen()), (route) => false);
-                }
-              });
-                },
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
