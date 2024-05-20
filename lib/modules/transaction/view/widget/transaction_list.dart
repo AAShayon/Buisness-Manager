@@ -79,8 +79,8 @@ class TransactionList extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(Icons.more_vert),
                     onPressed: () {
-                      String trsndsctionID='45';
-                      _showTransactionOption(context, trsndsctionID);
+                      String transactionID=customerSupplierID;
+                      _showTransactionOption(context, transactionID);
                     },
                   ),
                 ),
