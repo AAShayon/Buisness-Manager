@@ -39,12 +39,12 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        _loadData();
-      },
-      child: Scaffold(
-        body: CustomContainer(
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _loadData();
+        },
+        child: CustomContainer(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -89,7 +89,7 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
                                     IconButton(
                                       icon: Icon(Icons.remove_red_eye_rounded),
                                       onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionList(customerSupplierID: customer.id.toString())));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionList(customerSupplierID: customer.id.toString(), branchID:widget.branchId,)));
                                       },
                                     ),
                                     IconButton(
