@@ -1,6 +1,5 @@
 import 'package:buisness_manager/modules/admin/model/core/request_model/user_profile_update_request_model.dart';
 import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
-import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
