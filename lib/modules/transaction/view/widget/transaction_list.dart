@@ -1,61 +1,105 @@
+import 'package:buisness_manager/model/core/api_urls.dart';
+import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_create.dart';
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_update.dart';
-import 'package:buisness_manager/view/widget/common_use_container.dart';
+import 'package:buisness_manager/modules/transaction/viewModel/transaction_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
-import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../../model/core/response_model/TransactionsListResponseModel.dart';
 
-class TransactionList extends StatelessWidget {
+class TransactionList extends StatefulWidget {
   final String customerSupplierID;
+  final String branchID;
 
-  const TransactionList({super.key, required this.customerSupplierID});
+  const TransactionList({super.key, required this.customerSupplierID, required this.branchID});
+
+  @override
+  State<TransactionList> createState() => _TransactionListState();
+}
+
+class _TransactionListState extends State<TransactionList> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData();
+    });
+  }
+
+  Future _loadData() async {
+    final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
+    await transactionViewModel.transactionListFetch(branchID: widget.branchID, customerOrSupplierID: widget.customerSupplierID);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  CustomContainer(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 25.h),
-              Center(child: HeadlineLargeText(text: "Supplier/Customer", color: Colors.white)),
-              SizedBox(height: 25.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  HeadlineLargeText(text: 'UserName', color: Colors.white),
-                  SizedBox(width: 50.w),
-                  HeadlineLargeText(text: 'ID $customerSupplierID', color: Colors.white),
-                ],
-              ),
-              SizedBox(height: 10.h,),
-              Center(child: CustomCircularButton(text: 'Create Transaction', onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> TransactionCreate()));})),
-              Column(
-                children: [
-                  SizedBox(height: 20.h),
-                  SizedBox(
-                    height: 700.h,
-                    width: 300.w,
-                    child: _buildTransactionTable(context),
-                  ),
-                ],
-              ),
-            ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _loadData();
+        },
+        child: CustomContainer(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15.h),
+                Center(child: HeadlineLargeText(text: "Supplier/Customer", color: Colors.white)),
+                SizedBox(height: 15.h),
+                Consumer<TransactionViewModel>(
+                  builder: (context, transactionViewModel, child) {
+                    if (transactionViewModel.isLoadingState) {
+                      return Center(child: CircularProgressIndicator(color: Colors.green));
+                    } else if (transactionViewModel.transactions == null || transactionViewModel.transactions!.transactionList!.isEmpty) {
+                      return Center(child: Text('No Data', style: TextStyle(color: Colors.white)));
+                    }
+
+                    final transactions = transactionViewModel.transactions!.transactionList;
+
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            HeadlineLargeText(text: 'ID ${widget.customerSupplierID}', color: Colors.white),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Center(
+                          child: CustomCircularButton(
+                            text: 'Create Transaction',
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCreate(branchID: widget.branchID, customerOrSupplierId: widget.customerSupplierID,)));
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                        SizedBox(
+                          height: 700.h,
+                          width: double.infinity,
+                          child: _buildTransactionTable(context, transactions!),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTransactionTable(BuildContext context) {
+  Widget _buildTransactionTable(BuildContext context, List<Transaction> transactions) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        columnSpacing: 5.w,
+        columnSpacing: 10.w,
         columns: [
           _buildDataColumn('Trans. No'),
           _buildDataColumn('Amount'),
@@ -63,42 +107,32 @@ class TransactionList extends StatelessWidget {
           _buildDataColumn('Bill No'),
           _buildDataColumn('Actions'),
         ],
-        rows: List<DataRow>.generate(
-          10,
-              (index) => DataRow(
+        rows: transactions.map((transaction) {
+          return DataRow(
             cells: [
-              _buildDataCell('1003'),
-              _buildDataCell('2000'),
-              _buildDataCell('Anything'),
-              _buildDataCell('001'),
+              _buildDataCell(transaction.id.toString()),
+              _buildDataCell(transaction.amount.toString()),
+              _buildDataCell(transaction.details ?? 'N/A'),
+              _buildDataCell(transaction.billNo ?? 'N/A'),
               DataCell(
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed: () {
-                      String transactionID=customerSupplierID;
-                      _showTransactionOption(context, transactionID);
-                    },
-                  ),
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {
+                    _showTransactionOption(context, transactionID: transaction.id.toString() ,branchID:widget.branchID,customerID:widget.customerSupplierID,billID: transaction.billNo.toString() );
+                  },
                 ),
               ),
             ],
-          ),
-        ),
+          );
+        }).toList(),
       ),
     );
   }
 
   DataColumn _buildDataColumn(String label) {
     return DataColumn(
-      label: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        padding: EdgeInsets.all(8.0),
+      label: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         child: Text(label),
       ),
     );
@@ -106,16 +140,15 @@ class TransactionList extends StatelessWidget {
 
   DataCell _buildDataCell(String content) {
     return DataCell(
-      Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         child: Text(content),
       ),
     );
   }
 
-  void _showTransactionOption(BuildContext context, String? id) {
+  void _showTransactionOption(BuildContext context,
+      {required String branchID, required String transactionID,required String customerID,required String billID}) {
     showDialog(
       context: context,
       builder: (context) {
@@ -129,17 +162,26 @@ class TransactionList extends StatelessWidget {
                 title: const Text('Update'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const TransactionUpdate(
-                    // transactionID:id ,
-                  )));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TransactionUpdate(transactionID: transactionID, branchID: branchID, customerID:customerID,)),
+                  );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.delete),
                 title: const Text('Delete'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your delete logic here
+                onTap: () async {
+                  final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
+                  await transactionViewModel.deleteTransaction(context, branchID: branchID, transactionID: transactionID).then((isDeleted) {
+                    if (isDeleted) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => BranchViewInformationScreen()),
+                            (route) => false,
+                      );
+                    }
+                  });
                 },
               ),
             ],
@@ -148,4 +190,5 @@ class TransactionList extends StatelessWidget {
       },
     );
   }
+
 }
