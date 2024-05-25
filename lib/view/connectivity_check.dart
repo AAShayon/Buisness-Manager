@@ -65,7 +65,7 @@ class _CheckConnectivityState extends State<CheckConnectivity> {
             ? const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
+                CircularProgressIndicator(color: Colors.green,),
                 SizedBox(height: 20.0),
                 Text(
                   'Establishing connection...',
