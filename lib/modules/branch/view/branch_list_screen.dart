@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/branch/view/widgets/branch_update.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
-import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
 import '../model/core/response_model/branch_list_response_model.dart';
 
