@@ -1,6 +1,5 @@
 
 
-import 'dart:developer';
 
 import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
