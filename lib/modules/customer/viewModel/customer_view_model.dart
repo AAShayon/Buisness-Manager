@@ -1,7 +1,6 @@
 
 import 'dart:developer';
 
-import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_create_request_model.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_update_request_model.dart';
 import 'package:buisness_manager/modules/customer/model/core/response_model/CustomerUpdateResponseModel.dart';
@@ -9,7 +8,6 @@ import 'package:buisness_manager/modules/customer/model/core/response_model/cust
 import 'package:buisness_manager/modules/customer/model/core/response_model/customer_list_response_model.dart';
 import 'package:buisness_manager/modules/customer/model/service/remote/customer_service.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomerViewModel extends ChangeNotifier {
@@ -56,13 +54,13 @@ class CustomerViewModel extends ChangeNotifier {
   Customers? get customers => _customers;
 
   ////////////////
-  Future<bool> createCustomer(CustomerCreateRequestModel customerCreateRequestModel, BuildContext context,{required String branchId}) async {
+  Future<bool> createCustomer(CustomerCreateRequestModel customerCreateRequestModel, BuildContext context,{required String branchId,required int customerOrSupplierType}) async {
     _isLoadingState = true;
     bool isCreate = false;
     _customerCreateResponseModel = null;
     _customers = null;
     try {
-      Response response = await _customerService.customerCreate(customerCreateRequestModel, branchId: branchId);
+      Response response = await _customerService.customerCreate(customerCreateRequestModel, branchId: branchId, customerOrSupplierType:customerOrSupplierType);
 
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _customerCreateResponseModel = CustomerCreateResponseModel.fromJson(response.data);

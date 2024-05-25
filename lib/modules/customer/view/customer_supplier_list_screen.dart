@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_create.dart';
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_update.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_list.dart';
-import 'package:buisness_manager/view/widget/common_use_container.dart';
 
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -14,12 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../model/core/response_model/customer_list_response_model.dart';
-
 class CustomerSupplierViewScreen extends StatefulWidget {
-  dynamic name;
-  String branchId;
-  int customerOrSupplierType;
+  final dynamic name;
+  final String branchId;
+  final int customerOrSupplierType;
 
   CustomerSupplierViewScreen({super.key, this.name, required this.branchId, required this.customerOrSupplierType});
 
@@ -76,6 +71,7 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
+                          columnSpacing: 10.0, // Set column spacing to minimum
                           columns: const [
                             DataColumn(label: Text('ID')),
                             DataColumn(label: Text('Name')),

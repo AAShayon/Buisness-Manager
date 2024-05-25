@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 abstract class CustomerService {
   
   Future<Response> customerList({required String branchId,required int customerOrSupplierType});
-  Future<Response> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId});
+  Future<Response> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId,required int customerOrSupplierType});
   Future<Response> customerUpdate(CustomerUpdateRequestModel customerUpdateRequestModel,{required String branchId,required String customerOrSupplierId });
   Future<Response> customerDelete({required String branchId, required String customerOrSupplierId});
   
@@ -38,7 +38,7 @@ class CustomerRemoteDataSource extends CustomerService{
   Future<Response> customerUpdate(CustomerUpdateRequestModel customerUpdateRequestModel,{required String branchId,required String customerOrSupplierId }) async{
    ApiUrl.branchId=branchId;
    ApiUrl.customerOrSupplierID=customerOrSupplierId;
-    Response? response = await _dioService!.post(ApiUrl().customerorSupplierUpdate,data: customerUpdateRequestModel.toJson());
+    Response? response = await _dioService!.post(ApiUrl().customerOrSupplierUpdate,data: customerUpdateRequestModel.toJson());
   return response!;
   }
   
@@ -53,7 +53,7 @@ class CustomerRemoteDataSource extends CustomerService{
   }
 
   @override
-  Future<Response> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId})async {
+  Future<Response> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId,required int customerOrSupplierType})async {
   ApiUrl.branchId=branchId;
   Response? response =await _dioService!.post(ApiUrl().customerOrSupplierCreate,data: customerCreateRequestModel.toJson());
   return response!;

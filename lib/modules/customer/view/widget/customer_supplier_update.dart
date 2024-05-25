@@ -1,6 +1,5 @@
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_update_request_model.dart';
-import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -22,8 +21,7 @@ class CustomerOrSupplierUpdate extends StatefulWidget {
 
 class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
   final RegExp phoneRegex = RegExp(r'^\+?(88)?0[1-9]\d{8,9}$');
-  final _customerCreateFormKey = GlobalKey<FormState>();
-
+  final _customerUpdateFormKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -37,7 +35,7 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
   final TextEditingController routingNumberController = TextEditingController();
   final TextEditingController swiftCodeController = TextEditingController();
 
-  String? customerOrSupplier;
+  int? customerOrSupplier; // Change to int for 0/1 values
 
   @override
   void dispose() {
@@ -58,11 +56,11 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
 
   @override
   Widget build(BuildContext context) {
-    final customerViewModel=Provider.of<CustomerViewModel>(context);
+    final customerViewModel = Provider.of<CustomerViewModel>(context);
     return Scaffold(
       body: CustomContainer(
         child: Form(
-          key: _customerCreateFormKey,
+          key: _customerUpdateFormKey,
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 100.h),
@@ -72,7 +70,7 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                 children: [
                   const Center(
                       child: HeadLineMediumText(
-                          text: 'Update Customer OR Supplier', color: Colors.lightGreen)),
+                          text: 'Add Customer OR Supplier', color: Colors.lightGreen)),
                   SizedBox(height: 25.h),
                   Container(
                     width: 350.w,
@@ -108,15 +106,6 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                   prefixIcon: Iconsax.mobile,
                                   textInputTypeKeyboard: TextInputType.phone,
                                   controller: phoneNumberController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter a phone number';
-                                    }
-                                    if (!phoneRegex.hasMatch(value)) {
-                                      return 'Please enter a valid phone number';
-                                    }
-                                    return null;
-                                  },
                                 ),
                                 SizedBox(height: 15.h),
                                 CustomTextFormField(
@@ -124,18 +113,9 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                   prefixIcon: Icons.email,
                                   textInputTypeKeyboard: TextInputType.emailAddress,
                                   controller: emailController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an email';
-                                    }
-                                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                                      return 'Please enter a valid email';
-                                    }
-                                    return null;
-                                  },
                                 ),
                                 SizedBox(height: 15.h),
-                                DropdownButtonFormField<String>(
+                                DropdownButtonFormField<int>(
                                   decoration: const InputDecoration(
                                     labelText: 'Customer / Supplier',
                                     prefixIcon: Icon(Icons.add),
@@ -143,12 +123,12 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                   ),
                                   value: customerOrSupplier,
                                   items: const [
-                                    DropdownMenuItem<String>(
-                                      value: 'customer',
+                                    DropdownMenuItem<int>(
+                                      value: 0,
                                       child: Text('Customer'),
                                     ),
-                                    DropdownMenuItem<String>(
-                                      value: 'supplier',
+                                    DropdownMenuItem<int>(
+                                      value: 1,
                                       child: Text('Supplier'),
                                     ),
                                   ],
@@ -158,7 +138,7 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                     });
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
+                                    if (value == null) {
                                       return 'Please select Customer/Supplier';
                                     }
                                     return null;
@@ -286,26 +266,34 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                           ),
                           SizedBox(height: 15.h),
                           CustomCircularButton(
-                            text: 'Update',
-                            onPressed: () {
-                              if (_customerCreateFormKey.currentState!.validate()) {
-                                final customerUpdateRequestModel=CustomerUpdateRequestModel(
-                                  accountName: accountNameController.text,
-                                  accountNumber: accountNumberController.text,
+                            text: 'Create',
+                            onPressed: () async {
+                              if (_customerUpdateFormKey.currentState!.validate()) {
+                                final customerUpdateRequestModel = CustomerUpdateRequestModel(
                                   name: nameController.text,
                                   email: emailController.text,
                                   phone: phoneNumberController.text,
+                                  accountName: accountNameController.text,
+                                  accountNumber: accountNumberController.text,
                                   address: addressController.text,
                                   area: areaController.text,
                                   city: cityController.text,
                                   postCode: postCodeController.text,
                                   routingNumber: routingNumberController.text,
-                                  type: customerOrSupplier,
-                                  swiftCode: swiftCodeController.text,
                                   state: stateController.text,
+                                  swiftCode: swiftCodeController.text,
+                                  type: customerOrSupplier.toString(), // Ensure type is string
                                 );
-                                customerViewModel.updateCustomer(customerUpdateRequestModel, context,branchId: widget.branchId ,customerOrSupplierId:widget.customerOrSupplierId ).then((value){
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen()));
+                                await customerViewModel
+                                    .updateCustomer(
+                                    customerUpdateRequestModel, context,
+                                    branchId: widget.branchId, customerOrSupplierId: widget.customerOrSupplierId )
+                                    .then((value) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              BranchViewInformationScreen()));
                                 });
                               }
                             },

@@ -1,6 +1,5 @@
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_create_request_model.dart';
-import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -35,8 +34,7 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
   final TextEditingController routingNumberController = TextEditingController();
   final TextEditingController swiftCodeController = TextEditingController();
 
-  String? customerOrSupplier;
-
+  int? customerOrSupplier; // Change to int for 0/1 values
 
   @override
   void dispose() {
@@ -57,7 +55,7 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
 
   @override
   Widget build(BuildContext context) {
-    final customerViewModel=Provider.of<CustomerViewModel>(context);
+    final customerViewModel = Provider.of<CustomerViewModel>(context);
     return Scaffold(
       body: CustomContainer(
         child: Form(
@@ -114,18 +112,9 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                   prefixIcon: Icons.email,
                                   textInputTypeKeyboard: TextInputType.emailAddress,
                                   controller: emailController,
-                                  // validator: (value) {
-                                  //   if (value == null || value.isEmpty) {
-                                  //     return 'Please enter an email';
-                                  //   }
-                                  //   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                                  //     return 'Please enter a valid email';
-                                  //   }
-                                  //   return null;
-                                  // },
                                 ),
                                 SizedBox(height: 15.h),
-                                DropdownButtonFormField<String>(
+                                DropdownButtonFormField<int>(
                                   decoration: const InputDecoration(
                                     labelText: 'Customer / Supplier',
                                     prefixIcon: Icon(Icons.add),
@@ -133,12 +122,12 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                   ),
                                   value: customerOrSupplier,
                                   items: const [
-                                    DropdownMenuItem<String>(
-                                      value: 'customer',
+                                    DropdownMenuItem<int>(
+                                      value: 0,
                                       child: Text('Customer'),
                                     ),
-                                    DropdownMenuItem<String>(
-                                      value: 'supplier',
+                                    DropdownMenuItem<int>(
+                                      value: 1,
                                       child: Text('Supplier'),
                                     ),
                                   ],
@@ -148,7 +137,7 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                     });
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
+                                    if (value == null) {
                                       return 'Please select Customer/Supplier';
                                     }
                                     return null;
@@ -277,25 +266,34 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                           SizedBox(height: 15.h),
                           CustomCircularButton(
                             text: 'Create',
-                            onPressed: () async{
+                            onPressed: () async {
                               if (_customerCreateFormKey.currentState!.validate()) {
-                                final customerCreateRequestModel=CustomerCreateRequestModel(
-                                    name: nameController.text,
-                                    email: emailController.text,
-                                    phone: phoneNumberController.text,
-                                    accountName: accountNameController.text,
-                                    accountNumber: accountNumberController.text,
-                                    address: addressController.text,
-                                    area: areaController.text,
-                                    city: cityController.text,
-                                    postCode: postCodeController.text,
-                                    routingNumber: routingNumberController.text,
-                                    state: stateController.text,
-                                    swiftCode: swiftCodeController.text,
-                                    type: customerOrSupplier
+                                final customerCreateRequestModel = CustomerCreateRequestModel(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  phone: phoneNumberController.text,
+                                  accountName: accountNameController.text,
+                                  accountNumber: accountNumberController.text,
+                                  address: addressController.text,
+                                  area: areaController.text,
+                                  city: cityController.text,
+                                  postCode: postCodeController.text,
+                                  routingNumber: routingNumberController.text,
+                                  state: stateController.text,
+                                  swiftCode: swiftCodeController.text,
+                                  type: customerOrSupplier.toString(), // Ensure type is string
                                 );
-                             await   customerViewModel.createCustomer(customerCreateRequestModel, context, branchId: widget.id).then((value) {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen()));
+                                await customerViewModel
+                                    .createCustomer(
+                                    customerCreateRequestModel, context,
+                                    branchId: widget.id,
+                                    customerOrSupplierType: customerOrSupplier!)
+                                    .then((value) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              BranchViewInformationScreen()));
                                 });
                               }
                             },
