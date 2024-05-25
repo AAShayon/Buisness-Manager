@@ -1,4 +1,3 @@
-
 import 'package:buisness_manager/modules/transaction/model/core/request_model/transaction_create_request_model.dart';
 import 'package:buisness_manager/modules/transaction/model/core/request_model/transaction_update_request_model.dart';
 import 'package:buisness_manager/modules/transaction/model/core/response_model/TransactionsListResponseModel.dart';
@@ -48,12 +47,12 @@ class TransactionViewModel extends ChangeNotifier {
   TransactionsListResponseModel? get transactionsListResponseModel => _transactionsListResponseModel;
   Transactions? get transactions => _transactions;
 
-  Future<bool> createTransaction(TransactionCreateRequestModel transactionCreateRequestModel, BuildContext context) async {
+  Future<bool> createTransaction(TransactionCreateRequestModel transactionCreateRequestModel, BuildContext context,{required String branchID}) async {
    _isLoadingState =true;
     bool isCreated = false;
     _transactionCreateResponseModel=null;
     try {
-      Response response = await _transactionService.transactionCreate(transactionCreateRequestModel);
+      Response response = await _transactionService.transactionCreate(transactionCreateRequestModel, branchID: branchID);
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _transactionCreateResponseModel = TransactionCreateResponseModel.fromJson(response.data);
         _isLoadingState = false;
@@ -90,13 +89,13 @@ class TransactionViewModel extends ChangeNotifier {
     return isCreated;
   }
 
-  Future<bool> updateTransaction(TransactionUpdateRequestModel transactionUpdateRequestModel, BuildContext context) async {
+  Future<bool> updateTransaction(TransactionUpdateRequestModel transactionUpdateRequestModel, BuildContext context,{required String branchID,required String transactionID}) async {
     _isLoadingState =true;
       bool isUpdate=false ;
     _transactionUpdateResponseModel = null ;
 
     try {
-      Response response = await _transactionService.transactionUpdate(transactionUpdateRequestModel);
+      Response response = await _transactionService.transactionUpdate(transactionUpdateRequestModel, branchID: branchID, transactionID: transactionID);
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _transactionUpdateResponseModel= TransactionUpdateResponseModel.fromJson(response.data);
         _isLoadingState =false;
@@ -133,12 +132,12 @@ class TransactionViewModel extends ChangeNotifier {
     return isUpdate;
   }
 
-  Future<bool> transactionListFetch() async {
+  Future<bool> transactionListFetch({required String branchID,required String customerOrSupplierID}) async {
     _isLoadingState=true;
     bool isFetched = false;
     _transactionsListResponseModel = null;
     try {
-      Response response = await _transactionService.transactionList();
+      Response response = await _transactionService.transactionList(branchId: branchID, customerOrSupplierId: customerOrSupplierID);
       if (response.statusCode == 200) {
       _transactionsListResponseModel = TransactionsListResponseModel.fromJson(response.data);
         _transactions = _transactionsListResponseModel!.transactions;
@@ -158,11 +157,11 @@ class TransactionViewModel extends ChangeNotifier {
     return isFetched;
   }
 
-  Future<bool> deleteTransaction(BuildContext context) async {
+  Future<bool> deleteTransaction(BuildContext context,{required String branchID,required String transactionID}) async {
     _isLoadingState = true;
     bool isDeleted = false;
     try {
-      Response response = await _transactionService.transactionDelete();
+      Response response = await _transactionService.transactionDelete(branchID: branchID, transactionID: transactionID);
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _isLoadingState =false;
         isDeleted = true;
