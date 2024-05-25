@@ -30,7 +30,7 @@ class ApiUrl{
     String customerOrSupplierList="/admin/$branchId/$customerOrSupplierType/customers";
   //  String supplierList="{{BASE_URL}}/admin/$branchId/1/customers";
     String customerOrSupplierCreate="/admin/$branchId/customer/create";
-    String customerorSupplierUpdate="/admin/$branchId/customer/$customerOrSupplierID/update";
+    String customerOrSupplierUpdate="/admin/$branchId/customer/$customerOrSupplierID/update";
     String customerOrSupplierDelete="/admin/$branchId/customer/$customerOrSupplierID/delete";
 
   ///Transaction
