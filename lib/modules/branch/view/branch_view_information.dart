@@ -1,6 +1,5 @@
 import 'package:buisness_manager/modules/admin/view/user_profile.dart';
 import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
-import 'package:buisness_manager/modules/auth/model/core/response_model/logIn_response_model.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/view/branch_list_screen.dart';
@@ -10,7 +9,6 @@ import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -28,7 +26,7 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
     });
   }
