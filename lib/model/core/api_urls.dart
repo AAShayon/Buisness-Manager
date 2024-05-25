@@ -3,7 +3,8 @@ class ApiUrl{
     static String branchId='';
     static String customerOrSupplierID= '';
     static String customerOrSupplierType= '';
-    static String transactionID= '';
+    static String customerID= '';
+    static String transactionID='';
 
     static String baseUrl="https://skill-test.retinasoft.com.bd/api/v1";
 
@@ -28,7 +29,6 @@ class ApiUrl{
   ///0 form Customer and 1 for supplier
 
     String customerOrSupplierList="/admin/$branchId/$customerOrSupplierType/customers";
-  //  String supplierList="{{BASE_URL}}/admin/$branchId/1/customers";
     String customerOrSupplierCreate="/admin/$branchId/customer/create";
     String customerOrSupplierUpdate="/admin/$branchId/customer/$customerOrSupplierID/update";
     String customerOrSupplierDelete="/admin/$branchId/customer/$customerOrSupplierID/delete";
@@ -37,8 +37,6 @@ class ApiUrl{
    String transactionList="/admin/$branchId/customer/$customerOrSupplierID/transactions";
    String transactionCreate="/admin/$branchId/customer/transaction/create";
    String transactionUpdate="/admin/$branchId/customer/transaction/$transactionID/update";
-
-
    String transactionDelete="/admin/$branchId/customer/transaction/$transactionID/delete";
 
  ///User Profile
