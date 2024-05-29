@@ -1,15 +1,18 @@
+import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
 import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/modules/transaction/viewModel/transaction_view_model.dart';
-import 'package:buisness_manager/view/connectivity_check.dart';
+import 'package:buisness_manager/view/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreService().setup();
   runApp(const MyApp());
 }
 
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Business Manager',
-          home: CheckConnectivity(),
+          home: OnboardingScreen(),
 
         ),
       ),

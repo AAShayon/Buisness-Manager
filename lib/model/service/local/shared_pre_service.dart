@@ -1,11 +1,18 @@
-
-
-import 'package:buisness_manager/model/service/local/storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+abstract class StorageService{
+  Future<void> write({required String key, required dynamic value});
+  Future<dynamic> read({required String key});
+  Future<void> delete({required String key});
+  Future<void> update({required String key, required dynamic value});
+}
+
 
 class SharedPreService implements StorageService{
   late SharedPreferences sharedPreferences;
   static final SharedPreService _singleton = SharedPreService._internal();
+
+
   factory SharedPreService(){
     return _singleton;
   }
@@ -17,29 +24,82 @@ class SharedPreService implements StorageService{
   }
 
   @override
-  void delete({required String key}) {
-    // TODO: implement delete
-    sharedPreferences.remove(key);
+  Future<void> delete ({required String key}) async{
+   await sharedPreferences.remove(key);
   }
 
   @override
-  void read({required String key}) {
-    // TODO: implement read
-    sharedPreferences.get(key);
+  Future<dynamic> read({required String key}) async {
+   return sharedPreferences.get(key);
   }
 
   @override
-  void update({required String key,required dynamic value}) {
-    // TODO: implement update
-    sharedPreferences.remove(key);
-    sharedPreferences.setString(key, value.toString());
+  Future<void> update({required String key,required dynamic value}) async {
+   await sharedPreferences.remove(key);
+   await sharedPreferences.setString(key, value.toString());
   }
 
   @override
-  void write({required String key,required dynamic value}) {
+  Future<void> write({required String key,required dynamic value}) async {
     // TODO: implement write
-    sharedPreferences.setString(key, value.toString());
+   await  sharedPreferences.setString(key, value.toString());
   }
 
 
 }
+
+//import 'package:shared_preferences/shared_preferences.dart';
+//
+// abstract class StorageService {
+//   Future<void> write({required String key, required dynamic value});
+//   Future<dynamic> read({required String key});
+//   Future<void> delete({required String key});
+//   Future<void> update({required String key, required dynamic value});
+// }
+//
+// class SharedPreService implements StorageService {
+//   late SharedPreferences _sharedPreferences;
+//   static final SharedPreService _singleton = SharedPreService._internal();
+//
+//   factory SharedPreService() {
+//     return _singleton;
+//   }
+//
+//   SharedPreService._internal() {
+//     _setup();
+//   }
+//
+//   Future<void> _setup() async {
+//     _sharedPreferences = await SharedPreferences.getInstance();
+//   }
+//
+//   Future<void> _ensureInitialized() async {
+//     if (_sharedPreferences == null) {
+//       await _setup();
+//     }
+//   }
+//
+//   @override
+//   Future<void> write({required String key, required dynamic value}) async {
+//     await _ensureInitialized();
+//     await _sharedPreferences.setString(key, value.toString());
+//   }
+//
+//   @override
+//   Future<dynamic> read({required String key}) async {
+//     await _ensureInitialized();
+//     return _sharedPreferences.get(key);
+//   }
+//
+//   @override
+//   Future<void> delete({required String key}) async {
+//     await _ensureInitialized();
+//     await _sharedPreferences.remove(key);
+//   }
+//
+//   @override
+//   Future<void> update({required String key, required dynamic value}) async {
+//     await _ensureInitialized();
+//     await _sharedPreferences.setString(key, value.toString());
+//   }
+// }

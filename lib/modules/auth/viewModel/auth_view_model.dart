@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
@@ -21,12 +22,15 @@ class AuthViewModel extends ChangeNotifier{
   * --------------------------attributes----------------------------------------
   * */
   final AuthService _authService =AuthRemoteDataSource();
+  final SharedPreService _sharedPreService =SharedPreService();
   bool _isLoadingState = false;
   LogInOtpResponseModel? _logInOtpResponseModel;
   LogInResponseModel? _logInResponseModel;
   User? _user;
   RegisterRequestResponseModel? _registerRequestResponseModel;
   RegisterVerifyOtpResponseModel? _registerVerifyOtpResponseModel;
+
+
   /*
   * --------------------------setter----------------------------------------
   * */
@@ -35,6 +39,20 @@ class AuthViewModel extends ChangeNotifier{
     _isLoadingState = isLoading;
     notifyListeners();
   }
+
+  Future<bool> isLoggedIn() async {
+
+    String? token = await _sharedPreService.read(key: 'token');
+    return token != null && token.isNotEmpty;
+  }
+  Future<void> saveToken(String token) async {
+    await _sharedPreService.write(key: 'token', value: token);
+  }
+
+  Future<String?> getToken() async {
+    return await _sharedPreService.read(key: 'token');
+  }
+
   void setLogInOtpResponseModel(LogInOtpResponseModel logInOtpResponseModel){
     _logInOtpResponseModel = logInOtpResponseModel;
     notifyListeners();
@@ -45,6 +63,11 @@ class AuthViewModel extends ChangeNotifier{
   }
   void setUser(User? user){
     _user = user;
+    if (user != null) {
+      _sharedPreService.write(key: 'user', value: _user!.toJson());
+    } else {
+      _sharedPreService.delete(key: 'user');
+    }
     notifyListeners();
   }
 
@@ -56,6 +79,7 @@ class AuthViewModel extends ChangeNotifier{
     _registerVerifyOtpResponseModel =registerVerifyOtpResponseModel;
     notifyListeners();
   }
+
   /*
   * --------------------------getters----------------------------------------
   * */
@@ -68,6 +92,7 @@ class AuthViewModel extends ChangeNotifier{
   /*
   * --------------------------methods----------------------------------------
   * */
+
 
   Future<bool> registration(RegisterRequestModel registerRequestModel,BuildContext context)async{
     _isLoadingState = true ;
@@ -225,7 +250,16 @@ class AuthViewModel extends ChangeNotifier{
         _logInResponseModel=LogInResponseModel.fromJson(response.data);
         _user = _logInResponseModel!.user;
         String? token = _user?.apiToken;
+        await saveToken(token!);
         DioService().setup(bearerToken: token);
+        // await _sharedPreService.write(key: 'user', value: _user!.toJson());
+        // await _sharedPreService.write(key: 'token', value: token);
+        await _sharedPreService.write(key: 'user', value: _user!.toJson());
+        // Retrieve and log the shared preferences data
+        // String? storedUser = await _sharedPreService.read(key: 'user');
+        // String? storedToken = await _sharedPreService.read(key: 'token');
+        // log('Shared preferences data - User: $storedUser');
+        // log('Shared preferences data - Token: $storedToken');
         _isLoadingState=false;
         isLogIn=true;
         notifyListeners();
@@ -272,6 +306,8 @@ class AuthViewModel extends ChangeNotifier{
 
       if (response.statusCode == 200) {
         setUser(null);
+        await _sharedPreService.delete(key: 'user');
+        await _sharedPreService.delete(key: 'token');
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
