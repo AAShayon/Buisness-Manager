@@ -382,6 +382,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       bool isLoggedIn = await authViewModel.isLoggedIn();
       if (isLoggedIn) {
         _token = await authViewModel.getToken();
+        log('tokeeeeeeeeeeeeeeeeeeeen =>${_token}');
       }
     }
     setState(() {
@@ -389,7 +390,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _isLoading = false;
     });
 
-    // Navigate to the appropriate screen
     if (_isConnected && _token != null) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => BranchViewInformationScreen()));

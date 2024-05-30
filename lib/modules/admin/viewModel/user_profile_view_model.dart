@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
 import 'package:buisness_manager/modules/admin/model/core/request_model/user_profile_update_request_model.dart';
 import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_data_response_model.dart';
 import 'package:buisness_manager/modules/admin/model/core/response_model/user_profile_update_request_response_model.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 
 class UserProfileViewModel extends ChangeNotifier{
   final UserProfileService _userProfileService=UserProfileDataSource();
+  final SharedPreService _sharedPreService = SharedPreService();
+
   bool _isLoadingState=false;
   UserProfileDataResponseModel? _userProfileDataResponseModel;
   ResponseUser? _responseUser;
@@ -39,6 +42,11 @@ class UserProfileViewModel extends ChangeNotifier{
 
   void setResponseUser(ResponseUser? responseUser){
     _responseUser = responseUser;
+    if (responseUser != null) {
+      _sharedPreService.write(key: 'responseUser', value: _responseUser!.toJson());
+    } else {
+      _sharedPreService.delete(key: 'responseUser');
+    }
     notifyListeners();
   }
 
@@ -65,6 +73,11 @@ Future<bool> getUserProfile() async{
     if(response.statusCode == 200){
       _userProfileDataResponseModel = UserProfileDataResponseModel.fromJson(response.data);
       _responseUser =_userProfileDataResponseModel!.responseUser;
+      if (responseUser != null) {
+        _sharedPreService.write(key: 'responseUser', value: _responseUser!.toJson());
+      } else {
+        _sharedPreService.delete(key: 'responseUser');
+      }
       isUser =true ;
       _isLoadingState=false;
       notifyListeners();

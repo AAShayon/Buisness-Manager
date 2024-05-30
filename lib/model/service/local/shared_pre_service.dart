@@ -9,7 +9,7 @@ abstract class StorageService{
 
 
 class SharedPreService implements StorageService{
-  late SharedPreferences sharedPreferences;
+  static SharedPreferences? sharedPreferences;
   static final SharedPreService _singleton = SharedPreService._internal();
 
 
@@ -25,24 +25,24 @@ class SharedPreService implements StorageService{
 
   @override
   Future<void> delete ({required String key}) async{
-   await sharedPreferences.remove(key);
+   await sharedPreferences?.remove(key);
   }
 
   @override
   Future<dynamic> read({required String key}) async {
-   return sharedPreferences.get(key);
+   return sharedPreferences?.get(key);
   }
 
   @override
   Future<void> update({required String key,required dynamic value}) async {
-   await sharedPreferences.remove(key);
-   await sharedPreferences.setString(key, value.toString());
+   await sharedPreferences?.remove(key);
+   await sharedPreferences?.setString(key, value.toString());
   }
 
   @override
   Future<void> write({required String key,required dynamic value}) async {
     // TODO: implement write
-   await  sharedPreferences.setString(key, value.toString());
+   await  sharedPreferences?.setString(key, value.toString());
   }
 
 

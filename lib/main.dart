@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SharedPreService().setup();
+  await SharedPreService();
   runApp(const MyApp());
 }
 
