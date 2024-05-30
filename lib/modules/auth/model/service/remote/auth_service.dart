@@ -21,6 +21,8 @@ abstract class AuthService{
   Future<Response> logOut();
   Future<void> updateDioService(DioService dioService);
   Future<void> saveAuthToken(String? token);
+  Future<void> clearToken(String? token);
+  Future<String?> getToken();
 
 }
 
@@ -84,6 +86,18 @@ class AuthRemoteDataSource extends AuthService{
   @override
   Future<void> saveAuthToken(String? token) async{
     await _sharedPreService.write(key: 'token', value: token);
+  }
+
+  @override
+  Future<String?> getToken() async {
+    return await _sharedPreService.read(key: 'token');
+  }
+
+
+  @override
+  Future<void> clearToken(String? token) async {
+    // await _sharedPreService.delete(key: 'user');
+    await _sharedPreService.delete(key: 'token');
   }
 
 
