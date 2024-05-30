@@ -19,7 +19,6 @@ class DioService{
   Future<void> setup()async{
     try{
       String? bearerToken= await _sharedPreService.read(key:'token')??null;
-      // String? bearerToken;
       _dio=Dio();
       final headers={
         'Content_type':'application/json',
