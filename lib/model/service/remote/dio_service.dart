@@ -1,12 +1,13 @@
-
 import 'dart:developer';
 import 'package:buisness_manager/model/core/api_urls.dart';
+import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class DioService{
   static final DioService _singleton=DioService._internal();
   static Dio? _dio;
+  final SharedPreService _sharedPreService =SharedPreService();
 
   factory DioService(){
     return _singleton;
@@ -15,8 +16,10 @@ class DioService{
     setup();
   }
 
-  Future<void> setup({String? bearerToken})async{
+  Future<void> setup()async{
     try{
+      String? bearerToken= await _sharedPreService.read(key:'token')??null;
+      // String? bearerToken;
       _dio=Dio();
       final headers={
         'Content_type':'application/json',
@@ -41,12 +44,39 @@ class DioService{
 
       );
       _dio!.options=options;
+      _dio!.interceptors.add(LogInterceptor(requestBody: true, responseBody: true,requestHeader: true,responseHeader: true));
 
     }catch(e){
       if (kDebugMode) {
         print(e);
       }
     }
+  }
+  Future<void> updateHeaders() async{
+   String? bearerToken= await _sharedPreService.read(key:'token')??null;
+    final headers={
+      'Content_type':'application/json',
+    };
+    if(bearerToken != null){
+      headers['Authorization']='Bearer $bearerToken';
+      if (kDebugMode) {
+        print("Bearer token: $bearerToken");
+      }
+    }
+    final options=BaseOptions(
+        baseUrl: ApiUrl.baseUrl,
+        headers: headers,
+        validateStatus: (v){
+          if(v == null){
+            return false;
+          }
+          else {
+            return v< 500 ;
+          }
+        }
+
+    );
+    _dio!.options=options;
   }
   Future<Response?> post(String path , {Map? data})async{
     log(path);

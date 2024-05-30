@@ -152,7 +152,7 @@ class BranchViewModel extends ChangeNotifier {
 
   }
 
-  Future<bool> branchListFetch() async {
+  Future<bool> branchListFetch(BuildContext context) async {
     _isLoadingState = true;
     bool isBranchListFetch = false;
     _branchListResponseModel = null;
@@ -169,6 +169,14 @@ class BranchViewModel extends ChangeNotifier {
         _isLoadingState =false ;
         isBranchListFetch =false;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            duration: Duration(milliseconds: 1),
+            backgroundColor: Colors.red,
+            content: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
 
     } catch (e) {

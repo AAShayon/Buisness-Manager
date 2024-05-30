@@ -1,9 +1,7 @@
 
 
 import 'dart:developer';
-
 import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
-import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/login_send_otp_request_model.dart';
@@ -250,16 +248,8 @@ class AuthViewModel extends ChangeNotifier{
         _logInResponseModel=LogInResponseModel.fromJson(response.data);
         _user = _logInResponseModel!.user;
         String? token = _user?.apiToken;
-        await saveToken(token!);
-        DioService().setup(bearerToken: token);
-        // await _sharedPreService.write(key: 'user', value: _user!.toJson());
-        // await _sharedPreService.write(key: 'token', value: token);
-        await _sharedPreService.write(key: 'user', value: _user!.toJson());
-        // Retrieve and log the shared preferences data
-        // String? storedUser = await _sharedPreService.read(key: 'user');
-        // String? storedToken = await _sharedPreService.read(key: 'token');
-        // log('Shared preferences data - User: $storedUser');
-        // log('Shared preferences data - Token: $storedToken');
+        _authService.saveAuthToken(token);
+        _authService.updateDioService(_authService.getDioServiceInstance());
         _isLoadingState=false;
         isLogIn=true;
         notifyListeners();

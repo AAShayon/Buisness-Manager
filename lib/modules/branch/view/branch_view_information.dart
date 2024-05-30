@@ -34,8 +34,8 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
   Future<void> _loadData() async {
     final userProfileViewModel = Provider.of<UserProfileViewModel>(context, listen: false);
     final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
-    await branchViewModel.branchListFetch();
-    await userProfileViewModel.getUserProfile();
+    await branchViewModel.branchListFetch(context);
+    await userProfileViewModel.getUserProfile(context);
   }
 
   @override
@@ -52,7 +52,7 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                     ? const CircularProgressIndicator(color: Colors.amber)
                     : IconButton(
                       onPressed: () async {
-                        await userProfileViewModel.getUserProfile();
+                        await userProfileViewModel.getUserProfile(context);
                         if (context.mounted) {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => const UserProfile()));
                         }

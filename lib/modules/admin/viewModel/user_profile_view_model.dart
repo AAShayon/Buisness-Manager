@@ -62,7 +62,7 @@ class UserProfileViewModel extends ChangeNotifier{
 
   ///---------Methods ---------\\\\
 
-Future<bool> getUserProfile() async{
+Future<bool> getUserProfile(BuildContext context) async{
   _isLoadingState = true ;
   bool isUser= false;
   _userProfileDataResponseModel = null ;
@@ -81,10 +81,25 @@ Future<bool> getUserProfile() async{
       isUser =true ;
       _isLoadingState=false;
       notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          backgroundColor: Colors.red,
+          content: Center(child: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+        ));
+      }
     }else{
       _isLoadingState = false;
       isUser =false ;
       notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          duration: Duration(seconds: 1),
+          backgroundColor: Colors.red,
+          content: Center(child: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+        ));
+      }
     }
   }
   catch(e){

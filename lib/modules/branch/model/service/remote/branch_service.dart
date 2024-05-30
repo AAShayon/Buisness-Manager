@@ -30,6 +30,7 @@ class BranchRemoteDataSource extends BranchService{
   Future<Response> branchList() async {
     Response? response=await _dioService.get(ApiUrl().branchList);
     return response!;
+
   }
 
     @override

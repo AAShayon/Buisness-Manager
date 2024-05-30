@@ -2,6 +2,7 @@
 
 
 import 'package:buisness_manager/model/core/api_urls.dart';
+import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_verify_otp_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
@@ -11,22 +12,33 @@ import 'package:buisness_manager/modules/auth/model/core/request_model/login_sen
 import 'package:dio/dio.dart';
 
 abstract class AuthService{
+  DioService getDioServiceInstance();
   Future<Response> logInWithOtp(LogInRequestModel logInRequestModel);
   Future<Response> register(RegisterRequestModel registerRequestModel);
   Future<Response> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel);
   Future<Response> resendOtpForRegister(ResendRegisterOtpRequestModel registerOtpRequestModel);
   Future<Response> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel);
   Future<Response> logOut();
+  Future<void> updateDioService(DioService dioService);
+  Future<void> saveAuthToken(String? token);
+
 }
 
 class AuthRemoteDataSource extends AuthService{
   static final AuthRemoteDataSource _singleton = AuthRemoteDataSource._internal();
+   SharedPreService _sharedPreService=SharedPreService();
   late DioService _dioService;
+  DioService? get dioService => _dioService;
   factory AuthRemoteDataSource(){
   return _singleton;
   }
   AuthRemoteDataSource._internal(){
     _dioService=DioService();
+  }
+
+  @override
+  DioService getDioServiceInstance() {
+   return _dioService;
   }
 
   @override
@@ -62,6 +74,19 @@ class AuthRemoteDataSource extends AuthService{
     Response? response= await _dioService.post(ApiUrl().registration,data: registerOtpRequestModel.toJson());
     return response!;
   }
+
+  @override
+  Future<void> updateDioService(DioService dioService) async {
+   dioService.setup();
+
+  }
+
+  @override
+  Future<void> saveAuthToken(String? token) async{
+    await _sharedPreService.write(key: 'token', value: token);
+  }
+
+
 
 
 
