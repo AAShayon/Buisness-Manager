@@ -81,11 +81,12 @@ Future<bool> getUserProfile(BuildContext context) async{
       isUser =true ;
       _isLoadingState=false;
       notifyListeners();
+      // ${response.data["status"]}
       if(context.mounted){
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor: Colors.red,
-          content: Center(child: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+          backgroundColor: Colors.green,
+          content: Center(child: Text('${response.data["description"] }',style: const TextStyle(color: Colors.white),)),
         ));
       }
     }else{
@@ -169,13 +170,13 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
         _isLoadingState =false;
         isDeleted = true;
         notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
-          ));
-        }
+        // if(context.mounted){
+        //   ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        //   ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+        //     backgroundColor: const Color(0xffFF0000),
+        //     content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+        //   ));
+        // }
       } else {
         isDeleted = false;
         _isLoadingState=false;
