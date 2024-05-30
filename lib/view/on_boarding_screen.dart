@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:buisness_manager/modules/auth/model/service/remote/auth_service.dart';
 import 'package:buisness_manager/modules/auth/view/login.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
@@ -19,6 +20,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  final AuthService _authService =AuthRemoteDataSource();
   bool _isLoading = true;
   bool _isConnected = false;
   String? _token;
@@ -51,30 +53,57 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _checkConnectivity();
     });
   }
-
   Future<void> _checkConnectivity() async {
     bool isConnected = await _isConnectedToInternet();
+    bool isLoggedIn = false;
     if (isConnected) {
       final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-      bool isLoggedIn = await authViewModel.isLoggedIn();
-      if (isLoggedIn) {
-        _token = await authViewModel.getToken();
-        log('tokeeeeeeeeeeeeeeeeeeeen =>${_token}');
-      }
+      isLoggedIn = await authViewModel.isLoggedIn();
     }
     setState(() {
       _isConnected = isConnected;
       _isLoading = false;
     });
 
-    if (_isConnected && _token != null) {
+    if (_isConnected && isLoggedIn) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => BranchViewInformationScreen()));
-    } else if (_isConnected && _token == null) {
+    } else if (_isConnected && !isLoggedIn) {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
     }
   }
+  // Future<void> _checkConnectivity() async {
+  //   final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+  //   bool isLoggedIn = await authViewModel.isLoggedIn();
+  //   bool isConnected = await _isConnectedToInternet();
+  //   if (isConnected) {
+  //     isLoggedIn=true;
+  //     // final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+  //     // bool isLoggedIn = await authViewModel.isLoggedIn();
+  //     // if (isLoggedIn) {
+  //     //   _token = await _authService.getToken();
+  //     //   log('tokeeeeeeeeeeeeeeeeeeeen =>${_token}');
+  //     // }
+  //   }
+  //   setState(() {
+  //     _isConnected = isConnected;
+  //     _isLoading = false;
+  //   });
+  //
+  //   if (_isConnected
+  //       && !isLoggedIn
+  //       // && _token != null
+  //   ) {
+  //     Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //         builder: (context) => BranchViewInformationScreen()));
+  //   } else if (_isConnected
+  //       && _token == null
+  //   ) {
+  //     Navigator.of(context)
+  //         .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+  //   }
+  // }
 
   Future<bool> _isConnectedToInternet() async {
     var connectivityResult = await Connectivity().checkConnectivity();
