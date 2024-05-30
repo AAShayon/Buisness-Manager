@@ -43,13 +43,11 @@ class AuthViewModel extends ChangeNotifier{
     String? token = await _sharedPreService.read(key: 'token');
     return token != null && token.isNotEmpty;
   }
-  Future<void> saveToken(String token) async {
-    await _sharedPreService.write(key: 'token', value: token);
-  }
+  // Future<void> saveToken(String token) async {
+  //   await _sharedPreService.write(key: 'token', value: token);
+  // }
 
-  Future<String?> getToken() async {
-    return await _sharedPreService.read(key: 'token');
-  }
+
 
   void setLogInOtpResponseModel(LogInOtpResponseModel logInOtpResponseModel){
     _logInOtpResponseModel = logInOtpResponseModel;
@@ -59,13 +57,8 @@ class AuthViewModel extends ChangeNotifier{
     _logInResponseModel = logInResponseModel;
     notifyListeners();
   }
-  void setUser(User? user){
+  void setUser(User? user) {
     _user = user;
-    if (user != null) {
-      _sharedPreService.write(key: 'user', value: _user!.toJson());
-    } else {
-      _sharedPreService.delete(key: 'user');
-    }
     notifyListeners();
   }
 
@@ -296,8 +289,11 @@ class AuthViewModel extends ChangeNotifier{
 
       if (response.statusCode == 200) {
         setUser(null);
-        await _sharedPreService.delete(key: 'user');
-        await _sharedPreService.delete(key: 'token');
+        _authService.clearToken('token');
+        _authService.updateDioService(_authService.getDioServiceInstance());
+
+        // await _sharedPreService.delete(key: 'user');
+        // await _sharedPreService.delete(key: 'token');
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
