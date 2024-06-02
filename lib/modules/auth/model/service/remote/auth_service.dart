@@ -1,8 +1,12 @@
 
 
 
+import 'dart:developer';
+
 import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
+import 'package:buisness_manager/model/service/remote/api_error_handler.dart';
+import 'package:buisness_manager/model/service/remote/api_response.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_verify_otp_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
@@ -13,12 +17,12 @@ import 'package:dio/dio.dart';
 
 abstract class AuthService{
   DioService getDioServiceInstance();
-  Future<Response> logInWithOtp(LogInRequestModel logInRequestModel);
-  Future<Response> register(RegisterRequestModel registerRequestModel);
-  Future<Response> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel);
-  Future<Response> resendOtpForRegister(ResendRegisterOtpRequestModel registerOtpRequestModel);
-  Future<Response> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel);
-  Future<Response> logOut();
+  Future<ApiResponse> logInWithOtp(LogInRequestModel logInRequestModel);
+  Future<ApiResponse> register(RegisterRequestModel registerRequestModel);
+  Future<ApiResponse> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel);
+  Future<ApiResponse> resendOtpForRegister(ResendRegisterOtpRequestModel registerOtpRequestModel);
+  Future<ApiResponse> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel);
+  Future<ApiResponse> logOut();
   Future<void> updateDioService(DioService dioService);
   Future<void> saveAuthToken(String? token);
   Future<void> clearToken(String? token);
@@ -44,37 +48,75 @@ class AuthRemoteDataSource extends AuthService{
   }
 
   @override
-  Future<Response> logInWithOtp(LogInRequestModel logInRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl().login, data:logInRequestModel.toJson());
-    return response!;
+  Future<ApiResponse> logInWithOtp(LogInRequestModel logInRequestModel) async{
+    try{
+      Response? response = await _dioService.post(ApiUrl().login, data: logInRequestModel.toJson());
+      log("===>${response!.toString()}");
+      return ApiResponse.withSuccess(response);
+    }catch(e){
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
   }
   @override
-  Future<Response> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel) async{
-    Response? response= await _dioService.post(ApiUrl().sendLoginOtp,data: sendOtpRequestForLoginModel.toJson());
-    return response!;
-  }
-
-  @override
-  Future<Response> logOut() async{
-    Response? response= await _dioService.post(ApiUrl().logout);
-    return response!;
-  }
-
-  @override
-  Future<Response> register(RegisterRequestModel registerRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl().registration,data: registerRequestModel.toJson());
-    return response!;
-  }
-  @override
-  Future<Response> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl().signUpVerifyOtp,data: verifyOtpRegisterRequestModel.toJson());
-    return response!;
+  Future<ApiResponse> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel) async{
+   try{
+     Response? response= await _dioService.post(ApiUrl().sendLoginOtp,data: sendOtpRequestForLoginModel.toJson());
+     // log("===>${response!.toString()}");
+     return ApiResponse.withSuccess(response!);
+   } catch(e){
+         log("===>$e");
+         return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+       }
   }
 
   @override
-  Future<Response> resendOtpForRegister(ResendRegisterOtpRequestModel registerOtpRequestModel) async{
-    Response? response= await _dioService.post(ApiUrl().registration,data: registerOtpRequestModel.toJson());
-    return response!;
+  Future<ApiResponse> logOut() async{
+   try{
+     Response? response= await _dioService.post(ApiUrl().logout);
+     log("===>${response!.toString()}");
+     return ApiResponse.withSuccess(response);
+   }
+   catch(e){
+     log("===>$e");
+     return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+   }
+  }
+
+  @override
+  Future<ApiResponse> register(RegisterRequestModel registerRequestModel) async{
+    try{
+      Response? response= await _dioService.post(ApiUrl().registration,data: registerRequestModel.toJson());
+      log("===>${response!.toString()}");
+      return ApiResponse.withSuccess(response);
+    }catch(e){
+      log("===>$e");
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+  @override
+  Future<ApiResponse> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel) async{
+    try{
+      Response? response= await _dioService.post(ApiUrl().signUpVerifyOtp,data: verifyOtpRegisterRequestModel.toJson());
+      log("===>${response!.toString()}");
+
+      return ApiResponse.withSuccess(response);
+    }catch(e){
+      log("===>$e");
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+
+  @override
+  Future<ApiResponse> resendOtpForRegister(ResendRegisterOtpRequestModel registerOtpRequestModel) async{
+   try{
+     Response? response= await _dioService.post(ApiUrl().registration,data: registerOtpRequestModel.toJson());
+     log("===>${response!.toString()}");
+
+     return ApiResponse.withSuccess(response);
+   }catch(e){
+     log("===>$e");
+     return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+   }
   }
 
   @override
@@ -96,7 +138,6 @@ class AuthRemoteDataSource extends AuthService{
 
   @override
   Future<void> clearToken(String? token) async {
-    // await _sharedPreService.delete(key: 'user');
     await _sharedPreService.delete(key: 'token');
   }
 

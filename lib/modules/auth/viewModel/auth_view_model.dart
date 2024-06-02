@@ -2,6 +2,8 @@
 
 import 'dart:developer';
 import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
+import 'package:buisness_manager/model/service/remote/api_error_handler.dart';
+import 'package:buisness_manager/model/service/remote/api_response.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/logIn_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
 import 'package:buisness_manager/modules/auth/model/core/request_model/login_send_otp_request_model.dart';
@@ -40,7 +42,8 @@ class AuthViewModel extends ChangeNotifier{
 
   Future<bool> isLoggedIn() async {
 
-    String? token = await _sharedPreService.read(key: 'token');
+    // String? token = await _sharedPreService.read(key: 'token');
+    String? token = await _authService.getToken();
     return token != null && token.isNotEmpty;
   }
   // Future<void> saveToken(String token) async {
@@ -90,22 +93,34 @@ class AuthViewModel extends ChangeNotifier{
     bool isRegister= false;
     _registerRequestResponseModel =null ;
     try {
-      Response response=await _authService.register(registerRequestModel);
-      log("=======^&^&^&^&^&^&^&^&^&==>${response.statusCode}");
-      if(response.statusCode == 200 && response.data["status"]==200){
-        _registerRequestResponseModel = RegisterRequestResponseModel.fromJson(response.data);
-        _isLoadingState= false;
-        isRegister = true ;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor:  Colors.green,
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
+      ApiResponse apiResponse=await _authService.register(registerRequestModel);
+      if(apiResponse.response!=null){
+        if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"]==200){
+          _registerRequestResponseModel = RegisterRequestResponseModel.fromJson(apiResponse.response!.data);
+          _isLoadingState= false;
+          isRegister = true ;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor:  Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
         }
-      }
-      else {
+        else {
+          _isLoadingState = false ;
+          isRegister = false ;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }else{
         _isLoadingState = false ;
         isRegister = false ;
         notifyListeners();
@@ -113,7 +128,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -123,9 +138,11 @@ class AuthViewModel extends ChangeNotifier{
       isRegister = false ;
       notifyListeners();
       if(context.mounted){
+        log("$e");
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor: const Color(0xffFF0000),
+          // backgroundColor: const Color(0xffFF0000),
+          backgroundColor: Colors.greenAccent,
           content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
@@ -137,21 +154,36 @@ class AuthViewModel extends ChangeNotifier{
     bool isRegister= false;
     _registerVerifyOtpResponseModel = null ;
     try{
-      Response response = await _authService.verifyOtp(verifyOtpRegisterRequestModel);
-      log("=============>${response.statusCode}");
-      if(response.statusCode == 200 && response.data["status"]==200){
-        _registerVerifyOtpResponseModel = RegisterVerifyOtpResponseModel.fromJson(response.data);
-        _isLoadingState =false;
-        isRegister =true ;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
-        }
-      }
+      ApiResponse apiResponse = await _authService.verifyOtp(verifyOtpRegisterRequestModel);
+      // log("=============>${response.statusCode}");
+     if(apiResponse.response !=null){
+       if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"]==200){
+         _registerVerifyOtpResponseModel = RegisterVerifyOtpResponseModel.fromJson(apiResponse.response!.data);
+         _isLoadingState =false;
+         isRegister =true ;
+         notifyListeners();
+         if(context.mounted){
+           ScaffoldMessenger.of(context).removeCurrentSnackBar();
+           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+             backgroundColor: Colors.green,
+             content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+           ));
+         }
+       }
+       else {
+         _isLoadingState = false ;
+         isRegister = false;
+         notifyListeners();
+         if(context.mounted){
+           ScaffoldMessenger.of(context).removeCurrentSnackBar();
+           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+             backgroundColor: const Color(0xffFF0000),
+             content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+           ));
+         }
+
+       }
+     }
       else{
         _isLoadingState = false ;
         isRegister = false;
@@ -160,7 +192,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -181,41 +213,55 @@ class AuthViewModel extends ChangeNotifier{
   }
 
   Future<bool> sendOtpForLogin(SendOtpRequestForLoginModel sendOtpRequestForLoginModel,BuildContext context)async{
-    setIsLoadingState(true);
+    _isLoadingState=true;
     bool isOtpSend=false;
-    setLogInResponseModel(null);
-    setUser(null);
+    _logInOtpResponseModel=null;
 
     try{
-      Response response= await _authService.sendOtpForLogin(sendOtpRequestForLoginModel);
-      if(response.data["status"]==200){
-        setLogInOtpResponseModel(LogInOtpResponseModel.fromJson(response.data));
-        setIsLoadingState(false);
-        isOtpSend=true;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xff00ff3c),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
+      ApiResponse apiResponse= await _authService.sendOtpForLogin(sendOtpRequestForLoginModel);
+      if(apiResponse.response!=null){
+        if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"]==200){
+          _logInOtpResponseModel= LogInOtpResponseModel.fromJson(apiResponse.response!.data);
+          _isLoadingState=false;
+          isOtpSend=true;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
         }
-      }else{
-        setIsLoadingState(false);
+        else{
+          _isLoadingState=false;
+          isOtpSend=false;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }
+      else{
+        _isLoadingState=false;
         isOtpSend=false;
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
 
       }
 
     }catch(e){
-      setIsLoadingState(false);
+      _isLoadingState=false;
       isOtpSend=false;
       notifyListeners();
       if(context.mounted){
@@ -236,24 +282,39 @@ class AuthViewModel extends ChangeNotifier{
     _user=null;
     
     try{
-      Response response= await _authService.logInWithOtp(logInRequestModel);
-      if(response.statusCode==200 && response.data["status"]==200){
-        _logInResponseModel=LogInResponseModel.fromJson(response.data);
-        _user = _logInResponseModel!.user;
-        String? token = _user?.apiToken;
-        _authService.saveAuthToken(token);
-        _authService.updateDioService(_authService.getDioServiceInstance());
-        _isLoadingState=false;
-        isLogIn=true;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xff00ff0d),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
+      ApiResponse apiResponse= await _authService.logInWithOtp(logInRequestModel);
+      if(apiResponse.response != null){
+        if(apiResponse.response!.statusCode==200 && apiResponse.response!.data["status"]==200){
+          _logInResponseModel=LogInResponseModel.fromJson(apiResponse.response!.data);
+          _user = _logInResponseModel!.user;
+          String? token = _user?.apiToken;
+          _authService.saveAuthToken(token);
+          _authService.updateDioService(_authService.getDioServiceInstance());
+          _isLoadingState=false;
+          isLogIn=true;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xff00ff0d),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
         }
-      }else{
+        else{
+          _isLoadingState =false;
+          isLogIn=false;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }
+      else{
         _isLoadingState=false;
         isLogIn=false;
         notifyListeners();
@@ -261,7 +322,7 @@ class AuthViewModel extends ChangeNotifier{
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -284,30 +345,39 @@ class AuthViewModel extends ChangeNotifier{
   Future<void> logOut(BuildContext context) async {
     try {
       setIsLoadingState(true);
-      Response response = await _authService.logOut();
+      ApiResponse apiResponse = await _authService.logOut();
       setIsLoadingState(false);
+      if(apiResponse.response != null){
+        if (apiResponse.response!.statusCode == 200) {
+          setUser(null);
+          _authService.clearToken('token');
+          _authService.updateDioService(_authService.getDioServiceInstance());
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xff22ff00),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
 
-      if (response.statusCode == 200) {
-        setUser(null);
-        _authService.clearToken('token');
-        _authService.updateDioService(_authService.getDioServiceInstance());
-
-        // await _sharedPreService.delete(key: 'user');
-        // await _sharedPreService.delete(key: 'token');
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xff22ff00),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
         }
+        else{
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }
 
-      } else {
+  else {
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
