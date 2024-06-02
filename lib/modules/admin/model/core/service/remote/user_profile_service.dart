@@ -51,7 +51,9 @@ class UserProfileDataSource extends UserProfileService{
 
   @override
   Future<void> saveUser(ResponseUser? responseUser) async {
-    await _sharedPreService.write(key: 'responseUser', value: responseUser!.toJson());
+    if (responseUser != null) {
+      await _sharedPreService.write(key: 'responseUser', value: responseUser.toJson());
+    }
   }
 
 
