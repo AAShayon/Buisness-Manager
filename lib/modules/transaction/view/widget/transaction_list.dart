@@ -113,13 +113,9 @@ class TransactionList extends StatelessWidget {
                 title: const Text('Delete'),
                 onTap: () async {
                   final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
-                  await transactionViewModel.deleteTransaction(context, branchID: branchID, transactionID: transactionID).then((isDeleted) {
+                  await transactionViewModel.deleteTransaction(context, branchID: branchID, transactionID: transactionID).then((isDeleted)async {
                     if (isDeleted) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => BranchViewInformationScreen()),
-                            (route) => false,
-                      );
+                  await transactionViewModel.transactionListFetch(context, branchID: branchID, customerOrSupplierID: customerID);
                     }
                   });
                 },

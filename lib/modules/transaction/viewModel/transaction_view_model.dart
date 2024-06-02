@@ -48,7 +48,7 @@ class TransactionViewModel extends ChangeNotifier {
   Transactions? get transactions => _transactions;
 
   Future<bool> createTransaction(TransactionCreateRequestModel transactionCreateRequestModel, BuildContext context,{required String branchID}) async {
-   _isLoadingState =true;
+    _isLoadingState =true;
     bool isCreated = false;
     _transactionCreateResponseModel=null;
     try {
@@ -61,7 +61,7 @@ class TransactionViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       } else {
@@ -71,18 +71,18 @@ class TransactionViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
     } catch (e) {
-       _isLoadingState = false;
-       isCreated = false;
-       notifyListeners();
+      _isLoadingState = false;
+      isCreated = false;
+      notifyListeners();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
-          content: Text('$e', style: const TextStyle(color: Colors.white)),
+          content: Center(child: Text('$e', style: const TextStyle(color: Colors.white))),
         ));
       }
     }
@@ -91,7 +91,7 @@ class TransactionViewModel extends ChangeNotifier {
 
   Future<bool> updateTransaction(TransactionUpdateRequestModel transactionUpdateRequestModel, BuildContext context,{required String branchID,required String transactionID}) async {
     _isLoadingState =true;
-      bool isUpdate=false ;
+    bool isUpdate=false ;
     _transactionUpdateResponseModel = null ;
 
     try {
@@ -99,12 +99,12 @@ class TransactionViewModel extends ChangeNotifier {
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _transactionUpdateResponseModel= TransactionUpdateResponseModel.fromJson(response.data);
         _isLoadingState =false;
-         isUpdate = true;
+        isUpdate = true;
         notifyListeners();
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       } else {
@@ -114,45 +114,63 @@ class TransactionViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
     } catch (e) {
       _isLoadingState =false;
-       isUpdate = false;
+      isUpdate = false;
       notifyListeners();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
-          content: Text('$e', style: const TextStyle(color: Colors.white)),
+          content: Center(child: Text('$e', style: const TextStyle(color: Colors.white))),
         ));
       }
     }
     return isUpdate;
   }
 
-  Future<bool> transactionListFetch({required String branchID,required String customerOrSupplierID}) async {
+  Future<bool> transactionListFetch(BuildContext context,{required String branchID,required String customerOrSupplierID}) async {
     _isLoadingState=true;
     bool isFetched = false;
     _transactionsListResponseModel = null;
     try {
       Response response = await _transactionService.transactionList(branchId: branchID, customerOrSupplierId: customerOrSupplierID);
       if (response.statusCode == 200) {
-      _transactionsListResponseModel = TransactionsListResponseModel.fromJson(response.data);
+        _transactionsListResponseModel = TransactionsListResponseModel.fromJson(response.data);
         _transactions = _transactionsListResponseModel!.transactions;
         _isLoadingState=false;
-         isFetched = true;
-         notifyListeners();
+        isFetched = true;
+        notifyListeners();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+          ));
+        }
       } else {
         _isLoadingState=false;
         isFetched = false;
         notifyListeners();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+          ));
+        }
       }
     } catch (e) {
       _isLoadingState=false;
       isFetched = false;
       notifyListeners();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Center(child: Text('$e', style: const TextStyle(color: Colors.white))),
+        ));
+      }
     }
     return isFetched;
   }
@@ -169,7 +187,7 @@ class TransactionViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       } else {
@@ -179,18 +197,18 @@ class TransactionViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
     } catch (e) {
-        isDeleted = false;
-        _isLoadingState=false;
-        notifyListeners();
+      isDeleted = false;
+      _isLoadingState=false;
+      notifyListeners();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
-          content: Text('$e', style: const TextStyle(color: Colors.white)),
+          content: Center(child: Text('$e', style: const TextStyle(color: Colors.white))),
         ));
       }
     }

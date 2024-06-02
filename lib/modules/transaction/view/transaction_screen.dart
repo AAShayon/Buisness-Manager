@@ -31,7 +31,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   Future _loadData() async {
     final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
-    await transactionViewModel.transactionListFetch(branchID: widget.branchID, customerOrSupplierID: widget.customerSupplierID);
+    await transactionViewModel.transactionListFetch(branchID: widget.branchID, customerOrSupplierID: widget.customerSupplierID,context);
   }
 
   @override

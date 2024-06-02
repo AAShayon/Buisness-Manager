@@ -1,5 +1,6 @@
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/transaction/model/core/request_model/transaction_create_request_model.dart';
+import 'package:buisness_manager/modules/transaction/view/transaction_screen.dart';
 import 'package:buisness_manager/modules/transaction/viewModel/transaction_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -157,7 +158,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                       await transactionViewModel.createTransaction(transactionCreateRequestModel, context, branchID: widget.branchID).then((value) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerOrSupplierId, branchID: widget.branchID)));
                       });
                     }
                   },
