@@ -52,8 +52,7 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
       builder: (context, authViewModel, userProfileViewModel, branchViewModel, child) {
 
         final user = userProfileViewModel.responseUser;
-        return !authViewModel.isLoadingState&&!userProfileViewModel.isLoadingState&&!branchViewModel.isLoadingState&&user!=null
-            ?Scaffold(
+        return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.greenAccent,
                 leading: userProfileViewModel.isLoadingState
@@ -69,7 +68,7 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                     ),
                 title: Center(
                     child: Text(
-                      'Welcome, ${user.name??""}',
+                      'Welcome, ${user?.name??""}',
                       style: const TextStyle(fontSize: 20),
                     )
                 ),
@@ -91,7 +90,9 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                 onRefresh: () async {
                   await _loadData();
                 },
-                child: CustomContainer(
+                child:
+
+                CustomContainer(
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
@@ -172,62 +173,63 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                           ),
                         ),
                         const SizedBox(height: 20),
-                        CommonUseContainer(
-                          width: 200.w,
-                          child: Column(
-                            children: [
-                              const Expanded(
-                                child: HeadlineLargeText(
-                                    text: 'My Business ', color: Colors.white),
-                              ),
-                              HeadlineLargeText(
-                                text: user.businessType ?? 'Not Available',
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 50),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                         !userProfileViewModel.isLoadingState &&!branchViewModel.isLoadingState && user!= null ?
+                        Column(
                           children: [
                             CommonUseContainer(
-                              color: Colors.greenAccent.withOpacity(.5),
-                              width: 150.w,
-                              height: 50.h,
-                              child: Center(
-                                child: HeadLineSmallText(
-                                  text: 'My Branches',
-                                  color: Colors.white,
-                                  fontsize: 17.spMin,
-                                ),
+                              width: 200.w,
+                              child: Column(
+                                children: [
+                                  const Expanded(
+                                    child: HeadlineLargeText(
+                                        text: 'My Business ', color: Colors.white),
+                                  ),
+                                  HeadlineLargeText(
+                                    text: user.businessType ?? 'Not Available',
+                                    color: Colors.white,
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 25),
-                            CustomCircularButton(
-                                text: 'Create Branch',
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                          const BranchCreate()));
-                                }),
+                            const SizedBox(height: 50),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CommonUseContainer(
+                                  color: Colors.greenAccent.withOpacity(.5),
+                                  width: 150.w,
+                                  height: 50.h,
+                                  child: Center(
+                                    child: HeadLineSmallText(
+                                      text: 'My Branches',
+                                      color: Colors.white,
+                                      fontsize: 17.spMin,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 25),
+                                CustomCircularButton(
+                                    text: 'Create Branch',
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                              const BranchCreate()));
+                                    }),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            const BranchListGridView(),
                           ],
-                        ),
-                        const SizedBox(height: 20),
-                        const BranchListGridView()
+                        ) : CircularProgressIndicator(color: Colors.green,)
                       ],
                     ),
                   ),
                 ),
               ),
-            )
-            :const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(color: Colors.amber),
-              ),
             );
+
       },
     );
   }
