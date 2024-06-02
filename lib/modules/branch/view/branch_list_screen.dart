@@ -72,7 +72,7 @@ class BranchListGridView extends StatelessWidget {
 void _showBranchOption(BuildContext context, dynamic name, num id) {
   showDialog(
     context: context,
-    builder: (showDialogContext) {
+    builder: (context) {
       return AlertDialog(
         title: const Text('Branch Options'),
         content: Column(
@@ -82,16 +82,14 @@ void _showBranchOption(BuildContext context, dynamic name, num id) {
               leading: const Icon(Icons.remove_red_eye_rounded),
               title: const Text('Customer List'),
               onTap: () async {
-                // final customerViewModel = Provider.of<CustomerViewModel>(showDialogContext, listen: false);
-                // await customerViewModel.customerListFetch(branchId: id.toString(), customerOrSupplierType: 0);
-                Navigator.push(showDialogContext, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(
                       name: name,
                       branchId: id.toString(),
                       customerOrSupplierType: 0,
                     ),
                   ),
                 ).then((value) {
-                  Navigator.of(showDialogContext).pop();
+                  Navigator.of(context).pop();
                 });
               },
             ),
@@ -99,14 +97,14 @@ void _showBranchOption(BuildContext context, dynamic name, num id) {
               leading: const Icon(Icons.remove_red_eye_rounded),
               title: const Text('Supplier List'),
               onTap: () async {
-                Navigator.push(showDialogContext, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(
                       name: name,
                       branchId: id.toString(),
                       customerOrSupplierType: 1,
                     ),
                   ),
                 ).then((value) {
-                  Navigator.of(showDialogContext).pop();
+                  Navigator.of(context).pop();
                 });
               },
             ),
@@ -114,9 +112,9 @@ void _showBranchOption(BuildContext context, dynamic name, num id) {
               leading: const Icon(Icons.edit),
               title: const Text('Update'),
               onTap: () {
-                Navigator.pop(showDialogContext);
+                Navigator.pop(context);
                 Navigator.push(
-                    showDialogContext,
+                    context,
                     MaterialPageRoute(
                         builder: (context) => BranchUpdate(
                               id: id,
@@ -128,9 +126,9 @@ void _showBranchOption(BuildContext context, dynamic name, num id) {
               leading: const Icon(Icons.delete),
               title: const Text('Delete'),
               onTap: () {
-                Navigator.of(showDialogContext).pop();
+                Navigator.of(context).pop();
                 showDialog<bool>(
-                  context: showDialogContext,
+                  context: context,
                   barrierDismissible: false,
                   builder: (BuildContext deleteContext) {
                     return AlertDialog(
