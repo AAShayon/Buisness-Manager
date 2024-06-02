@@ -42,7 +42,7 @@ class SharedPreService implements StorageService{
   @override
   Future<void> write({required String key,required dynamic value}) async {
     // TODO: implement write
-   await  sharedPreferences?.setString(key, value.toString());
+   await  sharedPreferences?.setString(key, value);
   }
 
 
