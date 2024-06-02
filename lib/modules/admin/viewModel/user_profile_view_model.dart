@@ -62,78 +62,91 @@ class UserProfileViewModel extends ChangeNotifier{
 
   ///---------Methods ---------\\\\
 
-Future<bool> getUserProfile(BuildContext context) async{
-  _isLoadingState = true ;
-  bool isUser= false;
-  _userProfileDataResponseModel = null ;
-  try{
-   Response response=await _userProfileService.userProfile();
-    log("response==================================>${response.statusCode}");
-    log("response==================================>${response.data}");
-    if(response.statusCode == 200){
-      _userProfileDataResponseModel = UserProfileDataResponseModel.fromJson(response.data);
-      _responseUser =_userProfileDataResponseModel!.responseUser;
-      if (responseUser != null) {
-        _userProfileService.saveUser(_responseUser);
-      }
-      else {
-        _userProfileService.clearUser();
-      }
+  Future<bool> getUserProfile(BuildContext context) async{
+    _isLoadingState = true ;
+    bool isUser= false;
+    _userProfileDataResponseModel = null ;
+    try{
+      Response response=await _userProfileService.userProfile();
+      log("response==================================>${response.statusCode}");
+      log("response==================================>${response.data}");
+      if(response.statusCode == 200){
+        _userProfileDataResponseModel = UserProfileDataResponseModel.fromJson(response.data);
+        _responseUser =_userProfileDataResponseModel!.responseUser;
+        if (responseUser != null) {
+          _userProfileService.saveUser(_responseUser);
+        }
+        else {
+          _userProfileService.clearUser();
+        }
 
-      isUser =true ;
-      _isLoadingState=false;
-      notifyListeners();
-      // ${response.data["status"]}
-      if(context.mounted){
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor: Colors.green,
-          content: Center(child: Text('${response.data["description"] }',style: const TextStyle(color: Colors.white),)),
-        ));
+        isUser =true ;
+        _isLoadingState=false;
+        notifyListeners();
+        // ${response.data["status"]}
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"] }',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
+      }else{
+        _isLoadingState = false;
+        isUser =false ;
+        notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            duration: Duration(seconds: 1),
+            backgroundColor: Colors.red,
+            content: Center(child: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
       }
-    }else{
+    }
+    catch(e){
       _isLoadingState = false;
       isUser =false ;
       notifyListeners();
-      if(context.mounted){
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          duration: Duration(seconds: 1),
-          backgroundColor: Colors.red,
-          content: Center(child: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),)),
-        ));
+    }
+
+    return isUser;
+  }
+
+  Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileUpdateRequestModel,BuildContext context) async {
+    _isLoadingState =true ;
+    bool isUpdate=false;
+    _userProfileUpdateRequestResponseModel =null ;
+    try{
+      Response response= await _userProfileService.userProfileUpdate(userProfileUpdateRequestModel);
+      if(response.statusCode == 200){
+        _userProfileUpdateRequestResponseModel = UserProfileUpdateRequestResponseModel.fromJson(response.data);
+        _user = _userProfileUpdateRequestResponseModel!.user;
+        _isLoadingState=false;
+        isUpdate = true;
+        notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor:  Colors.green,
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
+      } else {
+        _isLoadingState = false;
+        isUpdate = false;
+        notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          ));
+        }
       }
     }
-  }
-  catch(e){
-    _isLoadingState = false;
-    isUser =false ;
-    notifyListeners();
-  }
-
-  return isUser;
-}
-
-Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileUpdateRequestModel,BuildContext context) async {
-  _isLoadingState =true ;
-  bool isUpdate=false;
-  _userProfileUpdateRequestResponseModel =null ;
-  try{
-    Response response= await _userProfileService.userProfileUpdate(userProfileUpdateRequestModel);
-    if(response.statusCode == 200){
-      _userProfileUpdateRequestResponseModel = UserProfileUpdateRequestResponseModel.fromJson(response.data);
-      _user = _userProfileUpdateRequestResponseModel!.user;
-      _isLoadingState=false;
-      isUpdate = true;
-      notifyListeners();
-      if(context.mounted){
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor:  Colors.green,
-          content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-        ));
-      }
-    } else {
+    catch(e){
       _isLoadingState = false;
       isUpdate = false;
       notifyListeners();
@@ -141,45 +154,30 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          content: Text('$e',style: const TextStyle(color: Colors.white),),
         ));
       }
     }
-  }
-  catch(e){
-    _isLoadingState = false;
-    isUpdate = false;
-    notifyListeners();
-    if(context.mounted){
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-        backgroundColor: const Color(0xffFF0000),
-        content: Text('$e',style: const TextStyle(color: Colors.white),),
-      ));
-    }
-  }
-  return isUpdate;
+    return isUpdate;
 
-}
+  }
   Future<bool> deleteUserProfile(BuildContext context) async {
     _isLoadingState = true;
     bool isDeleted = false;
     try {
       Response response = await _userProfileService.userDeleteProfile();
-      // log("Delete Profile Response Status Code: ${response.statusCode}");
-      // log("Delete Profile Response Data: ${response.data}");
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _isLoadingState =false;
         _userProfileService.clearUser();
         isDeleted = true;
         notifyListeners();
-        // if(context.mounted){
-        //   ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        //   ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-        //     backgroundColor: const Color(0xffFF0000),
-        //     content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
-        //   ));
-        // }
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
       } else {
         isDeleted = false;
         _isLoadingState=false;
