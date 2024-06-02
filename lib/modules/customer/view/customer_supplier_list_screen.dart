@@ -53,13 +53,13 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
                 HeadlineLargeText(text: widget.name ?? 'No Name', color: Colors.white),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 15.h),
-                  child: CustomCircularButton(text: 'Add Customer', onPressed: () {
+                  child: CustomCircularButton(text: 'Add Customer / Supplier', onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerOrSupplierCreate(id:widget.branchId,)));
                   }),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.h),
-                  child: HeadLineMediumText(text: 'Customer List', color: Colors.white),
+                  child: HeadLineMediumText(text: widget.customerOrSupplierType == 0 ? 'Customer List' : 'Supplier List', color: Colors.white,),
                 ),
                 Consumer<CustomerViewModel>(
                   builder: (context, customerViewModel, child) {
