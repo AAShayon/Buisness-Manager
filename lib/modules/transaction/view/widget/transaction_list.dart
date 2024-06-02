@@ -1,100 +1,41 @@
-import 'package:buisness_manager/model/core/api_urls.dart';
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
-import 'package:buisness_manager/modules/transaction/view/widget/transaction_create.dart';
+import 'package:buisness_manager/modules/transaction/model/core/response_model/TransactionsListResponseModel.dart';
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_update.dart';
 import 'package:buisness_manager/modules/transaction/viewModel/transaction_view_model.dart';
-import 'package:buisness_manager/view/widget/custom_circular_button.dart';
-import 'package:buisness_manager/view/widget/custom_container.dart';
-import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../model/core/response_model/TransactionsListResponseModel.dart';
-
-class TransactionList extends StatefulWidget {
-  final String customerSupplierID;
+class TransactionList extends StatelessWidget {
   final String branchID;
-
-  const TransactionList({super.key, required this.customerSupplierID, required this.branchID});
-
-  @override
-  State<TransactionList> createState() => _TransactionListState();
-}
-
-class _TransactionListState extends State<TransactionList> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadData();
-    });
-  }
-
-  Future _loadData() async {
-    final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
-    await transactionViewModel.transactionListFetch(branchID: widget.branchID, customerOrSupplierID: widget.customerSupplierID);
+  final String customerSupplierID;
+  const TransactionList({super.key, required this.branchID, required this.customerSupplierID});
+  String? _formatDateTime(String? dateTime) {
+    if (dateTime == null) return null;
+    DateTime parsedDate = DateTime.parse(dateTime);
+    return DateFormat('hh:mm a yyyy-MM-dd').format(parsedDate);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          _loadData();
-        },
-        child: CustomContainer(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 15.h),
-                Center(child: HeadlineLargeText(text: "Supplier/Customer", color: Colors.white)),
-                SizedBox(height: 15.h),
-                Consumer<TransactionViewModel>(
-                  builder: (context, transactionViewModel, child) {
-                    if (transactionViewModel.isLoadingState) {
-                      return Center(child: CircularProgressIndicator(color: Colors.green));
-                    } else if (transactionViewModel.transactions == null || transactionViewModel.transactions!.transactionList!.isEmpty) {
-                      return Center(child: Text('No Data', style: TextStyle(color: Colors.white)));
-                    }
+    return Consumer<TransactionViewModel>(
+      builder: (context, transactionViewModel, child) {
+        if (transactionViewModel.isLoadingState) {
+          return Center(child: CircularProgressIndicator(color: Colors.green));
+        } else if (transactionViewModel.transactions == null || transactionViewModel.transactions!.transactionList!.isEmpty) {
+          return Center(child: Text('No Data', style: TextStyle(color: Colors.white)));
+        }
 
-                    final transactions = transactionViewModel.transactions!.transactionList;
+        final transactions = transactionViewModel.transactions!.transactionList;
 
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HeadlineLargeText(text: 'ID ${widget.customerSupplierID}', color: Colors.white),
-                          ],
-                        ),
-                        SizedBox(height: 10.h),
-                        Center(
-                          child: CustomCircularButton(
-                            text: 'Create Transaction',
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionCreate(branchID: widget.branchID, customerOrSupplierId: widget.customerSupplierID,)));
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 20.h),
-                        SizedBox(
-                          height: 700.h,
-                          width: double.infinity,
-                          child: _buildTransactionTable(context, transactions!),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+        return Column(
+          children: [
+            _buildTransactionTable(context, transactions!),
+          ],
+        );
+      },
     );
   }
-
   Widget _buildTransactionTable(BuildContext context, List<Transaction> transactions) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -105,7 +46,7 @@ class _TransactionListState extends State<TransactionList> {
           _buildDataColumn('Amount'),
           _buildDataColumn('Details'),
           _buildDataColumn('Bill No'),
-          _buildDataColumn('Actions'),
+          _buildDataColumn('Date '),
         ],
         rows: transactions.map((transaction) {
           return DataRow(
@@ -114,15 +55,14 @@ class _TransactionListState extends State<TransactionList> {
               _buildDataCell(transaction.amount.toString()),
               _buildDataCell(transaction.details ?? 'N/A'),
               _buildDataCell(transaction.billNo ?? 'N/A'),
-              DataCell(
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    _showTransactionOption(context, transactionID: transaction.id.toString() ,branchID:widget.branchID,customerID:widget.customerSupplierID,billID: transaction.billNo.toString() );
-                  },
-                ),
-              ),
+              _buildDataCell(_formatDateTime(transaction.transactionDate) ?? 'N/A'),
             ],
+            onSelectChanged: (selected){
+              if(selected != null && selected){
+                _showTransactionOption(context, transactionID: transaction.id.toString() ,branchID:branchID,customerID:customerSupplierID,billID: transaction.billNo.toString() );
+
+              }
+            }
           );
         }).toList(),
       ),
