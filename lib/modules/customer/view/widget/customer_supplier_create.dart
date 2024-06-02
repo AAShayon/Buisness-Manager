@@ -1,5 +1,6 @@
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_create_request_model.dart';
+import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -12,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class CustomerOrSupplierCreate extends StatefulWidget {
   final String id;
-  const CustomerOrSupplierCreate({super.key, required this.id});
+  const CustomerOrSupplierCreate({super.key, required this.id,});
 
   @override
   State<CustomerOrSupplierCreate> createState() => _CustomerOrSupplierCreateState();
@@ -289,11 +290,7 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                     branchId: widget.id,
                                     customerOrSupplierType: customerOrSupplier!)
                                     .then((value) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BranchViewInformationScreen()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(customerOrSupplierType: customerOrSupplier!,branchId:widget.id,)));
                                 });
                               }
                             },

@@ -37,7 +37,7 @@ class CustomerViewModel extends ChangeNotifier {
   }
 
   void setCustomerListResponseModel(CustomerListResponseModel customerListResponseModel){
-   _customerListResponseModel = customerListResponseModel;
+    _customerListResponseModel = customerListResponseModel;
     notifyListeners();
   }
   void setCustomersList(Customers? customers) {
@@ -73,7 +73,7 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       } else {
@@ -118,8 +118,8 @@ class CustomerViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       } else {
@@ -130,7 +130,7 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
@@ -149,7 +149,7 @@ class CustomerViewModel extends ChangeNotifier {
     return isUpdate;
   }
 
-  Future<bool> customerListFetch({required String branchId,required int customerOrSupplierType}) async {
+  Future<bool> customerListFetch(BuildContext context,{required String branchId,required int customerOrSupplierType}) async {
     _isLoadingState = true;
     bool isCustomerListFetch = false;
     _customerListResponseModel = null;
@@ -164,15 +164,36 @@ class CustomerViewModel extends ChangeNotifier {
         _isLoadingState = false;
         isCustomerListFetch = true;
         notifyListeners();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+          ));
+        }
       } else {
         _isLoadingState = false;
         isCustomerListFetch = false;
         notifyListeners();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+          ));
+        }
       }
     } catch (e) {
       _isLoadingState = false;
       isCustomerListFetch = false;
       notifyListeners();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: const Color(0xffFF0000),
+          content: Center(child: Text('$e', style: const TextStyle(color: Colors.white))),
+        ));
+      }
     }
     return isCustomerListFetch;
   }
@@ -189,8 +210,8 @@ class CustomerViewModel extends ChangeNotifier {
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       } else {
@@ -201,7 +222,7 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
@@ -210,7 +231,7 @@ class CustomerViewModel extends ChangeNotifier {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e', style: const TextStyle(color: Colors.white)),
+          content: Center(child: Text('$e', style: const TextStyle(color: Colors.white))),
         ));
       }
       isDeleted = false;

@@ -1,5 +1,6 @@
 import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_update_request_model.dart';
+import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -289,11 +290,7 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                     customerUpdateRequestModel, context,
                                     branchId: widget.branchId, customerOrSupplierId: widget.customerOrSupplierId )
                                     .then((value) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BranchViewInformationScreen()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(branchId: widget.branchId, customerOrSupplierType: customerOrSupplier!)));
                                 });
                               }
                             },

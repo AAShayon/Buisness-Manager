@@ -35,7 +35,7 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
 
   Future _loadData() async {
     final customerViewModel = Provider.of<CustomerViewModel>(context, listen: false);
-    await customerViewModel.customerListFetch(branchId: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType);
+    await customerViewModel.customerListFetch(branchId: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType,context);
   }
 
   @override
@@ -103,9 +103,9 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
                                       icon: Icon(Icons.delete),
                                       onPressed: () async {
                                         final customerViewModel = Provider.of<CustomerViewModel>(context, listen: false);
-                                        await customerViewModel.deleteCustomer(context, branchId: widget.branchId, customerOrSupplierId: customer.id.toString()).then((isDeleted) {
+                                        await customerViewModel.deleteCustomer(context, branchId: widget.branchId, customerOrSupplierId: customer.id.toString()).then((isDeleted)async {
                                           if (isDeleted) {
-                                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen()), (route) => false);
+                                            await customerViewModel.customerListFetch(context, branchId: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType);
                                           }
                                         });
                                       },
