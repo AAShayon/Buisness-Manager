@@ -222,7 +222,7 @@ class AuthViewModel extends ChangeNotifier{
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
     }

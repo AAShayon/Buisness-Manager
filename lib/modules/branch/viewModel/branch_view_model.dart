@@ -86,7 +86,7 @@ class BranchViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -98,7 +98,7 @@ class BranchViewModel extends ChangeNotifier {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
     }
@@ -119,8 +119,8 @@ class BranchViewModel extends ChangeNotifier {
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }else{
@@ -131,7 +131,7 @@ class BranchViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -144,7 +144,7 @@ class BranchViewModel extends ChangeNotifier {
      ScaffoldMessenger.of(context).removeCurrentSnackBar();
      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
        backgroundColor: const Color(0xffFF0000),
-       content: Text('$e',style: const TextStyle(color: Colors.white),),
+       content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
      ));
       }
     }
@@ -164,6 +164,13 @@ class BranchViewModel extends ChangeNotifier {
         _isLoadingState =false ;
         isBranchListFetch =true;
         notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
       }
       else{
         _isLoadingState =false ;
