@@ -85,7 +85,7 @@ class AuthRemoteDataSource extends AuthService{
 
   @override
   Future<void> saveAuthToken(String? token) async{
-    await _sharedPreService.write(key: 'token', value: token);
+    await _sharedPreService.write(key: 'token', value: token.toString());
   }
 
   @override
