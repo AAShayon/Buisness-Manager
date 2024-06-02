@@ -94,10 +94,11 @@ class DioService{
     try{
       final response=await _dio!.get(path,queryParameters: data);
       return response;
-    }catch(e){if (kDebugMode) {
-      print(e);
-    }}
-    return null;
+    } on FormatException catch (_) {
+      throw FormatException("Unable to process the data");
+    } catch (e) {
+      throw e;
+    }
   }
   Future<Response?> request(String path) async {
     try {
@@ -105,10 +106,15 @@ class DioService{
       log("Response Status Code: ${response.statusCode}");
       log("Response Data: ${response.data}");
       return response;
+    } on FormatException catch (_) {
+      throw FormatException("Unable to process the data");
     } catch (e) {
-      log(e.toString());
+      throw e;
     }
-    return null;
+    // catch (e) {
+    //   log(e.toString());
+    // }
+    // return null;
   }
   Future<Response?> delete(String path) async{
     try {
@@ -117,10 +123,15 @@ class DioService{
       log("Response Status Code: ${response.statusCode}");
       log("Response Data: ${response.data}");
       return response;
+    } on FormatException catch (_) {
+      throw FormatException("Unable to process the data");
     } catch (e) {
-      log(e.toString());
+      throw e;
     }
-    return null;
+    // catch (e) {
+    //   log(e.toString());
+    // }
+    // return null;
 
   }
 }
