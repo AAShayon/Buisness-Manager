@@ -2,7 +2,8 @@ import 'package:buisness_manager/modules/branch/view/branch_view_information.dar
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_create.dart';
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_update.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
-import 'package:buisness_manager/modules/transaction/view/widget/transaction_list.dart';
+import 'package:buisness_manager/modules/transaction/view/transaction_screen.dart';
+
 
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
@@ -89,7 +90,7 @@ class _CustomerSupplierViewScreenState extends State<CustomerSupplierViewScreen>
                                     IconButton(
                                       icon: Icon(Icons.remove_red_eye_rounded),
                                       onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionList(customerSupplierID: customer.id.toString(), branchID:widget.branchId,)));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: customer.id.toString(), branchID:widget.branchId,)));
                                       },
                                     ),
                                     IconButton(
