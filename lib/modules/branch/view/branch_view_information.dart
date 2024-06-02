@@ -171,39 +171,6 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                             spacing: 4.w,
                           ),
                         ),
-                        // Container(
-                        //
-                        //   width: 365.w,
-                        //   height: 250.h,
-                        //   decoration: BoxDecoration(),
-                        //   child: CarouselSlider(
-                        //     options: CarouselOptions(
-                        //       height: 250.h,
-                        //       autoPlay: true,
-                        //       autoPlayInterval: Duration(seconds: 2),
-                        //       autoPlayAnimationDuration: Duration(milliseconds: 800),
-                        //       autoPlayCurve: Curves.fastOutSlowIn,
-                        //       enlargeCenterPage: true,
-                        //       scrollDirection: Axis.horizontal,
-                        //       enableInfiniteScroll: true,
-                        //     ),
-                        //     items: [
-                        //       'assets/business1.json',
-                        //       'assets/business2.json',
-                        //       'assets/business3.json',
-                        //     ].map((i) {
-                        //       return Builder(
-                        //         builder: (BuildContext context) {
-                        //           return Container(
-                        //             width: 365.w,
-                        //             margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        //             child: Lottie.asset(i),
-                        //           );
-                        //         },
-                        //       );
-                        //     }).toList(),
-                        //   ),
-                        // ),
                         const SizedBox(height: 20),
                         CommonUseContainer(
                           width: 200.w,
@@ -250,12 +217,6 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                         ),
                         const SizedBox(height: 20),
                         const BranchListGridView()
-                        // if (branchViewModel.isLoadingState)
-                        //   const CircularProgressIndicator()
-                        // else if (branchViewModel.branches != null&&branchViewModel.branches!.branches!=null)
-                        //   BranchListGridView(branches: branchViewModel.branches!.branches!)
-                        // else
-                        //   const Text('No branches found'),
                       ],
                     ),
                   ),
