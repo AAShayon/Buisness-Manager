@@ -74,10 +74,12 @@ Future<bool> getUserProfile(BuildContext context) async{
       _userProfileDataResponseModel = UserProfileDataResponseModel.fromJson(response.data);
       _responseUser =_userProfileDataResponseModel!.responseUser;
       if (responseUser != null) {
-        _sharedPreService.write(key: 'responseUser', value: _responseUser!.toJson());
-      } else {
-        _sharedPreService.delete(key: 'responseUser');
+        _userProfileService.saveUser(_responseUser);
       }
+      else {
+        _userProfileService.clearUser();
+      }
+
       isUser =true ;
       _isLoadingState=false;
       notifyListeners();
@@ -168,6 +170,7 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
       // log("Delete Profile Response Data: ${response.data}");
       if (response.statusCode == 200 && response.data["status"] == 200) {
         _isLoadingState =false;
+        _userProfileService.clearUser();
         isDeleted = true;
         notifyListeners();
         // if(context.mounted){
@@ -201,21 +204,8 @@ Future<bool> userProfileUpdateRequest(UserProfileUpdateRequestModel userProfileU
       _isLoadingState=false;
       notifyListeners();
     }
-    //
-    // finally {
-    //   _isLoadingState = false;
-    //   notifyListeners();
-    // }
     return isDeleted;
   }
-
-
-
-
-
-
-
-
 
 
   String businessType(int businessType) {
