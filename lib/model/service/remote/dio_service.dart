@@ -81,12 +81,13 @@ class DioService{
     log(path);
     try{
       final response= await _dio!.post(path,data: data);
-      log("${response.statusCode}");
+      // log("${response.statusCode}");
       return response;
+    }on FormatException catch (_) {
+      throw FormatException("Unable to process the data");
+    } catch (e) {
+      throw e;
     }
-    catch (e){if (kDebugMode) {
-      print(e);
-    }}
     return null;
   }
   Future<Response?> get(String path,{Map<String,dynamic>? data}) async {
