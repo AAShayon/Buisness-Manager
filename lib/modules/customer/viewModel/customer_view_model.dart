@@ -1,6 +1,7 @@
 
 import 'dart:developer';
 
+import 'package:buisness_manager/model/service/remote/api_response.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_create_request_model.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_update_request_model.dart';
 import 'package:buisness_manager/modules/customer/model/core/response_model/CustomerUpdateResponseModel.dart';
@@ -60,23 +61,38 @@ class CustomerViewModel extends ChangeNotifier {
     _customerCreateResponseModel = null;
     _customers = null;
     try {
-      Response response = await _customerService.customerCreate(customerCreateRequestModel, branchId: branchId, customerOrSupplierType:customerOrSupplierType);
+      ApiResponse apiResponse = await _customerService.customerCreate(customerCreateRequestModel, branchId: branchId, customerOrSupplierType:customerOrSupplierType);
+     if(apiResponse.response != null){
+       if (apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200) {
+         _customerCreateResponseModel = CustomerCreateResponseModel.fromJson(apiResponse.response!.data);
+         _customers = _customerListResponseModel!.customers;
+         // log("============>check customer list${_customers!.customerList!.length}");
+         _isLoadingState = false;
+         isCreate = true;
+         notifyListeners();
+         if (context.mounted) {
+           ScaffoldMessenger.of(context).removeCurrentSnackBar();
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+             backgroundColor: Colors.green,
+             content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
+           ));
+         }
+       }
+       else {
+         _isLoadingState = false;
+         isCreate = false;
+         notifyListeners();
+         if (context.mounted) {
 
-      if (response.statusCode == 200 && response.data["status"] == 200) {
-        _customerCreateResponseModel = CustomerCreateResponseModel.fromJson(response.data);
-        _customers = _customerListResponseModel!.customers;
-        log("============>check customer list${_customers!.customerList!.length}");
-        _isLoadingState = false;
-        isCreate = true;
-        notifyListeners();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
-          ));
-        }
-      } else {
+           ScaffoldMessenger.of(context).removeCurrentSnackBar();
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+             backgroundColor: const Color(0xffFF0000),
+             content: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white)),
+           ));
+         }
+       }
+     }
+     else {
         _isLoadingState = false;
         isCreate = false;
         notifyListeners();
@@ -85,7 +101,7 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white)),
+            content: Text('${apiResponse.error}', style: const TextStyle(color: Colors.white)),
           ));
         }
       }
@@ -109,20 +125,35 @@ class CustomerViewModel extends ChangeNotifier {
     bool isUpdate = false;
     _customerUpdateResponseModel = null;
     try {
-      Response response = await _customerService.customerUpdate(customerUpdateRequestModel, branchId: branchId, customerOrSupplierId: customerOrSupplierId);
-      if (response.statusCode == 200 && response.data["status"] == 200) {
-        _customerUpdateResponseModel = CustomerUpdateResponseModel.fromJson(response.data);
-        _isLoadingState = false;
-        isUpdate = true;
-        notifyListeners();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
-          ));
+      ApiResponse apiResponse = await _customerService.customerUpdate(customerUpdateRequestModel, branchId: branchId, customerOrSupplierId: customerOrSupplierId);
+      if(apiResponse.response !=null){
+        if (apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200) {
+          _customerUpdateResponseModel = CustomerUpdateResponseModel.fromJson(apiResponse.response!.data);
+          _isLoadingState = false;
+          isUpdate = true;
+          notifyListeners();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
+            ));
+          }
         }
-      } else {
+        else {
+          _isLoadingState = false;
+          isUpdate = false;
+          notifyListeners();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
+            ));
+          }
+        }
+      }
+      else {
         _isLoadingState = false;
         isUpdate = false;
         notifyListeners();
@@ -130,7 +161,7 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+            content: Center(child: Text('${apiResponse.error}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
@@ -155,11 +186,12 @@ class CustomerViewModel extends ChangeNotifier {
     _customerListResponseModel = null;
     _customers = null;
     try {
-      Response response = await _customerService.customerList(branchId: branchId,customerOrSupplierType: customerOrSupplierType);
-      log('customer list=================>${response.data}');
-      log('customer list=================>${response.data['status']}');
-      if (response.statusCode == 200 && response.data["status"] == 200) {
-        _customerListResponseModel = CustomerListResponseModel.fromJson(response.data);
+      ApiResponse apiResponse = await _customerService.customerList(branchId: branchId,customerOrSupplierType: customerOrSupplierType);
+      // log('customer list=================>${response.data}');
+      // log('customer list=================>${response.data['status']}');
+    if(apiResponse.response != null){
+      if (apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200) {
+        _customerListResponseModel = CustomerListResponseModel.fromJson(apiResponse.response!.data);
         _customers = _customerListResponseModel!.customers;
         _isLoadingState = false;
         isCustomerListFetch = true;
@@ -168,10 +200,11 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+            content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
           ));
         }
-      } else {
+      }
+      else {
         _isLoadingState = false;
         isCustomerListFetch = false;
         notifyListeners();
@@ -179,7 +212,20 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+            content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
+          ));
+        }
+      }
+    }
+       else {
+        _isLoadingState = false;
+        isCustomerListFetch = false;
+        notifyListeners();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: const Color(0xffFF0000),
+            content: Center(child: Text('${apiResponse.error}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
@@ -202,19 +248,34 @@ class CustomerViewModel extends ChangeNotifier {
     _isLoadingState = true;
     bool isDeleted = false;
     try {
-      Response response = await _customerService.customerDelete(branchId: branchId,customerOrSupplierId: customerOrSupplierId);
-      if (response.statusCode == 200 && response.data["status"] == 200) {
-        _isLoadingState = false;
-        isDeleted = true;
-        notifyListeners();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
-          ));
+      ApiResponse apiResponse = await _customerService.customerDelete(branchId: branchId,customerOrSupplierId: customerOrSupplierId);
+      if(apiResponse.response !=null){
+        if (apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200) {
+          _isLoadingState = false;
+          isDeleted = true;
+          notifyListeners();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
+            ));
+          }
         }
-      } else {
+        else {
+          isDeleted = false;
+          _isLoadingState = false;
+          notifyListeners();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}', style: const TextStyle(color: Colors.white))),
+            ));
+          }
+        }
+      }
+       else {
         isDeleted = false;
         _isLoadingState = false;
         notifyListeners();
@@ -222,7 +283,7 @@ class CustomerViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}', style: const TextStyle(color: Colors.white))),
+            content: Center(child: Text('${apiResponse.error}', style: const TextStyle(color: Colors.white))),
           ));
         }
       }
