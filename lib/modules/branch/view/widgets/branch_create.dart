@@ -17,7 +17,6 @@ class BranchCreate extends StatelessWidget {
   Widget build(BuildContext context) {
     final _branchCreateFormKey = GlobalKey<FormState>();
     final TextEditingController branchNameController = TextEditingController();
-    final authViewModel=Provider.of<AuthViewModel>(context);
 
     return Consumer<BranchViewModel>(
       builder: (context,branchViewModel,child) {
@@ -51,10 +50,8 @@ class BranchCreate extends StatelessWidget {
                       );
                       branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate) {
                         if(isCreate){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen(
-                            // logInResponseModel: authViewModel.logInResponseModel!,
-
-                          )));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen()));
+                          Navigator.pop(context);
                         }
                         else{
                           ScaffoldMessenger.of(context).showSnackBar(
