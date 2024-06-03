@@ -1,3 +1,4 @@
+import 'package:buisness_manager/model/service/remote/api_response.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_create_request_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_name_update_request_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/response_model/branch_create_response_model.dart';
@@ -64,21 +65,36 @@ class BranchViewModel extends ChangeNotifier {
     bool isCreate = false;
     _branchCreateResponseModel = null;
     try {
-      Response response = await _branchService.branchCreate(branchCreateRequestModel);
-      if (response.statusCode == 200 && response.data["status"] == 200) {
-        _branchCreateResponseModel = BranchCreateResponseModel.fromJson(response.data);
-        _branches= _branchListResponseModel!.branches;
-        _isLoadingState = false;
-        isCreate = true;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor:  Colors.greenAccent,
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
+      ApiResponse apiResponse = await _branchService.branchCreate(branchCreateRequestModel);
+      if(apiResponse.response != null){
+        if (apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200) {
+          _branchCreateResponseModel = BranchCreateResponseModel.fromJson(apiResponse.response!.data);
+          _branches= _branchListResponseModel!.branches;
+          _isLoadingState = false;
+          isCreate = true;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor:  Colors.greenAccent,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
         }
-      } else {
+        else{
+          _isLoadingState = false;
+          isCreate = false;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text(' ${apiResponse.response!.data["status"]}${apiResponse.response!.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }
+      else {
         _isLoadingState = false;
         isCreate = false;
         notifyListeners();
@@ -86,7 +102,7 @@ class BranchViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -110,20 +126,35 @@ class BranchViewModel extends ChangeNotifier {
     bool isUpdate=false ;
     _branchNameUpdateRequestResponseModel = null ;
     try{
-      Response response= await _branchService.branchUpdate(branchNameUpdateRequestModel,branchId: branchId);
-      if(response.statusCode == 200 && response.data["status"] == 200){
-        _branchNameUpdateRequestResponseModel=BranchNameUpdateRequestResponseModel.fromJson(response.data);
-        _isLoadingState= false;
-        isUpdate= true ;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
+      ApiResponse apiResponse= await _branchService.branchUpdate(branchNameUpdateRequestModel,branchId: branchId);
+      if(apiResponse.response != null){
+        if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200){
+          _branchNameUpdateRequestResponseModel=BranchNameUpdateRequestResponseModel.fromJson(apiResponse.response!.data);
+          _isLoadingState= false;
+          isUpdate= true ;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
         }
-      }else{
+        else{
+          _isLoadingState =false ;
+          isUpdate =false ;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }
+      else{
         _isLoadingState =false ;
         isUpdate =false ;
         notifyListeners();
@@ -131,7 +162,7 @@ class BranchViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             backgroundColor: const Color(0xffFF0000),
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -157,19 +188,34 @@ class BranchViewModel extends ChangeNotifier {
     bool isBranchListFetch = false;
     _branchListResponseModel = null;
     try {
-      Response response=await _branchService.branchList();
-      if(response.statusCode == 200 && response.data["status"]==200){
-        _branchListResponseModel = BranchListResponseModel.fromJson(response.data);
-        _branches = _branchListResponseModel!.branches;
-        _isLoadingState =false ;
-        isBranchListFetch =true;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            backgroundColor: Colors.green,
-            content: Center(child: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),)),
-          ));
+      ApiResponse apiResponse=await _branchService.branchList();
+      if(apiResponse.response != null ){
+        if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"]==200){
+          _branchListResponseModel = BranchListResponseModel.fromJson(apiResponse.response!.data);
+          _branches = _branchListResponseModel!.branches;
+          _isLoadingState =false ;
+          isBranchListFetch =true;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+        else{
+          _isLoadingState =false ;
+          isBranchListFetch =false;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              duration: Duration(milliseconds: 1),
+              backgroundColor: Colors.red,
+              content: Center(child: Text(' ${apiResponse.response!.data["status"]}${apiResponse.response!.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
         }
       }
       else{
@@ -181,7 +227,7 @@ class BranchViewModel extends ChangeNotifier {
           ScaffoldMessenger.of(context).showSnackBar( SnackBar(
             duration: Duration(milliseconds: 1),
             backgroundColor: Colors.red,
-            content: Text(' ${response.data["status"]}${response.data["msg"] }',style: const TextStyle(color: Colors.white),),
+            content: Center(child: Text(' ${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
       }
@@ -190,6 +236,14 @@ class BranchViewModel extends ChangeNotifier {
       _isLoadingState =false ;
       isBranchListFetch =false;
       notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          duration: Duration(milliseconds: 1),
+          backgroundColor: Colors.red,
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
+        ));
+      }
     }
     notifyListeners();
     return isBranchListFetch;
@@ -198,20 +252,36 @@ class BranchViewModel extends ChangeNotifier {
     _isLoadingState = true;
     bool isDeleted = false;
     try{
-    Response response= await _branchService.branchDelete(branchId: branchId);
-    if(response.statusCode == 200 && response.data["status"] == 200){
-      _isLoadingState =false;
-      isDeleted = true;
-      notifyListeners();
-      if(context.mounted){
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
-        ));
-      }
+    ApiResponse apiResponse= await _branchService.branchDelete(branchId: branchId);
+    if(apiResponse.response != null){
+      if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200){
+        _isLoadingState =false;
+        isDeleted = true;
+        notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: Colors.green,
+            content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
+        else{
+          isDeleted = false;
+          _isLoadingState=false;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: const Color(0xffFF0000),
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
 
-    } else{
+        }
+
+      }
+    }
+    else{
       isDeleted = false;
       _isLoadingState=false;
       notifyListeners();
@@ -219,7 +289,7 @@ class BranchViewModel extends ChangeNotifier {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('${response.data["description"]}',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
         ));
       }
 
@@ -230,7 +300,7 @@ class BranchViewModel extends ChangeNotifier {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
           backgroundColor: const Color(0xffFF0000),
-          content: Text('$e',style: const TextStyle(color: Colors.white),),
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
         ));
       }
       isDeleted = false;

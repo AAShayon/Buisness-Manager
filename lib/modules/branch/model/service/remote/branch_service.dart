@@ -2,16 +2,18 @@
 import 'dart:developer';
 
 import 'package:buisness_manager/model/core/api_urls.dart';
+import 'package:buisness_manager/model/service/remote/api_error_handler.dart';
+import 'package:buisness_manager/model/service/remote/api_response.dart';
 import 'package:buisness_manager/model/service/remote/dio_service.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_create_request_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_name_update_request_model.dart';
 import 'package:dio/dio.dart';
 
 abstract class BranchService{
-  Future<Response> branchList();
-  Future<Response> branchCreate(BranchCreateRequestModel branchCreateRequestModel);
-  Future<Response> branchUpdate(BranchNameUpdateRequestModel branchNameUpdateRequestModel,{required String branchId});
-  Future<Response> branchDelete({required String branchId});
+  Future<ApiResponse> branchList();
+  Future<ApiResponse> branchCreate(BranchCreateRequestModel branchCreateRequestModel);
+  Future<ApiResponse> branchUpdate(BranchNameUpdateRequestModel branchNameUpdateRequestModel,{required String branchId});
+  Future<ApiResponse> branchDelete({required String branchId});
 }
 
 class BranchRemoteDataSource extends BranchService{
@@ -27,32 +29,48 @@ class BranchRemoteDataSource extends BranchService{
   }
 
   @override
-  Future<Response> branchList() async {
-    Response? response=await _dioService.get(ApiUrl().branchList);
-    return response!;
+  Future<ApiResponse> branchList() async {
+   try{
+     Response? response=await _dioService.get(ApiUrl().branchList);
+     return ApiResponse.withSuccess(response!);
+   }catch(e){
+     return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+   }
 
   }
 
     @override
-    Future<Response> branchCreate(BranchCreateRequestModel branchCreateRequestModel) async {
-    Response? response= await _dioService.post(ApiUrl().branchCreate,data: branchCreateRequestModel.toJson());
-    return response!;
+    Future<ApiResponse> branchCreate(BranchCreateRequestModel branchCreateRequestModel) async {
+    try{
+      Response? response= await _dioService.post(ApiUrl().branchCreate,data: branchCreateRequestModel.toJson());
+      return ApiResponse.withSuccess(response!);
+    }
+    catch(e){
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
     }
 
   @override
-  Future<Response> branchUpdate(BranchNameUpdateRequestModel branchNameUpdateRequestModel,{required String branchId}) async{
+  Future<ApiResponse> branchUpdate(BranchNameUpdateRequestModel branchNameUpdateRequestModel,{required String branchId}) async{
     ApiUrl.branchId=branchId;
-    Response? response= await _dioService.post(ApiUrl().branchUpdate,data: branchNameUpdateRequestModel.toJson());
-    return response!;
+    try{
+      Response? response= await _dioService.post(ApiUrl().branchUpdate,data: branchNameUpdateRequestModel.toJson());
+      return ApiResponse.withSuccess(response!);
+    }catch(e){
+      return  ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
   }
 
     @override
-    Future<Response> branchDelete({required String branchId}) async{
+    Future<ApiResponse> branchDelete({required String branchId}) async{
     ApiUrl.branchId=branchId;
-    log("======>ApiUrl.branchId${ApiUrl.branchId}");
-    log("======>ApiUrl.branchId${ApiUrl().branchDelete}");
-    Response? response=await _dioService.delete(ApiUrl().branchDelete);
-    return response!;
+    try{
+      Response? response=await _dioService.delete(ApiUrl().branchDelete);
+      return ApiResponse.withSuccess(response!);
+    }catch(e){
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+
     }
 
 
