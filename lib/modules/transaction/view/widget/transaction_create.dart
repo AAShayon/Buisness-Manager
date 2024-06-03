@@ -40,7 +40,35 @@ class _TransactionCreateState extends State<TransactionCreate> {
     billNoController.dispose();
     super.dispose();
   }
+  Future<void> _selectDateTime(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
 
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime finalDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        setState(() {
+          transactionDateController.text = DateFormat('yyyy-MM-dd HH:mm').format(finalDateTime);
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,15 +133,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
                 SizedBox(height: 15.h),
                 GestureDetector(
                   onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101),
-                    );
-                    if (pickedDate != null) {
-                      transactionDateController.text = pickedDate.toLocal().toString(); // Use toLocal as a property
-                    }
+                    _selectDateTime(context);
                   },
                   child: AbsorbPointer(child: CustomTextFormField(controller: transactionDateController, hintText: 'Add Date', textInputTypeKeyboard: TextInputType.name, prefixIcon: Icons.date_range_sharp,
                   )),
@@ -160,6 +180,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                       await transactionViewModel.createTransaction(transactionCreateRequestModel, context, branchID: widget.branchID).then((value) {
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerOrSupplierId, branchID: widget.branchID,customerSupplierType: widget.customerSupplierType,)));
+                        Navigator.pop(context);
                       });
                     }
                   },

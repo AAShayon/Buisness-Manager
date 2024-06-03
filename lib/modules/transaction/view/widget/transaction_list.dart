@@ -116,7 +116,12 @@ class TransactionList extends StatelessWidget {
                   final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                   await transactionViewModel.deleteTransaction(context, branchID: branchID, transactionID: transactionID).then((isDeleted)async {
                     if (isDeleted) {
-                  await transactionViewModel.transactionListFetch(context, branchID: branchID, customerOrSupplierID: customerID);
+                  await transactionViewModel.transactionListFetch(context, branchID: branchID, customerOrSupplierID: customerID).then((isFetched) {
+                    if(isFetched){
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  });
                     }
                   });
                 },
