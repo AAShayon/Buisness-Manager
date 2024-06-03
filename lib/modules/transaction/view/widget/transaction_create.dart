@@ -15,7 +15,8 @@ import 'package:provider/provider.dart';
 class TransactionCreate extends StatefulWidget {
   final String branchID;
   final String customerOrSupplierId;
-  const TransactionCreate({super.key, required this.branchID, required this.customerOrSupplierId});
+  final int customerSupplierType;
+  const TransactionCreate({super.key, required this.branchID, required this.customerOrSupplierId, required this.customerSupplierType});
 
   @override
   State<TransactionCreate> createState() => _TransactionCreateState();
@@ -158,7 +159,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                       await transactionViewModel.createTransaction(transactionCreateRequestModel, context, branchID: widget.branchID).then((value) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerOrSupplierId, branchID: widget.branchID)));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerOrSupplierId, branchID: widget.branchID,customerSupplierType: widget.customerSupplierType,)));
                       });
                     }
                   },

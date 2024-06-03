@@ -15,7 +15,8 @@ class TransactionUpdate extends StatefulWidget {
    final String transactionID;
    final String branchID;
    final String customerID;
-  const TransactionUpdate({super.key, required this.transactionID, required this.branchID, required this.customerID,});
+   final int customerSupplierType;
+  const TransactionUpdate({super.key, required this.transactionID, required this.branchID, required this.customerID, required this.customerSupplierType,});
 
   @override
   State<TransactionUpdate> createState() => _TransactionUpdateState();
@@ -120,7 +121,7 @@ class _TransactionUpdateState extends State<TransactionUpdate> {
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                       await transactionViewModel.updateTransaction(transactionUpdateRequestModel, context, branchID: widget.branchID,transactionID: widget.transactionID).then((value) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerID, branchID: widget.branchID)));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerID, branchID: widget.branchID, customerSupplierType: widget.customerSupplierType,)));
                       });
                     }
                   },

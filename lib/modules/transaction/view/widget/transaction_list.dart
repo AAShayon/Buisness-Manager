@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 class TransactionList extends StatelessWidget {
   final String branchID;
   final String customerSupplierID;
-  const TransactionList({super.key, required this.branchID, required this.customerSupplierID});
+  final int customerSupplierType;
+  const TransactionList({super.key, required this.branchID, required this.customerSupplierID, required this.customerSupplierType});
   String? _formatDateTime(String? dateTime) {
     if (dateTime == null) return null;
     DateTime parsedDate = DateTime.parse(dateTime);
@@ -82,7 +83,7 @@ class TransactionList extends StatelessWidget {
     return DataCell(
       Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(content),
+        child: Text(content,overflow: TextOverflow.ellipsis,maxLines: 1,),
       ),
     );
   }
@@ -104,7 +105,7 @@ class TransactionList extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TransactionUpdate(transactionID: transactionID, branchID: branchID, customerID:customerID,)),
+                    MaterialPageRoute(builder: (context) => TransactionUpdate(transactionID: transactionID, branchID: branchID, customerID:customerID, customerSupplierType:customerSupplierType,)),
                   );
                 },
               ),
