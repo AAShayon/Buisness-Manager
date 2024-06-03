@@ -342,7 +342,7 @@ class AuthViewModel extends ChangeNotifier{
     return isLogIn;
   }
 
-  Future<void> logOut(BuildContext context) async {
+  Future<bool> logOut(BuildContext context) async {
     try {
       setIsLoadingState(true);
       ApiResponse apiResponse = await _authService.logOut();
@@ -359,7 +359,7 @@ class AuthViewModel extends ChangeNotifier{
               content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
             ));
           }
-
+          return true;
         }
         else{
           if(context.mounted){
@@ -369,6 +369,7 @@ class AuthViewModel extends ChangeNotifier{
               content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
             ));
           }
+          return false;
         }
       }
 
@@ -380,6 +381,7 @@ class AuthViewModel extends ChangeNotifier{
             content: Center(child: Text('${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
           ));
         }
+        return false;
       }
     } catch (e) {
       setIsLoadingState(false);
@@ -389,6 +391,7 @@ class AuthViewModel extends ChangeNotifier{
           const SnackBar(content: Center(child: Text('Failed to logout. Please try again later'))),
         );
       }
+      return false;
     }
   }
 
