@@ -258,6 +258,7 @@ class BranchViewModel extends ChangeNotifier {
       if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200){
         _isLoadingState =false;
         isDeleted = true;
+        branchListFetch(context);
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();

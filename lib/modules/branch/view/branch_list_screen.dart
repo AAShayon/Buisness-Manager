@@ -149,9 +149,7 @@ void _showBranchOption(BuildContext context, dynamic name, num id) {
                             final branchViewModel = Provider.of<BranchViewModel>(deleteContext, listen: false);
                             await branchViewModel.deleteBranch(context: deleteContext, branchId: id.toString()).then((isDeleted)async {
                                     if (isDeleted) {
-                                      await branchViewModel.branchListFetch(context).then((value) {
-                                        Navigator.of(deleteContext).pop();
-                                      });
+                                      Navigator.of(deleteContext).pop();
                                     }
                             });
                           },
