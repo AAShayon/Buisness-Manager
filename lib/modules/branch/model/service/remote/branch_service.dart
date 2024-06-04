@@ -10,7 +10,7 @@ import 'package:buisness_manager/modules/branch/model/core/request_model/branch_
 import 'package:dio/dio.dart';
 
 abstract class BranchService{
-  Future<ApiResponse> branchList();
+  Future<ApiResponse> branchList(dynamic page, dynamic limit);
   Future<ApiResponse> branchCreate(BranchCreateRequestModel branchCreateRequestModel);
   Future<ApiResponse> branchUpdate(BranchNameUpdateRequestModel branchNameUpdateRequestModel,{required String branchId});
   Future<ApiResponse> branchDelete({required String branchId});
@@ -29,18 +29,22 @@ class BranchRemoteDataSource extends BranchService{
   }
 
   @override
-  Future<ApiResponse> branchList() async {
-   try{
-     Response? response=await _dioService.get(ApiUrl().branchList);
-     return ApiResponse.withSuccess(response!);
-   }catch(e){
-     return ApiResponse.withError(ApiErrorHandler.getMessage(e));
-   }
+  Future<ApiResponse> branchList(dynamic page, dynamic limit) async {
+    try{
+      Response? response=await _dioService.get(ApiUrl().branchList,queryParameters: {
+        'page': page,
+        'limit':limit,
+
+      });
+      return ApiResponse.withSuccess(response!);
+    }catch(e){
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
 
   }
 
-    @override
-    Future<ApiResponse> branchCreate(BranchCreateRequestModel branchCreateRequestModel) async {
+  @override
+  Future<ApiResponse> branchCreate(BranchCreateRequestModel branchCreateRequestModel) async {
     try{
       Response? response= await _dioService.post(ApiUrl().branchCreate,data: branchCreateRequestModel.toJson());
       return ApiResponse.withSuccess(response!);
@@ -48,7 +52,7 @@ class BranchRemoteDataSource extends BranchService{
     catch(e){
       return ApiResponse.withError(ApiErrorHandler.getMessage(e));
     }
-    }
+  }
 
   @override
   Future<ApiResponse> branchUpdate(BranchNameUpdateRequestModel branchNameUpdateRequestModel,{required String branchId}) async{
@@ -61,8 +65,8 @@ class BranchRemoteDataSource extends BranchService{
     }
   }
 
-    @override
-    Future<ApiResponse> branchDelete({required String branchId}) async{
+  @override
+  Future<ApiResponse> branchDelete({required String branchId}) async{
     ApiUrl.branchId=branchId;
     try{
       Response? response=await _dioService.delete(ApiUrl().branchDelete);
@@ -71,7 +75,7 @@ class BranchRemoteDataSource extends BranchService{
       return ApiResponse.withError(ApiErrorHandler.getMessage(e));
     }
 
-    }
+  }
 
 
 
