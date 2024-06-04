@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:buisness_manager/modules/branch/model/core/response_model/branch_information_response_model.dart';
 /// status : 200
 /// msg : "OK"
 /// description : "Branches"
@@ -179,38 +181,3 @@ class Branches {
 
 }
 
-/// id : 31
-/// name : "ACI"
-
-Branch branchFromJson(String str) => Branch.fromJson(json.decode(str));
-String branchToJson(Branch data) => json.encode(data.toJson());
-class Branch {
-  Branch({
-    num? id,
-    String? name,}){
-    _id = id;
-    _name = name;
-  }
-
-  Branch.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
-  }
-  num? _id;
-  String? _name;
-  Branch copyWith({  num? id,
-    String? name,
-  }) => Branch(  id: id ?? _id,
-    name: name ?? _name,
-  );
-  num? get id => _id;
-  String? get name => _name;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    return map;
-  }
-
-}
