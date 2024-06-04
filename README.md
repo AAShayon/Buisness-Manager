@@ -110,4 +110,4 @@ Update the API endpoints and other configurations in lib/model/core/api_urls.dar
 
 
 APK Download
-Download [Business Manager APK](https://drive.google.com/file/d/1nvjgK9VUNwbCEbo-KEUOIRo5Y6QLhRKU/view?usp=sharing)
+Download [Business Manager APK](https://drive.google.com/file/d/1vnmXZC5khCDgsMtG0EqaKPTOUikiU-If/view?usp=sharing)
