@@ -1,7 +1,6 @@
-import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
+
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_create_request_model.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
-import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
@@ -50,7 +49,6 @@ class BranchCreate extends StatelessWidget {
                       );
                       branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate) {
                         if(isCreate){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BranchViewInformationScreen()));
                           Navigator.pop(context);
                         }
                         else{

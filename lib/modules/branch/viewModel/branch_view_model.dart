@@ -5,7 +5,6 @@ import 'package:buisness_manager/modules/branch/model/core/response_model/branch
 import 'package:buisness_manager/modules/branch/model/core/response_model/branch_list_response_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/response_model/branch_name_update_request_response_model.dart';
 import 'package:buisness_manager/modules/branch/model/service/remote/branch_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class BranchViewModel extends ChangeNotifier {
@@ -72,6 +71,7 @@ class BranchViewModel extends ChangeNotifier {
           _branches= _branchListResponseModel!.branches;
           _isLoadingState = false;
           isCreate = true;
+          branchListFetch(context);
           notifyListeners();
           if(context.mounted){
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -132,6 +132,7 @@ class BranchViewModel extends ChangeNotifier {
           _branchNameUpdateRequestResponseModel=BranchNameUpdateRequestResponseModel.fromJson(apiResponse.response!.data);
           _isLoadingState= false;
           isUpdate= true ;
+          branchListFetch(context);
           notifyListeners();
           if(context.mounted){
             ScaffoldMessenger.of(context).removeCurrentSnackBar();

@@ -1,6 +1,5 @@
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_name_update_request_model.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
-import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
@@ -55,11 +54,7 @@ class BranchUpdate extends StatelessWidget {
 
                       branchViewModel.branchNameUpdateRequest(branchNameUpdateRequestModel, context,branchId: id.toString()).then((isUpdate) {
                         if (isUpdate) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const BranchViewInformationScreen()),
-                                (route) => false,
-                          );
+                      Navigator.pop(context);
                         }
                       });
                     }
