@@ -125,6 +125,7 @@ class UserProfileViewModel extends ChangeNotifier{
         _user = _userProfileUpdateRequestResponseModel!.user;
         _isLoadingState=false;
         isUpdate = true;
+        getUserProfile(context);
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();

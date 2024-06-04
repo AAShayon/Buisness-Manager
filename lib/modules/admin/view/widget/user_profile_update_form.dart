@@ -136,9 +136,7 @@ class _UserProfileUpdateFormState extends State<UserProfileUpdateForm> {
                       );
                       userProfileViewModel.userProfileUpdateRequest(userProfileUpdateRequestModel,context).then((isUpdate) {
                         if (isUpdate) {
-                          Navigator.pushAndRemoveUntil(
-                              context, MaterialPageRoute(builder: (context) => const BranchViewInformationScreen()),(route) => false,);
-                        } else {
+                        Navigator.pop(context);
                         }
                       });
                     }
