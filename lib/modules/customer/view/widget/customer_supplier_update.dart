@@ -290,9 +290,11 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                     .updateCustomer(
                                     customerUpdateRequestModel, context,
                                     branchId: widget.branchId, customerOrSupplierId: widget.customerOrSupplierId )
-                                    .then((value) {
-                                  customerViewModel.customerListFetch(context, branchId: widget.branchId, customerOrSupplierType: widget.customerSupplierType);
+                                    .then((value)async {
+                                await customerViewModel.customerListFetch(context, branchId: widget.branchId, customerOrSupplierType: widget.customerSupplierType).then((isFetched){
                                   Navigator.pop(context);
+                                });
+
                                 });
                               }
                             },

@@ -158,15 +158,9 @@ class _CustomerSupplierViewScreenState
                                                           customer.id
                                                               .toString())
                                                   .then((isDeleted) async {
-                                                if (isDeleted) {
-                                                  await customerViewModel
-                                                      .customerListFetch(
-                                                          context,
-                                                          branchId:
-                                                              widget.branchId,
-                                                          customerOrSupplierType:
-                                                              widget
-                                                                  .customerOrSupplierType);
+                           if (isDeleted) {await customerViewModel.customerListFetch(context, branchId: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType).then((isFetched) {
+                             Navigator.pop(context);
+                           });
                                                 }
                                               });
                                             },

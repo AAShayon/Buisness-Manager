@@ -290,10 +290,11 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                     customerCreateRequestModel, context,
                                     branchId: widget.branchID,
                                     customerOrSupplierType: customerOrSupplier!)
-                                    .then((value) {
-                             customerViewModel.customerListFetch(context, branchId: widget.branchID, customerOrSupplierType: widget.customerOrSupplierType);
+                                    .then((value)async {
+                           await  customerViewModel.customerListFetch(context, branchId: widget.branchID, customerOrSupplierType: widget.customerOrSupplierType).then((isFetched){
                              Navigator.pop(context);
-                                });
+                           });
+                                    });
                               }
                             },
                           ),
