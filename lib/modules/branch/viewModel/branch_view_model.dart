@@ -2,6 +2,7 @@ import 'package:buisness_manager/model/service/remote/api_response.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_create_request_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/request_model/branch_name_update_request_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/response_model/branch_create_response_model.dart';
+import 'package:buisness_manager/modules/branch/model/core/response_model/branch_information_response_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/response_model/branch_list_response_model.dart';
 import 'package:buisness_manager/modules/branch/model/core/response_model/branch_name_update_request_response_model.dart';
 import 'package:buisness_manager/modules/branch/model/service/remote/branch_service.dart';
@@ -14,10 +15,14 @@ class BranchViewModel extends ChangeNotifier {
   BranchListResponseModel? _branchListResponseModel;
   BranchNameUpdateRequestResponseModel? _branchNameUpdateRequestResponseModel;
   Branches? _branches;
+  List<Branch> _branch=[];
+  List<Branch>? _newBranch;
   int? _branchesIndex;
+  int _limit=10;
+  int _page=1;
 
 
-  ///////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
 
   void setIsLoadingState(bool isLoading) {
     _isLoadingState = isLoading;
@@ -46,18 +51,106 @@ class BranchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /////////////////////////
+
+  ///for branch list fetch pagination
+
+  void resetPage(){
+    _page=1;
+    _limit=10;
+    notifyListeners();
+  }
+  void pageCounter({required BuildContext context}){
+    ++_page;
+    notifyListeners();
+  }
+
+  void clearList(){
+
+  }
+
+  ///////////////////////
 
   bool get isLoadingState => _isLoadingState;
 
   BranchCreateResponseModel? get branchCreateResponseModel => _branchCreateResponseModel;
   BranchNameUpdateRequestResponseModel? get branchNameUpdateRequestResponseModel => _branchNameUpdateRequestResponseModel;
- int? get branchesIndex => _branchesIndex;
+  int? get branchesIndex => _branchesIndex;
   BranchListResponseModel? get branchListResponseModel => _branchListResponseModel;
+  int? get page => _page;
+  int? get limit => _limit;
+  List<Branch> get branch => _branch;
+  List<Branch>? get newBranch => _newBranch;
 
   Branches? get branches => _branches;
 
   ////////////////
+
+  Future<bool> branchListFetch( BuildContext context,{ dynamic page, dynamic limit}) async {
+    _isLoadingState = true;
+    bool isBranchListFetch = false;
+    _branchListResponseModel = null;
+    try {
+      ApiResponse apiResponse=await _branchService.branchList(page,limit);
+      if(apiResponse.response != null ){
+        if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"]==200){
+          _branchListResponseModel = BranchListResponseModel.fromJson(apiResponse.response!.data);
+          _newBranch = _branchListResponseModel!.branches!.branchList;
+          _branch = _branch + _newBranch!;
+          _isLoadingState =false ;
+          isBranchListFetch =true;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+        else{
+          _isLoadingState =false ;
+          isBranchListFetch =false;
+          notifyListeners();
+          if(context.mounted){
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+              duration: Duration(milliseconds: 1),
+              backgroundColor: Colors.red,
+              content: Center(child: Text(' ${apiResponse.response!.data["status"]}${apiResponse.response!.data["msg"] }',style: const TextStyle(color: Colors.white),)),
+            ));
+          }
+        }
+      }
+      else{
+        _isLoadingState =false ;
+        isBranchListFetch =false;
+        notifyListeners();
+        if(context.mounted){
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            duration: Duration(milliseconds: 1),
+            backgroundColor: Colors.red,
+            content: Center(child: Text(' ${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
+          ));
+        }
+      }
+
+    } catch (e) {
+      _isLoadingState =false ;
+      isBranchListFetch =false;
+      notifyListeners();
+      if(context.mounted){
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          duration: Duration(milliseconds: 1),
+          backgroundColor: Colors.red,
+          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
+        ));
+      }
+    }
+    notifyListeners();
+    return isBranchListFetch;
+  }
 
   Future<bool> createBranch(BranchCreateRequestModel branchCreateRequestModel,BuildContext context) async {
     _isLoadingState = true;
@@ -184,71 +277,6 @@ class BranchViewModel extends ChangeNotifier {
 
   }
 
-  Future<bool> branchListFetch(BuildContext context) async {
-    _isLoadingState = true;
-    bool isBranchListFetch = false;
-    _branchListResponseModel = null;
-    try {
-      ApiResponse apiResponse=await _branchService.branchList();
-      if(apiResponse.response != null ){
-        if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"]==200){
-          _branchListResponseModel = BranchListResponseModel.fromJson(apiResponse.response!.data);
-          _branches = _branchListResponseModel!.branches;
-          _isLoadingState =false ;
-          isBranchListFetch =true;
-          notifyListeners();
-          if(context.mounted){
-            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-              backgroundColor: Colors.green,
-              content: Center(child: Text('${apiResponse.response!.data["description"]}',style: const TextStyle(color: Colors.white),)),
-            ));
-          }
-        }
-        else{
-          _isLoadingState =false ;
-          isBranchListFetch =false;
-          notifyListeners();
-          if(context.mounted){
-            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-              duration: Duration(milliseconds: 1),
-              backgroundColor: Colors.red,
-              content: Center(child: Text(' ${apiResponse.response!.data["status"]}${apiResponse.response!.data["msg"] }',style: const TextStyle(color: Colors.white),)),
-            ));
-          }
-        }
-      }
-      else{
-        _isLoadingState =false ;
-        isBranchListFetch =false;
-        notifyListeners();
-        if(context.mounted){
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            duration: Duration(milliseconds: 1),
-            backgroundColor: Colors.red,
-            content: Center(child: Text(' ${apiResponse.error}',style: const TextStyle(color: Colors.white),)),
-          ));
-        }
-      }
-
-    } catch (e) {
-      _isLoadingState =false ;
-      isBranchListFetch =false;
-      notifyListeners();
-      if(context.mounted){
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          duration: Duration(milliseconds: 1),
-          backgroundColor: Colors.red,
-          content: Center(child: Text('$e',style: const TextStyle(color: Colors.white),)),
-        ));
-      }
-    }
-    notifyListeners();
-    return isBranchListFetch;
-  }
   Future<bool> deleteBranch({required BuildContext context,required String branchId})async{
     _isLoadingState = true;
     bool isDeleted = false;
