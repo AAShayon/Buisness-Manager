@@ -12,8 +12,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class CustomerOrSupplierCreate extends StatefulWidget {
-  final String id;
-  const CustomerOrSupplierCreate({super.key, required this.id,});
+  final String branchID;
+  final int customerOrSupplierType;
+  const CustomerOrSupplierCreate({super.key, required this.branchID, required this.customerOrSupplierType,});
 
   @override
   State<CustomerOrSupplierCreate> createState() => _CustomerOrSupplierCreateState();
@@ -287,10 +288,11 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                 await customerViewModel
                                     .createCustomer(
                                     customerCreateRequestModel, context,
-                                    branchId: widget.id,
+                                    branchId: widget.branchID,
                                     customerOrSupplierType: customerOrSupplier!)
                                     .then((value) {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(customerOrSupplierType: customerOrSupplier!,branchId:widget.id,)));
+                             customerViewModel.customerListFetch(context, branchId: widget.branchID, customerOrSupplierType: widget.customerOrSupplierType);
+                             Navigator.pop(context);
                                 });
                               }
                             },

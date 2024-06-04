@@ -14,7 +14,8 @@ import 'package:provider/provider.dart';
 class CustomerOrSupplierUpdate extends StatefulWidget {
  final String branchId;
  final String customerOrSupplierId;
- const CustomerOrSupplierUpdate({super.key, required this.branchId, required this.customerOrSupplierId});
+ final int customerSupplierType;
+ const CustomerOrSupplierUpdate({super.key, required this.branchId, required this.customerOrSupplierId, required this.customerSupplierType});
 
   @override
   State<CustomerOrSupplierUpdate> createState() => _CustomerOrSupplierUpdateState();
@@ -290,7 +291,8 @@ class _CustomerOrSupplierUpdateState extends State<CustomerOrSupplierUpdate> {
                                     customerUpdateRequestModel, context,
                                     branchId: widget.branchId, customerOrSupplierId: widget.customerOrSupplierId )
                                     .then((value) {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerSupplierViewScreen(branchId: widget.branchId, customerOrSupplierType: customerOrSupplier!)));
+                                  customerViewModel.customerListFetch(context, branchId: widget.branchId, customerOrSupplierType: widget.customerSupplierType);
+                                  Navigator.pop(context);
                                 });
                               }
                             },

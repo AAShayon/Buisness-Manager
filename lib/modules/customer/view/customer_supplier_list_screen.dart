@@ -79,7 +79,7 @@ class _CustomerSupplierViewScreenState
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => CustomerOrSupplierCreate(
-                                            id: widget.branchId,)));}),
+                                            branchID: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType,)));}),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -141,7 +141,7 @@ class _CustomerSupplierViewScreenState
                                                                   .branchId,
                                                               customerOrSupplierId:
                                                                   customer.id
-                                                                      .toString())));
+                                                                      .toString(), customerSupplierType: widget.customerOrSupplierType,)));
                                             },
                                           ),
                                           IconButton(
