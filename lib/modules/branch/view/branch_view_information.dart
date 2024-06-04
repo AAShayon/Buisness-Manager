@@ -30,21 +30,40 @@ class BranchViewInformationScreen extends StatefulWidget {
 
 class _BranchViewInformationScreenState extends State<BranchViewInformationScreen> {
   int _currentIndex = 0;
+  final ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadData();
+      final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
+      branchViewModel.resetPage();
+      branchViewModel.clearList();
+      final page=branchViewModel.page;
+      _loadData(page: page.toString());
+      scrollController.addListener(_scrollListener);
     });
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData({dynamic page, dynamic limit}) async {
     final userProfileViewModel = Provider.of<UserProfileViewModel>(context, listen: false);
     final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
+
     if(context.mounted){
-      await branchViewModel.branchListFetch(context);
+      await branchViewModel.branchListFetch(context,page: page.toString(),limit: 10);
       await userProfileViewModel.getUserProfile(context);
     }
+  }
+  void _scrollListener(){
+    final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
+    final isLoading=branchViewModel.isLoadingState;
+    final branchlist=branchViewModel.branch;
+    if(!isLoading && branchlist.length >= 10 && scrollController.position.pixels == scrollController.position.maxScrollExtent){
+      final page= branchViewModel.page;
+      _loadData(page: page.toString());
+      print('Scrolling');
+    }
+
+
   }
   Future<bool> _onWillPop() async {
     return await showDialog(
@@ -249,7 +268,7 @@ class _BranchViewInformationScreenState extends State<BranchViewInformationScree
                                 ],
                               ),
                               const SizedBox(height: 20),
-                              const BranchListGridView()
+                              BranchListGridView(scrollController: scrollController,)
                             ],
                           ) : CircularProgressIndicator(color: Colors.green,)
                         ],

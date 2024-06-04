@@ -9,7 +9,8 @@ import 'package:buisness_manager/view/widget/common_use_container.dart';
 import '../model/core/response_model/branch_list_response_model.dart';
 
 class BranchListGridView extends StatelessWidget {
-  const BranchListGridView({super.key});
+  final ScrollController scrollController;
+  const BranchListGridView({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class BranchListGridView extends StatelessWidget {
         if(branchViewModel.branchListResponseModel!=null
             &&branchViewModel.branchListResponseModel!.branches!=null
             &&branchViewModel.branchListResponseModel!.branches!.branchList!=null){
-          List<Branch> branchList=branchViewModel.branchListResponseModel!.branches!.branchList!;
+          final branchList=branchViewModel.branch;
           return branchList.isNotEmpty
               ?Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.h),
@@ -32,7 +33,7 @@ class BranchListGridView extends StatelessWidget {
                     ),
                     itemCount: branchList.length,
                     itemBuilder: (context, index) {
-                      Branch branch = branchList[index];
+                     final branch = branchList[index];
                       return CommonUseContainer(
                         color: Colors.blue,
                         child: Card(
