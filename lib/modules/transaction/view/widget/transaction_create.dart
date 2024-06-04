@@ -178,9 +178,11 @@ class _TransactionCreateState extends State<TransactionCreate> {
                         transactionDate: transactionDateController.text,
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
-                      await transactionViewModel.createTransaction(transactionCreateRequestModel, context, branchID: widget.branchID).then((value) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerOrSupplierId, branchID: widget.branchID,customerSupplierType: widget.customerSupplierType,)));
-                        Navigator.pop(context);
+                      await transactionViewModel.createTransaction(transactionCreateRequestModel, context, branchID: widget.branchID).then((value)async {
+                        await transactionViewModel.transactionListFetch(context, branchID: widget.branchID, customerOrSupplierID: widget.customerOrSupplierId).then((isFetched){
+                          Navigator.pop(context);
+                        } );
+
                       });
                     }
                   },

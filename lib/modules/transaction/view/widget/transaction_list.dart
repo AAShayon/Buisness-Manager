@@ -119,7 +119,6 @@ class TransactionList extends StatelessWidget {
                   await transactionViewModel.transactionListFetch(context, branchID: branchID, customerOrSupplierID: customerID).then((isFetched) {
                     if(isFetched){
                       Navigator.pop(context);
-                      Navigator.pop(context);
                     }
                   });
                     }

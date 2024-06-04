@@ -142,8 +142,11 @@ class _TransactionUpdateState extends State<TransactionUpdate> {
                         transactionDate: transactionDateController.text,
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
-                      await transactionViewModel.updateTransaction(transactionUpdateRequestModel, context, branchID: widget.branchID,transactionID: widget.transactionID).then((value) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TransactionScreen(customerSupplierID: widget.customerID, branchID: widget.branchID, customerSupplierType: widget.customerSupplierType,)));
+                      await transactionViewModel.updateTransaction(transactionUpdateRequestModel, context, branchID: widget.branchID,transactionID: widget.transactionID).then((value) async{
+                        await transactionViewModel.transactionListFetch(context, branchID: widget.branchID, customerOrSupplierID: widget.customerID).then((isFetched) {
+                          Navigator.pop(context);
+                        });
+
                       });
                     }
                   },
