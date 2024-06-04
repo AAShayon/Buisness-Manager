@@ -90,9 +90,9 @@ class DioService{
     }
     return null;
   }
-  Future<Response?> get(String path,{Map<String,dynamic>? data}) async {
+  Future<Response?> get(String path,{Map<String,dynamic>? queryParameters}) async {
     try{
-      final response=await _dio!.get(path,queryParameters: data);
+      final response=await _dio!.get(path,queryParameters: queryParameters);
       return response;
     } on FormatException catch (_) {
       throw FormatException("Unable to process the data");
