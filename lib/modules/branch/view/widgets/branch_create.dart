@@ -47,17 +47,9 @@ class BranchCreate extends StatelessWidget {
                       final branchCreateRequestModel=BranchCreateRequestModel(
                           name: branchNameController.text
                       );
-                      branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate) {
+                      branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate){
                         if(isCreate){
                           Navigator.pop(context);
-                        }
-                        else{
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Name is already registered'),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
                         }
                       });
 
