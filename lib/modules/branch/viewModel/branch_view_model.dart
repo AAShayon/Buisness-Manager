@@ -17,7 +17,8 @@ class BranchViewModel extends ChangeNotifier {
   Branches? _branches;
   List<Branch> _branch=[];
   List<Branch>? _newBranch;
-  int? _branchesIndex;
+
+
   int _limit=10;
   int _page=1;
 
@@ -28,10 +29,7 @@ class BranchViewModel extends ChangeNotifier {
     _isLoadingState = isLoading;
     notifyListeners();
   }
-  void setBranchIndex({required int branchIndex}){
-    _branchesIndex=branchIndex;
-    notifyListeners();
-  }
+
   void setBranchCreateRequestResponseModel(BranchCreateResponseModel branchCreateResponseModel) {
     _branchCreateResponseModel = branchCreateResponseModel;
     notifyListeners();
@@ -65,16 +63,15 @@ class BranchViewModel extends ChangeNotifier {
   }
 
   void clearList(){
-
+    _branch.clear();
+    notifyListeners();
   }
 
   ///////////////////////
 
   bool get isLoadingState => _isLoadingState;
-
   BranchCreateResponseModel? get branchCreateResponseModel => _branchCreateResponseModel;
   BranchNameUpdateRequestResponseModel? get branchNameUpdateRequestResponseModel => _branchNameUpdateRequestResponseModel;
-  int? get branchesIndex => _branchesIndex;
   BranchListResponseModel? get branchListResponseModel => _branchListResponseModel;
   int? get page => _page;
   int? get limit => _limit;
