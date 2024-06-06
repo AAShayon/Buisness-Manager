@@ -50,11 +50,12 @@ class _UserProfileUpdateFormState extends State<UserProfileUpdateForm> {
                   ),
                   child: Form(
                     key: _userProfileUpdateForm,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.h, vertical: 5.h),
-                          child: CustomTextFormField(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 45.w,vertical: 20.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomTextFormField(
                             controller: nameController,
                             hintText: 'Name',
                             prefixIcon: Icons.update,
@@ -66,56 +67,68 @@ class _UserProfileUpdateFormState extends State<UserProfileUpdateForm> {
                               return null;
                             },
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-                          child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              labelText: 'Business Type',
-                              prefixIcon: Icon(Icons.add),
-                              border: OutlineInputBorder(),
+                          Padding(
+                            padding:  EdgeInsets.symmetric(vertical: 15.h,horizontal: 15.w),
+                            child: DropdownButtonFormField<String>(
+                              decoration:  InputDecoration(
+                                  labelText: 'Business Type',
+                                  labelStyle: TextStyle(color: Colors.greenAccent),
+                                  prefixIcon: Icon(Icons.add,color: Colors.greenAccent,),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.greenAccent),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.greenAccent, width: 2.0),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),focusColor: Colors.greenAccent
+
+                              ),
+                              value: selectedBusinessType,
+                              items: const [
+                                DropdownMenuItem<String>(
+                                  value: '1',
+                                  child: Text('Retailer/Shop',style: TextStyle(color: Colors.greenAccent),),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '2',
+                                  child: Text('Wholesaler',style: TextStyle(color: Colors.greenAccent),),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '3',
+                                  child: Text('Distributor',style: TextStyle(color: Colors.greenAccent),),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '4',
+                                  child: Text('Manufacturer',style: TextStyle(color: Colors.greenAccent),),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '6',
+                                  child: Text('Services',style: TextStyle(color: Colors.greenAccent),),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '7',
+                                  child: Text('Other',style: TextStyle(color: Colors.greenAccent),),
+                                ),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedBusinessType = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select a business type';
+                                }
+                                return null;
+                              },
                             ),
-                            value: selectedBusinessType,
-                            items: const [
-                              DropdownMenuItem<String>(
-                                value: '1',
-                                child: Text('Retailer/Shop'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: '2',
-                                child: Text('Wholesaler'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: '3',
-                                child: Text('Distributor'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: '4',
-                                child: Text('Manufacturer'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: '6',
-                                child: Text('Services'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: '7',
-                                child: Text('Other'),
-                              ),
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                selectedBusinessType = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please select a business type';
-                              }
-                              return null;
-                            },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -13,12 +13,12 @@ class UserProfileField extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
         children: [
-          Icon(icon, color: Colors.deepPurple),
+          Icon(icon, color: Colors.greenAccent),
           SizedBox(width: 15.w),
           Expanded(
             child: Text(
               '$label: $value',
-              style: TextStyle(fontSize: 16.sp),
+              style: TextStyle(fontSize: 16.sp,color: Colors.greenAccent),
             ),
           ),
         ],

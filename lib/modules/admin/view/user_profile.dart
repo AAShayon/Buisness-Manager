@@ -31,7 +31,7 @@ class UserProfile extends StatelessWidget {
                   backgroundImage: const AssetImage('assets/userimage.png'),
                 ),
                 SizedBox(height: 15.h),
-                HeadlineLargeText(text: user.name, color: Colors.lightBlueAccent),
+                HeadlineLargeText(text: user.name, color: Colors.lightGreen),
                 SizedBox(height: 10.h),
                 UserProfileInfoCard(user: user),
                 SizedBox(height: 20.h),
