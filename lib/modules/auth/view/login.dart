@@ -19,14 +19,27 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController phoneNumberController = TextEditingController();
-
-  final RegExp phoneRegex = RegExp(r'^(\+880\d{10}|01\d{9})$');
+  final _loginFormKey=GlobalKey<FormState>();
+  final TextEditingController identifierController = TextEditingController();
+  final RegExp phoneRegex = RegExp(r'^01\d{9}$');
+  final RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
 
   @override
   void dispose() {
-    phoneNumberController.dispose();
+    identifierController.dispose();
     super.dispose();
+  }
+  String? validateIdentifier(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a phone number or email';
+    } else if (!phoneRegex.hasMatch(value) && !emailRegex.hasMatch(value)) {
+      if (!phoneRegex.hasMatch(value)) {
+        return 'Please enter a valid phone number of 11 Digits';
+      } else if (!emailRegex.hasMatch(value)) {
+        return 'Please enter a valid email';
+      }
+    }
+    return null;
   }
 
   @override
@@ -41,21 +54,27 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(padding: EdgeInsets.symmetric(vertical: 15.h),
-                  child: Image.asset("assets/businessManager.png",fit: BoxFit.fill,),
+                  child: Image.asset("assets/businessManager.png",fit: BoxFit.fill,color: Colors.black,),
                   ),
               
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 25.h),
                     child: const HeadlineLargeText(
-                      text: 'Login',
+                      text: 'Please Login',
                       color: Colors.white,
                     ),
                   ),
-                  CustomTextFormField(
-                    hintText: 'Mobile',
-                    prefixIcon: Iconsax.mobile,
-                    textInputTypeKeyboard: TextInputType.phone,
-                    controller: phoneNumberController,
+                  Form(
+                    key: _loginFormKey,
+                    child: CustomTextFormField(
+                      hintText: 'Mobile or Email',
+                      prefixIcon: Iconsax.user,
+                      textInputTypeKeyboard: TextInputType.text,
+                      controller: identifierController,
+                        validator:validateIdentifier
+                    
+                    
+                    ),
                   ),
                   SizedBox(
                     height: 25.h,
@@ -64,19 +83,30 @@ class _LoginState extends State<Login> {
                       ? const CircularProgressIndicator(
                     color: Colors.green,
                   )
-                      : CustomCircularButton(
+                      :
+                  CustomCircularButton(
                       text: 'Next',
                       onPressed: () async {
-                        if (!authViewModel.isLoadingState) {
-                          await authViewModel.sendOtpForLogin(SendOtpRequestForLoginModel(identifier: phoneNumberController.text), context,).then((value) {
-                            if (value == true) {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => OtpScreen(
-                                    identifier: phoneNumberController.text,
-                                    isLoginPage: true,
-                                  )));
+                        if(_loginFormKey.currentState!.validate()){
+                          if (!authViewModel.isLoadingState) {
+                            String identifier = identifierController.text.trim();
+                            if (validateIdentifier(identifier) == null) {
+                              await authViewModel
+                                  .sendOtpForLogin(
+                                SendOtpRequestForLoginModel(identifier: identifier),
+                                context,
+                              )
+                                  .then((value) {
+                                if (value == true) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => OtpScreen(
+                                        identifier: identifier,
+                                        isLoginPage: true,
+                                      )));
+                                }
+                              });
                             }
-                          });
+                          }
                         }
                       }),
                   SizedBox(

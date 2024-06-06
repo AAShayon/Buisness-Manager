@@ -1,11 +1,13 @@
 import 'package:buisness_manager/modules/auth/model/core/request_model/register_request_model.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
 import 'package:buisness_manager/view/otp_sending.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -75,9 +77,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter a phone number';
+                                          }else if (!RegExp(r'^01\d{9}$').hasMatch(value)) {
+                                            return 'Please enter a valid phone number of 11 Digits';
                                           }
                                           return null;
                                         },
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                            LengthLimitingTextInputFormatter(11),
+                                          ]
                                       ),
                                       SizedBox(height: 15.h),
                                       CustomTextFormField(
@@ -88,6 +96,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter an email';
+                                          }else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value)) {
+                                            return 'Please enter a valid email';
                                           }
                                           return null;
                                         },
@@ -108,7 +118,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       SizedBox(height: 15.h),
                                       CustomTextFormField(
                                         hintText: 'Business Name',
-                                        prefixIcon: Iconsax.add,
+                                        prefixIcon: Icons.business,
                                         textInputTypeKeyboard: TextInputType.text,
                                         controller: businessNameController,
                                         validator: (value) {
@@ -118,63 +128,79 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           return null;
                                         },
                                       ),
+                                      SizedBox(height: 15.h),
+                                      DropdownButtonFormField<String>(
+                                        decoration:  InputDecoration(
+                                            labelText: 'Business Type',
+                                            labelStyle: TextStyle(color: Colors.greenAccent),
+                                            prefixIcon: Icon(Icons.add,color: Colors.greenAccent,),
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(10)
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.greenAccent),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.greenAccent, width: 2.0),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),focusColor: Colors.greenAccent
+
+                                        ),
+                                        value: selectedBusinessType,
+                                        items: const [
+                                          DropdownMenuItem<String>(
+                                            value: '1',
+                                            child: Text('Retailer/Shop',style: TextStyle(color: Colors.greenAccent),),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '2',
+                                            child: Text('Wholesaler',style: TextStyle(color: Colors.greenAccent),),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '3',
+                                            child: Text('Distributor',style: TextStyle(color: Colors.greenAccent),),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '4',
+                                            child: Text('Manufacturer',style: TextStyle(color: Colors.greenAccent),),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '6',
+                                            child: Text('Services',style: TextStyle(color: Colors.greenAccent),),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '7',
+                                            child: Text('Other',style: TextStyle(color: Colors.greenAccent),),
+                                          ),
+                                        ],
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedBusinessType = value;
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please select a business type';
+                                          }
+                                          return null;
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 15.h),
-                                DropdownButtonFormField<String>(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Business Type',
-                                    prefixIcon: Icon(Icons.add),
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  value: selectedBusinessType,
-                                  items: const [
-                                    DropdownMenuItem<String>(
-                                      value: '1',
-                                      child: Text('Retailer/Shop'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: '2',
-                                      child: Text('Wholesaler'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: '3',
-                                      child: Text('Distributor'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: '4',
-                                      child: Text('Manufacturer'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: '6',
-                                      child: Text('Services'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: '7',
-                                      child: Text('Other'),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedBusinessType = value;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please select a business type';
-                                    }
-                                    return null;
-                                  },
-                                ),
+
+
                               ],
                             ),
                           ),
                         ),
                         SizedBox(height: 15.h),
-                        authViewModel.isLoadingState?const CircularProgressIndicator(
-                          color: Colors.amber,
-                        ):CustomCircularButton(
+                        authViewModel.isLoadingState?
+                        const CircularProgressIndicator(
+                          color: Colors.green,
+                        ):
+                        CustomCircularButton(
                           text: 'Next',
                           onPressed: () async {
 
