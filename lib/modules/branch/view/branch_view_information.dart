@@ -8,8 +8,10 @@ import 'package:buisness_manager/modules/branch/view/widgets/branch_create.dart'
 import 'package:buisness_manager/modules/branch/view/widgets/branch_update.dart';
 import 'package:buisness_manager/modules/branch/viewModel/branch_view_model.dart';
 import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
+import 'package:buisness_manager/view/widget/animation/fadde_in_animation.dart';
 import 'package:buisness_manager/view/widget/common_use_container.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
+import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/no_internet_widget.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -39,43 +41,36 @@ class _BranchViewInformationScreenState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final branchViewModel =
-          Provider.of<BranchViewModel>(context, listen: false);
+      final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
       branchViewModel.resetPage();
       branchViewModel.clearList();
       final page = branchViewModel.page;
-      _loadData(context, page: page.toString());
+      _loadData(context, page: page.toString(),isRefresh: true);
       scrollController.addListener(_scrollListener);
     });
   }
 
-  Future<void> _loadData(BuildContext context,
-      {dynamic page, dynamic limit}) async {
-    final userProfileViewModel =
-        Provider.of<UserProfileViewModel>(context, listen: false);
-    final branchViewModel =
-        Provider.of<BranchViewModel>(context, listen: false);
+  Future<void> _loadData(BuildContext context, {dynamic page, dynamic limit,required bool isRefresh}) async {
+    final userProfileViewModel = Provider.of<UserProfileViewModel>(context, listen: false);
+    final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
 
-    if (context.mounted) {
-      await branchViewModel.branchListFetch(context,
-          page: page.toString(), limit: 10);
+    if(isRefresh){
+      await branchViewModel.branchListFetch(context, page: page.toString(), limit: 10);
       await userProfileViewModel.getUserProfile(context);
+    }else{
+      await branchViewModel.branchListFetch(context, page: page.toString(), limit: 10);
     }
+
   }
 
   void _scrollListener() {
-    final branchViewModel =
-        Provider.of<BranchViewModel>(context, listen: false);
+    final branchViewModel = Provider.of<BranchViewModel>(context, listen: false);
     final isLoading = branchViewModel.isLoadingState;
-    // final isLoadMore=branchViewModel.isLoadMore;
     final branchlist = branchViewModel.branch;
-    if (!isLoading &&
-        branchlist.length >= 10 &&
-        scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
+    if (!isLoading && branchlist.length >= 10 && scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       branchViewModel.pageCounter(context: context);
       final page = branchViewModel.page;
-      _loadData(context, page: page.toString());
+      _loadData(context, page: page.toString(),isRefresh: false);
       print('Scrolling');
     }
   }
@@ -121,12 +116,11 @@ class _BranchViewInformationScreenState
           return RefreshIndicator(
             color: Colors.greenAccent,
             onRefresh: () async {
-
               setState(() {
                 branchViewModel.resetPage();
                 branchViewModel.clearList();
               });
-              await _loadData(context, page: 1, limit: 10);
+              await _loadData(context, page: 1, limit: 10,isRefresh: true);
               return Future<void>.delayed(const Duration(seconds: 2));
             },
             child: Scaffold(
@@ -151,10 +145,13 @@ class _BranchViewInformationScreenState
                         icon: const Icon(Iconsax.user),
                       ),
                 title: Center(
-                    child: Text(
-                  'Welcome, ${user?.name ?? ""}',
-                  style: const TextStyle(fontSize: 20),
-                )),
+                    child: FadeInAnimation(
+                      delay: 10,direction: FadeInDirection.rtl,fadeOffset: 40,
+                      child: Text(
+                                        'Welcome, ${user?.name ?? ""}',
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                    )),
                 actions: [
                   userProfileViewModel.isLoadingState ? const CircularProgressIndicator(color: Colors.amber)
                       : IconButton(
@@ -173,232 +170,246 @@ class _BranchViewInformationScreenState
                       InternetConnectionStatus.disconnected
                   ? NoInternetWidget(
                       onPressed: () {
-                        _loadData(context, page: 1, limit: 10);
+                        setState(() {
+                          branchViewModel.resetPage();
+                          branchViewModel.clearList();
+                        });
+                        _loadData(context, page: 1, limit: 10,isRefresh: true);
                       },
                     )
-                  : ListView(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 25.w),
-                        child: Container(
-                          height: 200.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.greenAccent
-                          ),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  color: Colors.green.withOpacity(.7),
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: BackdropFilter(
-                                  filter: ImageFilter.blur(
-                                      sigmaX: 10.0, sigmaY: 10.0),
+                  : CustomContainer(
+                    child: ListView(
+                      controller: scrollController,
+                      shrinkWrap: true,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 25.w),
+                          child: Container(
+                            height: 200.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.greenAccent
+                            ),
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
                                   child: Container(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: Colors.green.withOpacity(.7),
                                   ),
                                 ),
-                              ),
-                              CarouselSlider(
-                                options: CarouselOptions(
-                                  height: 200.h,
-                                  autoPlay: true,
-                                  autoPlayInterval:
-                                      Duration(seconds: 6),
-                                  autoPlayAnimationDuration:
-                                      Duration(milliseconds: 800),
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  enlargeCenterPage: true,
-                                  scrollDirection: Axis.horizontal,
-                                  enableInfiniteScroll: true,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _currentIndex = index;
-                                    });
-                                  },
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 10.0, sigmaY: 10.0),
+                                    child: Container(
+                                      color: Colors.black.withOpacity(0.1),
+                                    ),
+                                  ),
                                 ),
-                                items: [
-                                  'assets/business1.json',
-                                  'assets/business2.json',
-                                  'assets/business3.json',
-                                ].map((i) {
-                                  return Builder(
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        width: 365.w,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 5.0),
-                                        child: Lottie.asset(i),
-                                      );
+                                CarouselSlider(
+                                  options: CarouselOptions(
+                                    height: 200.h,
+                                    autoPlay: true,
+                                    autoPlayInterval:
+                                        Duration(seconds: 6),
+                                    autoPlayAnimationDuration:
+                                        Duration(milliseconds: 800),
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    enlargeCenterPage: true,
+                                    scrollDirection: Axis.horizontal,
+                                    enableInfiniteScroll: true,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _currentIndex = index;
+                                      });
                                     },
-                                  );
-                                }).toList(),
+                                  ),
+                                  items: [
+                                    'assets/business1.json',
+                                    'assets/business2.json',
+                                    'assets/business3.json',
+                                  ].map((i) {
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          width: 365.w,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 5.0),
+                                          child: Lottie.asset(i),
+                                        );
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: AnimatedSmoothIndicator(
+                            activeIndex: _currentIndex,
+                            count: 3,
+                            effect: ExpandingDotsEffect(
+                              activeDotColor: Colors.greenAccent,
+                              dotColor: Colors.grey,
+                              dotHeight: 8.h,
+                              dotWidth: 8.w,
+                              spacing: 4.w,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 20.h),
+                          child: CommonUseContainer(
+                            color: Colors.greenAccent,
+                            height: 100.h,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                             mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FadeInAnimation(
+                                delay: 10,direction: FadeInDirection.rtl,fadeOffset: 40,
+                                child: HeadlineLargeText(
+                                    text: 'My Business ',
+                                    color: Colors.white),
+                              ),
+                              HeadlineLargeText(
+                                text: user?.businessType ?? 'Not Available',
+                                color: Colors.white,
                               ),
                             ],
-                          ),
+                          ),),
                         ),
-                      ),
-                      Center(
-                        child: AnimatedSmoothIndicator(
-                          activeIndex: _currentIndex,
-                          count: 3,
-                          effect: ExpandingDotsEffect(
-                            activeDotColor: Colors.greenAccent,
-                            dotColor: Colors.grey,
-                            dotHeight: 8.h,
-                            dotWidth: 8.w,
-                            spacing: 4.w,
-                          ),
-                        ),
-                      ),
-                      ///
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 20.h),
-                        child: CommonUseContainer(
-                          color: Colors.greenAccent,
-                          height: 100.h,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                           mainAxisAlignment: MainAxisAlignment.center,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            HeadlineLargeText(
-                                text: 'My Business ',
-                                color: Colors.white),
-                            HeadlineLargeText(
-                              text: user?.businessType ?? 'Not Available',
-                              color: Colors.white,
+                            Container(
+                              height: 37.h,
+                             width: 150.w,
+                             decoration: BoxDecoration(
+                               color: Colors.greenAccent,
+                               borderRadius: BorderRadius.circular(10),
+                             ),
+                              child: Center(
+                                child: Text('My Branches',style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),)
+                              ),
                             ),
+                            const SizedBox(width: 25),
+                            CustomCircularButton(
+                                text: 'Create Branch',
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const BranchCreate()));
+                                }),
                           ],
-                        ),),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 37.h,
-                           width: 150.w,
-                           decoration: BoxDecoration(
-                             color: Colors.greenAccent,
-                             borderRadius: BorderRadius.circular(10),
-                           ),
-                            child: Center(
-                              child: Text('My Branches',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w600,
-                              ),)
-                            ),
-                          ),
-                          const SizedBox(width: 25),
-                          CustomCircularButton(
-                              text: 'Create Branch',
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const BranchCreate()));
-                              }),
-                        ],
-                      ),
-                      branchList.isNotEmpty
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.h, horizontal: 10.h),
-                              child: GridView.builder(
-                                physics: const ScrollPhysics(),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10.0,
-                                  mainAxisSpacing: 10.0,
-                                ),
-                                itemCount: branchList.length,
-                                itemBuilder: (context, index) {
-                                  final branch = branchList[index];
-                                  // log('total branch-===>${branchList.length}');
-                                  if (index < branchList.length) {
-                                    return CommonUseContainer(
-                                      color: Colors.greenAccent,
-                                      child: Card(
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.h,
-                                              horizontal: 8.w),
-                                          child: InkWell(
-                                            onTap: () {
-                                              log('===================> ${branchList[index]}');
-                                              _showBranchOption(
-                                                context,
-                                                branch.name,
-                                                branch.id!,
-                                                // branchIndex: index
-                                              );
-                                            },
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text("${branch.id}",style: TextStyle(
-                                                  color: Colors.greenAccent,
-                                                  fontSize: 15.sp,
-                                                )),
-                                                Text(branch.name ?? '',style: TextStyle(
-                                                  color: Colors.greenAccent,
-                                                  fontSize: 15.sp,
-                                                ),),
-                                                Icon(Icons.business, size: 40.sp,color: Colors.greenAccent,),
-                                              ],
+                        ),
+                        branchList.isNotEmpty
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10.h, horizontal: 10.h),
+                                child: GridView.builder(
+                                  physics:  NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10.0,
+                                    mainAxisSpacing: 10.0,
+                                  ),
+                                  itemCount: branchList.length,
+                                  itemBuilder: (context, index) {
+                                    final branch = branchList[index];
+                                    log('total branch-===>${branchList.length}');
+                                    if (index < branchList.length) {
+                                      return FadeInAnimation(
+                                        direction: FadeInDirection.rtl,
+                                        delay: 1.0 + index,
+                                        fadeOffset: index == 0 ? 80 : 80.0 * index,
+                                        child: CommonUseContainer(
+                                          color: Colors.greenAccent,
+                                          child: Card(
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 10.h,
+                                                  horizontal: 8.w),
+                                              child:
+                                              InkWell(
+                                                onTap: () {
+                                                  log('===================> ${branchList[index]}');
+                                                  _showBranchOption(
+                                                    context,
+                                                    branch.name,
+                                                    branch.id!,
+                                                    // branchIndex: index
+                                                  );
+                                                },
+                                                child:
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text("${branch.id}",style: TextStyle(
+                                                      color: Colors.greenAccent,
+                                                      fontSize: 15.sp,
+                                                    )),
+                                                    Text(branch.name ?? '',style: TextStyle(
+                                                      color: Colors.greenAccent,
+                                                      fontSize: 15.sp,
+                                                    ),),
+                                                    Icon(Icons.business, size: 40.sp,color: Colors.greenAccent,),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Padding(
-                                      padding: EdgeInsets.all(12.0),
-                                      child: Center(
-                                        child: Text(
-                                          "No Branch",
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 18.sp),
+                                      );
+                                    } else {
+                                      return Padding(
+                                        padding: EdgeInsets.all(12.0),
+                                        child: Center(
+                                          child: Text(
+                                            "No Branch",
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 18.sp),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  }
-                                },
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        branchViewModel.isLoadingState == false
+                            ? SizedBox()
+                            : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      'Loading Branch List......',
+                                      style: TextStyle(
+                                          color: Colors.greenAccent,
+                                          fontSize: 18.sp),
+                                    )
+                                  ],
+                                ),
                               ),
-                            )
-                          : SizedBox.shrink(),
-                      branchViewModel.isLoadingState == false
-                          ? SizedBox()
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    'Loading Branches......',
-                                    style: TextStyle(
-                                        color: Colors.greenAccent,
-                                        fontSize: 18.sp),
-                                  )
-                                ],
-                              ),
-                            ),
-                      // BranchListGridView(scrollController: scrollController,)
-                      const SizedBox(height: 20)
-                    ],
+                        // BranchListGridView(scrollController: scrollController,)
+                        const SizedBox(height: 20)
+                      ],
+                    ),
                   ),
             ),
           );
@@ -413,6 +424,7 @@ class _BranchViewInformationScreenState
       builder: (context) {
         return AlertDialog(
           title: const Text('Branch Options'),
+          backgroundColor: Colors.greenAccent,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -463,7 +475,6 @@ class _BranchViewInformationScreenState
                           builder: (context) => BranchUpdate(
                                 id: id,
                               )));
-                  // log("============================>${id}");
                 },
               ),
               ListTile(

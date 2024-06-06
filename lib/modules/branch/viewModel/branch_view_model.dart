@@ -86,6 +86,9 @@ class BranchViewModel extends ChangeNotifier {
     _isLoadingState = true;
     bool isBranchListFetch = false;
     _branchListResponseModel = null;
+    if(page==1){
+      _branch=[];
+    }
     try {
       ApiResponse apiResponse=await _branchService.branchList(page,limit);
       if(apiResponse.response != null ){
@@ -161,7 +164,9 @@ class BranchViewModel extends ChangeNotifier {
           _branches= _branchListResponseModel!.branches;
           _isLoadingState = false;
           isCreate = true;
-          branchListFetch(context);
+          resetPage();
+          clearList();
+          branchListFetch(context,page: 1,limit: 10);
           notifyListeners();
           if(context.mounted){
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -222,7 +227,9 @@ class BranchViewModel extends ChangeNotifier {
           _branchNameUpdateRequestResponseModel=BranchNameUpdateRequestResponseModel.fromJson(apiResponse.response!.data);
           _isLoadingState= false;
           isUpdate= true ;
-          branchListFetch(context);
+          resetPage();
+          clearList();
+          branchListFetch(context,page: 1,limit: 10);
           notifyListeners();
           if(context.mounted){
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -283,7 +290,9 @@ class BranchViewModel extends ChangeNotifier {
       if(apiResponse.response!.statusCode == 200 && apiResponse.response!.data["status"] == 200){
         _isLoadingState =false;
         isDeleted = true;
-        branchListFetch(context);
+        resetPage();
+        clearList();
+        branchListFetch(context,page: 1,limit: 10);
         notifyListeners();
         if(context.mounted){
           ScaffoldMessenger.of(context).removeCurrentSnackBar();

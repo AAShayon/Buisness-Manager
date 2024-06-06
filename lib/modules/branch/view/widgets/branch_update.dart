@@ -31,7 +31,7 @@ class BranchUpdate extends StatelessWidget {
                   key: _branchUpdateFormKey,
                   child: CustomTextFormField(
                     hintText: 'Branch Name',
-                    prefixIcon: Icons.add,
+                    prefixIcon: Icons.business,
                     textInputTypeKeyboard: TextInputType.name,
                     controller: branchNameController,
                     validator: (value) {

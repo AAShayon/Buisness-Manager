@@ -31,7 +31,7 @@ class BranchCreate extends StatelessWidget {
                     key: _branchCreateFormKey,
                     child: CustomTextFormField(
                       hintText: 'Branch Name',
-                      prefixIcon: Icons.add,
+                      prefixIcon: Icons.business,
                       textInputTypeKeyboard: TextInputType.name,
                       controller: branchNameController,
                       validator: (value){
@@ -41,19 +41,19 @@ class BranchCreate extends StatelessWidget {
                         return null;
                       },),
                   ),
-                  branchViewModel.isLoadingState?const CircularProgressIndicator(color: Colors.amber,):
-                  CustomCircularButton(text: 'Create', onPressed: (){
-                    if (_branchCreateFormKey.currentState!.validate()){
-                      final branchCreateRequestModel=BranchCreateRequestModel(
-                          name: branchNameController.text
-                      );
-                      branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate){
-                        if(isCreate){
-                          Navigator.pop(context);
-                        }
-                      });
+                  branchViewModel.isLoadingState?const CircularProgressIndicator(color: Colors.greenAccent,):
+                  CustomCircularButton(
+                      text: 'Create',
+                      onPressed: (){
+                        if (_branchCreateFormKey.currentState!.validate()){
+                          final branchCreateRequestModel=BranchCreateRequestModel(name: branchNameController.text.trim());
+                          branchViewModel.createBranch(branchCreateRequestModel,context).then((isCreate){
+                            if(isCreate){
+                              Navigator.pop(context);
+                            }
+                          });
 
-                    }
+                        }
 
                   }),
                 ],
