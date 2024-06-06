@@ -432,6 +432,7 @@ class _BranchViewInformationScreenState
                 leading: const Icon(Icons.remove_red_eye_rounded),
                 title: const Text('Customer List'),
                 onTap: () async {
+                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -450,6 +451,7 @@ class _BranchViewInformationScreenState
                 leading: const Icon(Icons.remove_red_eye_rounded),
                 title: const Text('Supplier List'),
                 onTap: () async {
+                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -495,7 +497,6 @@ class _BranchViewInformationScreenState
                             child: Text('No'),
                             onPressed: () {
                               Navigator.of(deleteContext).pop();
-                              // Navigator.of(showDialogContext).pop();
                             },
                           ),
                           TextButton(
