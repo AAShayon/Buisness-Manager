@@ -77,7 +77,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
         child: Form(
           key: _transactionCreateFormKey,
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(vertical: 100.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -85,84 +85,110 @@ class _TransactionCreateState extends State<TransactionCreate> {
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: HeadlineLargeText(text: 'Transaction Create', color: Colors.white),
                 ),
-                CustomTextFormField(
-                  hintText: 'Amount',
-                  prefixIcon: Iconsax.money,
-                  textInputTypeKeyboard: TextInputType.number,
-                  controller: amountController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 15.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 60.w),
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: 'Transaction Type',
-                      prefixIcon: Icon(Icons.swap_horiz),
-                      border: OutlineInputBorder(),
-                    ),
-                    value: typeController.text.isEmpty ? null : typeController.text,
-                    items: const [
-                      DropdownMenuItem<String>(
-                        value: '0',
-                        child: Text('You get'),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: '1',
-                        child: Text('You gave'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        typeController.text = value!;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select transaction type';
-                      }
-                      return null;
-                    },
+                Container(
+                  width: 350.w,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.deepPurple),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-                SizedBox(height: 15.h),
-                GestureDetector(
-                  onTap: () async {
-                    _selectDateTime(context);
-                  },
-                  child: AbsorbPointer(child: CustomTextFormField(controller: transactionDateController, hintText: 'Add Date', textInputTypeKeyboard: TextInputType.name, prefixIcon: Icons.date_range_sharp,
-                  )),
-                ),
-                SizedBox(height: 15.h),
-                CustomTextFormField(
-                  hintText: 'Details',
-                  prefixIcon: Icons.details,
-                  textInputTypeKeyboard: TextInputType.text,
-                  controller: detailsController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter details';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 15.h),
-                CustomTextFormField(
-                  hintText: 'Bill No',
-                  prefixIcon: Icons.receipt,
-                  textInputTypeKeyboard: TextInputType.number,
-                  controller: billNoController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter bill number';
-                    }
-                    return null;
-                  },
+                  child: Padding(
+                    padding:  EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                    child: Column(
+                      children: [
+                        CustomTextFormField(
+                          hintText: 'Amount',
+                          prefixIcon: Iconsax.money,
+                          textInputTypeKeyboard: TextInputType.number,
+                          controller: amountController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter amount';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 15.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 50.w),
+                          child: DropdownButtonFormField<String>(
+                            decoration:  InputDecoration(
+                              labelText: 'Transaction Type',
+                                labelStyle: TextStyle(color: Colors.greenAccent),
+                              prefixIcon: Icon(Icons.swap_horiz,color: Colors.greenAccent,),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.greenAccent),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.greenAccent, width: 2.0),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),focusColor: Colors.greenAccent
+                            ),
+                            value: typeController.text.isEmpty ? null : typeController.text,
+                            items: const [
+                              DropdownMenuItem<String>(
+                                value: '0',
+                                child: Text('You get',style: TextStyle(color: Colors.greenAccent),),
+                              ),
+                              DropdownMenuItem<String>(
+                                value: '1',
+                                child: Text('You gave',style: TextStyle(color: Colors.greenAccent),),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                typeController.text = value!;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select transaction type';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 15.h),
+                        GestureDetector(
+                          onTap: () async {
+                            _selectDateTime(context);
+                          },
+                          child: AbsorbPointer(child: CustomTextFormField(controller: transactionDateController, hintText: 'Add Date', textInputTypeKeyboard: TextInputType.name, prefixIcon: Icons.date_range_sharp,
+                          )),
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextFormField(
+                          hintText: 'Details',
+                          prefixIcon: Icons.details,
+                          textInputTypeKeyboard: TextInputType.text,
+                          controller: detailsController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter details';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextFormField(
+                          hintText: 'Bill No',
+                          prefixIcon: Icons.receipt,
+                          textInputTypeKeyboard: TextInputType.number,
+                          controller: billNoController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter bill number';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: 15.h),
                 CustomCircularButton(
@@ -179,7 +205,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                       await transactionViewModel.createTransaction(transactionCreateRequestModel, context, branchID: widget.branchID).then((value)async {
-                        await transactionViewModel.transactionListFetch(context, branchID: widget.branchID, customerOrSupplierID: widget.customerOrSupplierId).then((isFetched){
+                        await transactionViewModel.transactionListFetch(context, branchID: widget.branchID, customerOrSupplierID: widget.customerOrSupplierId,page: 1,limit: 10).then((isFetched){
                           Navigator.pop(context);
                         } );
 

@@ -85,50 +85,66 @@ class _TransactionUpdateState extends State<TransactionUpdate> {
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: HeadlineLargeText(text: 'Transaction Update', color: Colors.white),
                 ),
-                CustomTextFormField(
-                  hintText: 'Amount',
-                  prefixIcon: Iconsax.money,
-                  textInputTypeKeyboard: TextInputType.number,
-                  controller: amountController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextFormField(
-                  hintText: 'Bill NO',
-                  prefixIcon: Iconsax.activity,
-                  textInputTypeKeyboard: TextInputType.number,
-                  controller: billController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 15.h),
-                GestureDetector(
-                  onTap: () async {
-                  _selectDateTime(context);
-                  },
-                  child: AbsorbPointer(child: CustomTextFormField(controller: transactionDateController, hintText: 'Add Date', textInputTypeKeyboard: TextInputType.name, prefixIcon: Icons.date_range_sharp,
-                  )),
-                ),
-                SizedBox(height: 15.h),
-                CustomTextFormField(
-                  hintText: 'Details',
-                  prefixIcon: Icons.details,
-                  textInputTypeKeyboard: TextInputType.text,
-                  controller: detailsController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter details';
-                    }
-                    return null;
-                  },
+                Container(
+                  width: 350.w,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.deepPurple),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding:  EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                    child: Column(
+                      children: [
+                        CustomTextFormField(
+                          hintText: 'Amount',
+                          prefixIcon: Iconsax.money,
+                          textInputTypeKeyboard: TextInputType.number,
+                          controller: amountController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter amount';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 15.h),
+                        GestureDetector(
+                          onTap: () async {
+                            _selectDateTime(context);
+                          },
+                          child: AbsorbPointer(child: CustomTextFormField(controller: transactionDateController, hintText: 'Add Date', textInputTypeKeyboard: TextInputType.name, prefixIcon: Icons.date_range_sharp,
+                          )),
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextFormField(
+                          hintText: 'Details',
+                          prefixIcon: Icons.details,
+                          textInputTypeKeyboard: TextInputType.text,
+                          controller: detailsController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter details';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextFormField(
+                          hintText: 'Bill No',
+                          prefixIcon: Icons.receipt,
+                          textInputTypeKeyboard: TextInputType.number,
+                          controller: billController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter bill number';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: 15.h),
                 CustomCircularButton(
@@ -143,7 +159,7 @@ class _TransactionUpdateState extends State<TransactionUpdate> {
                       );
                       final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
                       await transactionViewModel.updateTransaction(transactionUpdateRequestModel, context, branchID: widget.branchID,transactionID: widget.transactionID).then((value) async{
-                        await transactionViewModel.transactionListFetch(context, branchID: widget.branchID, customerOrSupplierID: widget.customerID).then((isFetched) {
+                        await transactionViewModel.transactionListFetch(context, branchID: widget.branchID, customerOrSupplierID: widget.customerID,limit: 10,page: 1).then((isFetched) {
                           Navigator.pop(context);
                         });
 
