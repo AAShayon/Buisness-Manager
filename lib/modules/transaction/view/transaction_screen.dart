@@ -1,5 +1,4 @@
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_create.dart';
-import 'package:buisness_manager/modules/transaction/view/widget/transaction_list.dart';
 import 'package:buisness_manager/modules/transaction/view/widget/transaction_update.dart';
 import 'package:buisness_manager/modules/transaction/viewModel/transaction_view_model.dart';
 import 'package:buisness_manager/view/widget/animation/fadde_in_animation.dart';
@@ -68,7 +67,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final transactionViewModel=Provider.of<TransactionViewModel>(context,listen: false);
     return  Consumer<TransactionViewModel>(
       builder: (context,transactionViewModel,child) {
         final transactionList=transactionViewModel.transaction;
@@ -282,7 +280,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   await transactionViewModel.deleteTransaction(context, branchID: branchID, transactionID: transactionID).then((isDeleted) async {
                     if (isDeleted) {
                       await transactionViewModel
-                          .transactionListFetch(context, branchID: branchID, customerOrSupplierID: customerID)
+                          .transactionListFetch(context, branchID: branchID, customerOrSupplierID: customerID,limit: 10,page: 1)
                           .then((isFetched) {
                         if (isFetched) {
                           Navigator.pop(context);

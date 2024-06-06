@@ -122,7 +122,7 @@ class _LoginState extends State<Login> {
                       child: HeadLineSmallText(
                           text:
                           "If you don't have an account yet,please Sign Up",
-                          color: Colors.white)),
+                          color: Colors.green)),
                   SizedBox(
                     height: 25.h,
                   ),

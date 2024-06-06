@@ -1,3 +1,4 @@
+import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -24,16 +25,13 @@ class NoInternetWidget extends StatelessWidget {
 
                   SizedBox(height: 30.h,),
 
-                  Text("No internet !!!"),
+                  Text("No internet !!!",style: TextStyle(color: Colors.greenAccent),),
                   SizedBox(height: 5.h,),
-                  Text("Please Check your internet connection"),
+                  Text("Please Check your internet connection",style: TextStyle(color: Colors.greenAccent),),
                   SizedBox(height: 20.h,),
 
-                  MaterialButton(onPressed: onPressed,
-                    minWidth: 150.w,
-                    color: Theme.of(context).primaryColor,
-                    child: Text("Try Again",style: TextStyle(color: Colors.white),),
-                  )
+                  CustomCircularButton(text: 'Try Again', onPressed: onPressed)
+
                 ],
               ),
             ],

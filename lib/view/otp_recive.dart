@@ -32,7 +32,7 @@ class OtpReceive extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 50.h),
                   child: HeadlineLargeText(
                     text: 'Enter Your OTP Here',
-                    color: Colors.white,
+                    color: Colors.green,
                   ),
                 ),
                 OtpTextField(

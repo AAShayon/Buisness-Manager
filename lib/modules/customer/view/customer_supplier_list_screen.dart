@@ -298,7 +298,9 @@ class _CustomerSupplierViewScreenState
                       ),
                     ),
                   ).then((value) {
-                    Navigator.of(context).pop();
+                    if(context.mounted){
+                      Navigator.of(context).pop();
+                    }
                   });
                 },
               ),

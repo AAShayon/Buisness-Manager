@@ -40,18 +40,18 @@ class _OtpScreenState extends State<OtpScreen> {
           children: [
             HeadLineMediumText(
               text: 'Verification Code',
-              color: Colors.deepPurple,
+              color: Colors.green,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 25.h),
               child: HeadLineSmallText(
                 text: 'Successfully, a verification code was sent to',
-                color: Colors.black,
+                color: Colors.green,
               ),
             ),
             HeadLineSmallText(
               text: widget.identifier.toString(),
-              color: Colors.white,
+              color: Colors.green,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 25.h),
@@ -62,8 +62,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   builder: (context, value, child) => Column(
                     children: [
                       LinearProgressIndicator(
-                        backgroundColor: Colors.black,
-                        color: Colors.deepPurpleAccent,
+                        backgroundColor: Colors.white,
+                        color: Colors.green,
                         value: value,
                       ),
                       SizedBox(height: 10.h),

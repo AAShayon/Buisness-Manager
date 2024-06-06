@@ -8,7 +8,6 @@ import 'package:buisness_manager/modules/transaction/model/core/response_model/t
 import 'package:buisness_manager/modules/transaction/model/core/response_model/transaction_update_responseModel.dart';
 import 'package:buisness_manager/modules/transaction/model/core/response_model/transactions_list_response_model.dart';
 import 'package:buisness_manager/modules/transaction/model/service/transaction_service.dart';
-import 'package:buisness_manager/modules/transaction/view/widget/transaction_list.dart';
 import 'package:flutter/material.dart';
 
 class TransactionViewModel extends ChangeNotifier {

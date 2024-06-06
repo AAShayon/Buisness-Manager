@@ -443,7 +443,9 @@ class _BranchViewInformationScreenState
                       ),
                     ),
                   ).then((value) {
-                    Navigator.of(context).pop();
+                   if(context.mounted){
+                     Navigator.of(context).pop();
+                   }
                   });
                 },
               ),
@@ -462,7 +464,9 @@ class _BranchViewInformationScreenState
                       ),
                     ),
                   ).then((value) {
-                    Navigator.of(context).pop();
+                   if(context.mounted){
+                     Navigator.of(context).pop();
+                   }
                   });
                 },
               ),
