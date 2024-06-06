@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:buisness_manager/modules/customer/model/core/response_model/customer_information_response_model.dart';
 /// status : 200
 /// msg : "OK"
 /// description : "Customers"
@@ -184,51 +186,3 @@ class Customers {
 /// phone : "01000005556"
 /// balance : "0.00"
 
-Customer customerFromJson(String str) => Customer.fromJson(json.decode(str));
-String customerToJson(Customer data) => json.encode(data.toJson());
-class Customer {
-  Customer({
-    num? id,
-    String? name,
-    String? phone,
-    String? balance,}){
-    _id = id;
-    _name = name;
-    _phone = phone;
-    _balance = balance;
-  }
-
-  Customer.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
-    _phone = json['phone'];
-    _balance = json['balance'];
-  }
-  num? _id;
-  String? _name;
-  String? _phone;
-  String? _balance;
-  Customer copyWith({  num? id,
-    String? name,
-    String? phone,
-    String? balance,
-  }) => Customer(  id: id ?? _id,
-    name: name ?? _name,
-    phone: phone ?? _phone,
-    balance: balance ?? _balance,
-  );
-  num? get id => _id;
-  String? get name => _name;
-  String? get phone => _phone;
-  String? get balance => _balance;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    map['phone'] = _phone;
-    map['balance'] = _balance;
-    return map;
-  }
-
-}

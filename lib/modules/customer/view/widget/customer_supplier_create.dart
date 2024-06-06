@@ -1,12 +1,11 @@
-import 'package:buisness_manager/modules/branch/view/branch_view_information.dart';
 import 'package:buisness_manager/modules/customer/model/core/request_model/customer_create_request_model.dart';
-import 'package:buisness_manager/modules/customer/view/customer_supplier_list_screen.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
 import 'package:buisness_manager/view/widget/custom_circular_button.dart';
 import 'package:buisness_manager/view/widget/custom_container.dart';
 import 'package:buisness_manager/view/widget/custom_text_from_filed.dart';
 import 'package:buisness_manager/view/widget/text_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -69,9 +68,11 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Center(
+                   Center(
                       child: HeadLineMediumText(
-                          text: 'Add Customer OR Supplier', color: Colors.lightGreen)),
+                          text: widget.customerOrSupplierType == 0
+                              ? 'Add Customer'
+                              : 'Add Supplier', color: Colors.lightGreen)),
                   SizedBox(height: 25.h),
                   Container(
                     width: 350.w,
@@ -107,6 +108,18 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                   prefixIcon: Iconsax.mobile,
                                   textInputTypeKeyboard: TextInputType.phone,
                                   controller: phoneNumberController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter a phone number';
+                                      }else if (!RegExp(r'^01\d{9}$').hasMatch(value)) {
+                                        return 'Please enter a valid phone number of 11 Digits';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(11),
+                                    ]
                                 ),
                                 SizedBox(height: 15.h),
                                 CustomTextFormField(
@@ -114,23 +127,42 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                   prefixIcon: Icons.email,
                                   textInputTypeKeyboard: TextInputType.emailAddress,
                                   controller: emailController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter an email';
+                                    }else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value)) {
+                                      return 'Please enter a valid email';
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 SizedBox(height: 15.h),
                                 DropdownButtonFormField<int>(
-                                  decoration: const InputDecoration(
+                                  decoration:  InputDecoration(
                                     labelText: 'Customer / Supplier',
-                                    prefixIcon: Icon(Icons.add),
-                                    border: OutlineInputBorder(),
+                                    labelStyle: TextStyle(color: Colors.greenAccent),
+                                    prefixIcon: Icon(Icons.add,color: Colors.greenAccent,),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.greenAccent),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.greenAccent, width: 2.0),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),focusColor: Colors.greenAccent
                                   ),
                                   value: customerOrSupplier,
                                   items: const [
                                     DropdownMenuItem<int>(
                                       value: 0,
-                                      child: Text('Customer'),
+                                      child: Text('Customer',style: TextStyle(color: Colors.greenAccent)),
                                     ),
                                     DropdownMenuItem<int>(
                                       value: 1,
-                                      child: Text('Supplier'),
+                                      child: Text('Supplier',style: TextStyle(color: Colors.greenAccent)),
                                     ),
                                   ],
                                   onChanged: (value) {
@@ -175,7 +207,7 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                 CustomTextFormField(
                                   hintText: 'Post Code',
                                   prefixIcon: Icons.location_on_outlined,
-                                  textInputTypeKeyboard: TextInputType.text,
+                                  textInputTypeKeyboard: TextInputType.number,
                                   controller: postCodeController,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -291,7 +323,7 @@ class _CustomerOrSupplierCreateState extends State<CustomerOrSupplierCreate> {
                                     branchId: widget.branchID,
                                     customerOrSupplierType: customerOrSupplier!)
                                     .then((value)async {
-                           await  customerViewModel.customerListFetch(context, branchId: widget.branchID, customerOrSupplierType: widget.customerOrSupplierType).then((isFetched){
+                           await  customerViewModel.customerListFetch(context, branchId: widget.branchID, customerOrSupplierType: widget.customerOrSupplierType,limit: 10,page: 1).then((isFetched){
                              Navigator.pop(context);
                            });
                                     });

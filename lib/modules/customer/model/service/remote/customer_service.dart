@@ -9,8 +9,7 @@ import 'package:buisness_manager/modules/customer/model/core/request_model/custo
 import 'package:dio/dio.dart';
 
 abstract class CustomerService {
-  
-  Future<ApiResponse> customerList({required String branchId,required int customerOrSupplierType});
+  Future<ApiResponse> customerList({required String branchId,required int customerOrSupplierType,dynamic  page, dynamic limit});
   Future<ApiResponse> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId,required int customerOrSupplierType});
   Future<ApiResponse> customerUpdate(CustomerUpdateRequestModel customerUpdateRequestModel,{required String branchId,required String customerOrSupplierId });
   Future<ApiResponse> customerDelete({required String branchId, required String customerOrSupplierId});
@@ -28,11 +27,15 @@ class CustomerRemoteDataSource extends CustomerService{
   }
   
   @override
-  Future<ApiResponse> customerList({required String branchId,required int customerOrSupplierType}) async {
+  Future<ApiResponse> customerList({required String branchId,required int customerOrSupplierType, dynamic page, dynamic limit}) async {
     ApiUrl.branchId=branchId;
     ApiUrl.customerOrSupplierType=customerOrSupplierType.toString();
    try{
-     Response? response= await _dioService!.get(ApiUrl().customerOrSupplierList);
+     Response? response= await _dioService!.get(ApiUrl().customerOrSupplierList,queryParameters: {
+       'page': page,
+       'limit':limit,
+
+     });
      return ApiResponse.withSuccess(response!);
    }
    catch(e){
@@ -40,6 +43,17 @@ class CustomerRemoteDataSource extends CustomerService{
    }
   }
 
+  @override
+  Future<ApiResponse> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId,required int customerOrSupplierType})async {
+    ApiUrl.branchId=branchId;
+    try{
+      Response? response =await _dioService!.post(ApiUrl().customerOrSupplierCreate,data: customerCreateRequestModel.toJson());
+      return ApiResponse.withSuccess(response!);
+    }
+    catch(e){
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
 
   @override
   Future<ApiResponse> customerUpdate(CustomerUpdateRequestModel customerUpdateRequestModel,{required String branchId,required String customerOrSupplierId }) async{
@@ -53,7 +67,6 @@ class CustomerRemoteDataSource extends CustomerService{
      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
        }
   }
-  
 
   @override
   Future<ApiResponse> customerDelete({required String branchId,required String customerOrSupplierId}) async {
@@ -67,16 +80,5 @@ class CustomerRemoteDataSource extends CustomerService{
    }
   }
 
-  @override
-  Future<ApiResponse> customerCreate(CustomerCreateRequestModel customerCreateRequestModel, {required String branchId,required int customerOrSupplierType})async {
-  ApiUrl.branchId=branchId;
-  try{
-    Response? response =await _dioService!.post(ApiUrl().customerOrSupplierCreate,data: customerCreateRequestModel.toJson());
-    return ApiResponse.withSuccess(response!);
-  }
-  catch(e){
-    return ApiResponse.withError(ApiErrorHandler.getMessage(e));
-  }
-  }
-  
+
 }
