@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 class HeadlineLargeText extends StatelessWidget {
   final String text;
   final Color color;
+  final double fontsize;
   const HeadlineLargeText({
-    super.key, required this.text, required this.color,
+    super.key, required this.text, required this.color,this.fontsize=30,
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(text,style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-        color: color.withOpacity(.9)
+        color: color.withOpacity(.9),fontSize: fontsize
     ),);
   }
 }

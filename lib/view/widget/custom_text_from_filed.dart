@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -9,7 +10,8 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final VoidCallback? onTap;
-  final bool readOnly;  // Add a readOnly flag
+  final bool readOnly;
+  final List<TextInputFormatter>? inputFormatters;// Add a readOnly flag
 
   const CustomTextFormField({
     super.key,
@@ -19,7 +21,7 @@ class CustomTextFormField extends StatelessWidget {
     this.textInputTypeKeyboard,
     this.controller,
     this.validator,
-    this.readOnly = false, this.onTap,  // Initialize readOnly
+    this.readOnly = false, this.onTap, this.inputFormatters,  // Initialize readOnly
   });
 
   @override
@@ -42,21 +44,26 @@ class CustomTextFormField extends StatelessWidget {
             borderRadius: const BorderRadius.all(
               Radius.circular(10),
             ),
-            border: Border.all(color: Colors.black),
+            border: Border.all(color: Colors.greenAccent),
           ),
           child: TextFormField(
+            style: TextStyle(color: Colors.black),
             controller: controller,
             keyboardType: textInputTypeKeyboard,
             validator: validator,
+            inputFormatters: inputFormatters,
             decoration: InputDecoration(
+              errorMaxLines: 100,
+              fillColor: Colors.greenAccent,
               prefixIcon: Icon(
                 prefixIcon,
-                color: Colors.blue,
+                color: Colors.greenAccent,
               ),
               border: const OutlineInputBorder(borderSide: BorderSide.none),
+              hoverColor: Colors.greenAccent,
               hintStyle: const TextStyle(
                 fontSize: 10,
-                color: Colors.black,
+                color: Colors.greenAccent,
               ),
               hintText: hintText,
             ),
