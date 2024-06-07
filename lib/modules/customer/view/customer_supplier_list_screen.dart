@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_create.dart';
 import 'package:buisness_manager/modules/customer/view/widget/customer_supplier_update.dart';
 import 'package:buisness_manager/modules/customer/viewModel/customer_view_model.dart';
@@ -21,9 +22,9 @@ class CustomerSupplierViewScreen extends StatefulWidget {
 
   CustomerSupplierViewScreen(
       {super.key,
-      this.name,
-      required this.branchId,
-      required this.customerOrSupplierType});
+        this.name,
+        required this.branchId,
+        required this.customerOrSupplierType});
 
   @override
   State<CustomerSupplierViewScreen> createState() =>
@@ -50,14 +51,17 @@ class _CustomerSupplierViewScreenState
   Future<void> _loadData(BuildContext context, {dynamic page, dynamic limit}) async {
     final customerViewModel = Provider.of<CustomerViewModel>(context, listen: false);
     await customerViewModel.customerListFetch(context, branchId: widget.branchId, customerOrSupplierType: widget.customerOrSupplierType, page: page.toString(), limit: 10);
+    _sortCustomerList(customerViewModel);
+  }
+  void _sortCustomerList(CustomerViewModel customerViewModel) {
+    customerViewModel.customer.sort((a, b) => a.id.compareTo(b.id));
   }
 
   void _scrollListener() {
     final customerViewModel = Provider.of<CustomerViewModel>(context, listen: false);
     final isLoading = customerViewModel.isLoadingState;
     final branchList = customerViewModel.customer;
-    if (!isLoading &&
-        branchList.length >= 10 && scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (!isLoading && branchList.length >= 10 && scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       customerViewModel.pageCounter(context: context);
       final page = customerViewModel.page;
       _loadData(context, page: page.toString());
@@ -80,188 +84,190 @@ class _CustomerSupplierViewScreenState
           },
           child: Scaffold(
             body: Provider.of<InternetConnectionStatus>(context) ==
-                    InternetConnectionStatus.disconnected
+                InternetConnectionStatus.disconnected
                 ? NoInternetWidget(
-                    onPressed: () {
-                      setState(() {
-                        customerViewModel.resetPage();
-                        customerViewModel.clearList();
-                      });
-                      _loadData(context, limit: 10, page: 1);
-                    },
-                  )
+              onPressed: () {
+                setState(() {
+                  customerViewModel.resetPage();
+                  customerViewModel.clearList();
+                });
+                _loadData(context, limit: 10, page: 1);
+              },
+            )
                 : CustomContainer(
-                    child: ListView(
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      children: [
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 20.h),
-                          child: CommonUseContainer(
-                            color: Colors.greenAccent,
-                            height: 100.h,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                FadeInAnimation(
-                                  delay: 10,direction: FadeInDirection.rtl,fadeOffset: 40,
-                                  child: HeadlineLargeText(
-                                      text: 'Branch Name ',
-                                      color: Colors.white),
-                                ),
-                                HeadlineLargeText(
-                                  text: widget.name,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 100.w),
-                          child: CustomCircularButton(
-                            text: widget.customerOrSupplierType == 0
-                                ? 'Add Customer'
-                                : 'Add Supplier',
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CustomerOrSupplierCreate(
-                                    branchID: widget.branchId,
-                                    customerOrSupplierType:
-                                        widget.customerOrSupplierType,
-                                  ),
-                                ),
-                              );
-                            },
+              child: ListView(
+                controller: scrollController,
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                children: [
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 20.h),
+                    child: CommonUseContainer(
+                      color: Colors.greenAccent,
+                      height: 100.h,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FadeInAnimation(
+                            delay: 10,direction: FadeInDirection.rtl,fadeOffset: 40,
+                            child: HeadlineLargeText(
+                                text: 'Branch Name ',
+                                color: Colors.white),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10.h,horizontal:100.w ),
-                          child: Center(
-                            child: CommonUseContainer(
-                              height: 59.h,
-                              width: 200.w,
-                              color: Colors.greenAccent,
-                              child: Center(
-                                child: HeadLineMediumText(
-                                  text: widget.customerOrSupplierType == 0
-                                      ? 'Customer List'
-                                      : 'Supplier List',
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                          HeadlineLargeText(
+                            text: widget.name,
+                            color: Colors.white,
                           ),
-                        ),
-                        Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
-                          child: Card(
-                            color: Colors.greenAccent,
-                            child: Row(
-                              children: [
-                                CustomTableWithBorder(text: 'Serial',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
-                               CustomTableWithBorder(text: 'ID',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
-                               CustomTableWithBorder(text: 'Name',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
-                               CustomTableWithBorder(text: 'Number',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
-
-                              ],
-                            ),
+                        ],
+                      ),),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 100.w),
+                    child: CustomCircularButton(
+                      text: widget.customerOrSupplierType == 0
+                          ? 'Add Customer'
+                          : 'Add Supplier',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CustomerOrSupplierCreate(
+                                  branchID: widget.branchId,
+                                  customerOrSupplierType:
+                                  widget.customerOrSupplierType,
+                                ),
                           ),
-                        ),
-                        customerList.isNotEmpty
-                            ?
-                        ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: customerList.length,
-                                itemBuilder: (context, index) {
-                                  final customer = customerList[index];
-                                if(index < customerList.length)  {
-                                    return FadeInAnimation(
-                                      direction: FadeInDirection.rtl,
-                                      delay: 1.0 + index,
-                                      fadeOffset:
-                                          index == 0 ? 80 : 80.0 * index,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal:20.w),
-                                        child:
-                                        Card(
-                                          color: Colors.greenAccent,
-                                          child:InkWell(
-                                            onTap: (){
-                                              _showCustomerOption(context,  customer.id, widget.customerOrSupplierType, widget.branchId,customer.name);
-                                            },
-                                            child: Row(
-                                              children: [
-                                                CustomTableWithBorder(text: '${index+1}', topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
-                                                CustomTableWithBorder(text: '${customer.id}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
-                                                CustomTableWithBorder(text: '${customer.name}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
-                                                CustomTableWithBorder(text: '${customer.phone}',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
-                                              ],
-                                            ),
-                                          )
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                else{
-                                  return Padding(
-                                    padding: EdgeInsets.all(12.0),
-                                    child: Center(
-                                      child: Text(
-                                        "No Customer",
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 18.sp),
-                                      ),
-                                    ),
-                                  );
-                                }
-                                },
-                              )
-                            :
-                        Center(
-                                child: HeadLineMediumText(
-                                  text: widget.customerOrSupplierType == 0
-                                      ? 'No Customer Found'
-                                      : 'No Supplier Found',
-                                  color: Colors.white,
-                                ),
-                              ),
-                        customerViewModel.isLoadingState
-                            ?
-                        Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(
-                                      color: Colors.greenAccent,
-                                    ),
-                                    SizedBox(
-                                      height: 5.h,
-                                    ),
-                                    HeadLineMediumText(
-                                      text: widget.customerOrSupplierType == 0
-                                          ? 'Loading Customer List'
-                                          : 'Loading Supplier List',
-                                      color: Colors.greenAccent,
-                                    )
-                                  ],
-                                ),
-                              )
-                            : SizedBox.shrink(),
-                        SizedBox(height: 25.h,)
-                      ],
+                        );
+                      },
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h,horizontal:100.w ),
+                    child: Center(
+                      child: CommonUseContainer(
+                        height: 59.h,
+                        width: 200.w,
+                        color: Colors.greenAccent,
+                        child: Center(
+                          child: HeadLineMediumText(
+                            text: widget.customerOrSupplierType == 0
+                                ? 'Customer List'
+                                : 'Supplier List',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
+                    child: Card(
+                      color: Colors.greenAccent,
+                      child: Row(
+                        children: [
+                          CustomTableWithBorder(text: 'Serial',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
+                          CustomTableWithBorder(text: 'ID',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
+                          CustomTableWithBorder(text: 'Name',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
+                          CustomTableWithBorder(text: 'Number',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                  customerList.isNotEmpty
+                      ?
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: customerList.length,
+                    itemBuilder: (context, index) {
+                      final customer = customerList[index];
+                      // customerList.sort((a, b) => a.id.compareTo(b.id));
+                      log('total branch-===>${customerList.length}');
+                      if(index < customerList.length)  {
+                        return FadeInAnimation(
+                          direction: FadeInDirection.btt,
+                          delay: .5 + index,
+                          fadeOffset:
+                          index == 0 ? 80 : 80.0 * index,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:20.w),
+                            child:
+                            Card(
+                                color: Colors.greenAccent,
+                                child:InkWell(
+                                  onTap: (){
+                                    _showCustomerOption(context,  customer.id, widget.customerOrSupplierType, widget.branchId,customer.name);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CustomTableWithBorder(text: '${index+1}', topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
+                                      CustomTableWithBorder(text: '${customer.id}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
+                                      CustomTableWithBorder(text: '${customer.name}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
+                                      CustomTableWithBorder(text: '${customer.phone}',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
+                                    ],
+                                  ),
+                                )
+                            ),
+                          ),
+                        );
+                      }
+                      else{
+                        return Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Text(
+                              "No Customer",
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 18.sp),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  )
+                      :
+                  Center(
+                    child: HeadLineMediumText(
+                      text: widget.customerOrSupplierType == 0
+                          ? 'No Customer Found'
+                          : 'No Supplier Found',
+                      color: Colors.white,
+                    ),
+                  ),
+                  customerViewModel.isLoadingState
+                      ?
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.greenAccent,
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        HeadLineMediumText(
+                          text: widget.customerOrSupplierType == 0
+                              ? 'Loading Customer List'
+                              : 'Loading Supplier List',
+                          color: Colors.greenAccent,
+                        )
+                      ],
+                    ),
+                  )
+                      : SizedBox.shrink(),
+                  SizedBox(height: 25.h,)
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -298,9 +304,7 @@ class _CustomerSupplierViewScreenState
                       ),
                     ),
                   ).then((value) {
-                    if(context.mounted){
-                      Navigator.of(context).pop();
-                    }
+                    Navigator.of(context).pop();
                   });
                 },
               ),
@@ -353,5 +357,3 @@ class _CustomerSupplierViewScreenState
     );
   }
 }
-
-
