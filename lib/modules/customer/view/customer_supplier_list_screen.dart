@@ -118,7 +118,7 @@ class _CustomerSupplierViewScreenState
                                 text: 'Branch Name ',
                                 color: Colors.white),
                           ),
-                          HeadlineLargeText(
+                          HeadLineSmallText(
                             text: widget.name,
                             color: Colors.white,
                           ),
@@ -126,7 +126,7 @@ class _CustomerSupplierViewScreenState
                       ),),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 100.w),
+                    padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 90.w),
                     child: CustomCircularButton(
                       text: widget.customerOrSupplierType == 0
                           ? 'Add Customer'
@@ -147,19 +147,17 @@ class _CustomerSupplierViewScreenState
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h,horizontal:100.w ),
-                    child: Center(
-                      child: CommonUseContainer(
-                        height: 59.h,
-                        width: 200.w,
-                        color: Colors.greenAccent,
-                        child: Center(
-                          child: HeadLineMediumText(
-                            text: widget.customerOrSupplierType == 0
-                                ? 'Customer List'
-                                : 'Supplier List',
-                            color: Colors.white,
-                          ),
+                    padding: EdgeInsets.symmetric(vertical: 10.h,horizontal:90.w ),
+                    child: CommonUseContainer(
+                      height: 59.h,
+                      width: 320.w,
+                      color: Colors.greenAccent,
+                      child: Center(
+                        child: HeadLineSmallText(
+                          text: widget.customerOrSupplierType == 0
+                              ? 'Customers List'
+                              : 'Suppliers List',
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -168,14 +166,17 @@ class _CustomerSupplierViewScreenState
                     padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
                     child: Card(
                       color: Colors.greenAccent,
-                      child: Row(
-                        children: [
-                          CustomTableWithBorder(text: 'Serial',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
-                          CustomTableWithBorder(text: 'ID',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
-                          CustomTableWithBorder(text: 'Name',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
-                          CustomTableWithBorder(text: 'Number',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            CustomTableWithBorder(text: 'Serial',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
+                            CustomTableWithBorder(text: 'ID',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
+                            CustomTableWithBorder(text: 'Name',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
+                            CustomTableWithBorder(text: 'Number',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
 
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -205,13 +206,16 @@ class _CustomerSupplierViewScreenState
                                   onTap: (){
                                     _showCustomerOption(context,  customer.id, widget.customerOrSupplierType, widget.branchId,customer.name);
                                   },
-                                  child: Row(
-                                    children: [
-                                      CustomTableWithBorder(text: '${index+1}', topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
-                                      CustomTableWithBorder(text: '${customer.id}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
-                                      CustomTableWithBorder(text: '${customer.name}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
-                                      CustomTableWithBorder(text: '${customer.phone}',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
-                                    ],
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        CustomTableWithBorder(text: '${index+1}', topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
+                                        CustomTableWithBorder(text: '${customer.id}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
+                                        CustomTableWithBorder(text: '${customer.name}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 80.w,),
+                                        CustomTableWithBorder(text: '${customer.phone}',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 107.w,),
+                                      ],
+                                    ),
                                   ),
                                 )
                             ),

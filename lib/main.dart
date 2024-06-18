@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:buisness_manager/model/service/local/shared_pre_service.dart';
 import 'package:buisness_manager/modules/admin/viewModel/user_profile_view_model.dart';
 import 'package:buisness_manager/modules/auth/viewModel/auth_view_model.dart';
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size=MediaQuery.of(context).size;
+    log('My decive weidth===========>${size.width}');
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.lightGreen,),);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

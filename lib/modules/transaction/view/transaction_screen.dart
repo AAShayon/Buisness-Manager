@@ -45,6 +45,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Future _loadData(BuildContext context,{dynamic page, dynamic limit}) async {
     final transactionViewModel = Provider.of<TransactionViewModel>(context, listen: false);
     await transactionViewModel.transactionListFetch(branchID: widget.branchID, customerOrSupplierID: widget.customerSupplierID,  context, page: page.toString(), limit: 10);
+    _sortTransactionList(transactionViewModel);
   }
 
   void _scrollListener(){
@@ -56,6 +57,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
       final page=transactionViewModel.page;
       _loadData(context,page: page.toString());
     }
+  }
+
+  void _sortTransactionList(TransactionViewModel transactionViewModel){
+    transactionViewModel.transaction.sort((a, b) => a.id!.compareTo(b.id!));
   }
 
 
@@ -109,7 +114,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                           : 'Supplier Name',
                                       color: Colors.white,),
                                 ),
-                                HeadlineLargeText(
+                                HeadLineSmallText(
                                   text: widget.customerName,
                                   color: Colors.white,
                                 ),
@@ -117,7 +122,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             ),),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 80.w),
+                          padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 76.w),
                           child: CustomCircularButton(
                             text: 'Create Transaction',
                             onPressed: () {
@@ -133,23 +138,40 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           ),
                         ),
                         Padding(
-                      padding:EdgeInsets.symmetric(vertical: 10.h,horizontal:100.w ),
-                      child: HeadlineLargeText(
-                          text: 'Transaction List',
-                          color: Colors.white),
-                    ),
+                          padding: EdgeInsets.symmetric(vertical: 10.h,horizontal:90.w ),
+                          child: CommonUseContainer(
+                            height: 59.h,
+                            width: 320.w,
+                            color: Colors.greenAccent,
+                            child: Center(
+                              child: HeadLineSmallText(
+                                text:'Transaction List',
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    //     Padding(
+                    //   padding:EdgeInsets.symmetric(vertical: 10.h,horizontal:100.w ),
+                    //   child: HeadLineSmallText(
+                    //       text: 'Transaction List',
+                    //       color: Colors.white),
+                    // ),
                         Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 5.w,vertical: 10.h),
                           child: Card(
                             color: Colors.greenAccent,
-                            child: Row(
-                              children: [
-                                CustomTableWithBorder(text: 'Transaction No ',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 70.w,fontSize: 9.5.sp,),
-                                CustomTableWithBorder(text: 'Amount',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 45.w,fontSize: 9.5.sp,),
-                                CustomTableWithBorder(text: 'Details',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 100.w,fontSize: 9.5.sp,),
-                                CustomTableWithBorder(text: 'Bill No',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 40.w,fontSize: 9.5.sp,),
-                                CustomTableWithBorder(text: 'Date ',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 102.w,fontSize: 9.5.sp,),
-                              ],
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  CustomTableWithBorder(text: 'Transaction No ',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 70.w,fontSize: 9.5.sp,),
+                                  CustomTableWithBorder(text: 'Amount',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 45.w,fontSize: 9.5.sp,),
+                                  CustomTableWithBorder(text: 'Details',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 100.w,fontSize: 9.5.sp,),
+                                  CustomTableWithBorder(text: 'Bill No',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 40.w,fontSize: 9.5.sp,),
+                                  CustomTableWithBorder(text: 'Date ',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 102.w,fontSize: 9.5.sp,),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -164,7 +186,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         if(index < transactionList.length)  {
                           return FadeInAnimation(
                             direction: FadeInDirection.rtl,
-                            delay: 1.0 + index,
+                            delay: .5 + index,
                             fadeOffset:
                             index == 0 ? 80 : 80.0 * index,
                             child: Padding(
@@ -178,15 +200,18 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
                                       _showTransactionOption(context, branchID: widget.branchID, transactionID: transaction.id.toString(), customerID: widget.customerSupplierID, billID: transaction.billNo.toString());
                                     },
-                                    child: Row(
-                                      children: [
-                                        CustomTableWithBorder(text: '${transaction.transactionNo} ',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 70.w,fontSize: 9.5.sp,),
-                                        CustomTableWithBorder(text: '${transaction.amount}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 45.w,fontSize: 9.5.sp,),
-                                        CustomTableWithBorder(text: '${transaction.details}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 100.w,fontSize: 9.5.sp,),
-                                        CustomTableWithBorder(text: '${transaction.billNo}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 40.w,fontSize: 9.5.sp,),
-                                        CustomTableWithBorder(text: '${_formatDateTime(transaction.transactionDate) }',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 102.w,fontSize: 9.5.sp,),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          CustomTableWithBorder(text: '${transaction.transactionNo} ',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 70.w,fontSize: 9.5.sp,),
+                                          CustomTableWithBorder(text: '${transaction.amount}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 45.w,fontSize: 9.5.sp,),
+                                          CustomTableWithBorder(text: '${transaction.details}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 100.w,fontSize: 9.5.sp,),
+                                          CustomTableWithBorder(text: '${transaction.billNo}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 40.w,fontSize: 9.5.sp,),
+                                          CustomTableWithBorder(text: '${_formatDateTime(transaction.transactionDate) }',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 102.w,fontSize: 9.5.sp,),
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   )
                               ),

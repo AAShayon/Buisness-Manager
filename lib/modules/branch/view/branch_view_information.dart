@@ -267,7 +267,7 @@ class _BranchViewInformationScreenState
                       padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 20.h),
                       child: CommonUseContainer(
                         color: Colors.greenAccent,
-                        height: 100.h,
+                        // height: 100.h,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -278,7 +278,7 @@ class _BranchViewInformationScreenState
                                   text: 'My Business ',
                                   color: Colors.white),
                             ),
-                            HeadlineLargeText(
+                            HeadLineSmallText(
                               text: user?.businessType ?? 'Not Available',
                               color: Colors.white,
                             ),
@@ -315,13 +315,16 @@ class _BranchViewInformationScreenState
                       padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
                       child: Card(
                         color: Colors.greenAccent,
-                        child: Row(
-                          children: [
-                            CustomTableWithBorder(text: 'Serial',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
-                            CustomTableWithBorder(text: 'ID',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
-                            CustomTableWithBorder(text: 'Branch Name',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 187.w,),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              CustomTableWithBorder(text: 'Serial',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
+                              CustomTableWithBorder(text: 'ID',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
+                              CustomTableWithBorder(text: 'Branch Name',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 187.w,),
 
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -356,12 +359,15 @@ class _BranchViewInformationScreenState
                                     );
                                   },
                                   child:
-                                  Row(
-                                    children: [
-                                      CustomTableWithBorder(text: '${index+1 }',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
-                                      CustomTableWithBorder(text: '${branch.id}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
-                                      CustomTableWithBorder(text: '${branch.name}',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 187.w,),
-                                    ],
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        CustomTableWithBorder(text: '${index+1 }',topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),width: 80.w,),
+                                        CustomTableWithBorder(text: '${branch.id}',topLeft: Radius.circular(0),topRight: Radius.circular(0),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(0), width: 60.w,),
+                                        CustomTableWithBorder(text: '${branch.name}',topLeft: Radius.circular(0),topRight: Radius.circular(10),bottomLeft: Radius.circular(0),bottomRight: Radius.circular(10), width: 187.w,),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
