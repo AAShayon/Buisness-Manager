@@ -151,12 +151,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             ),
                           ),
                         ),
-                    //     Padding(
-                    //   padding:EdgeInsets.symmetric(vertical: 10.h,horizontal:100.w ),
-                    //   child: HeadLineSmallText(
-                    //       text: 'Transaction List',
-                    //       color: Colors.white),
-                    // ),
                         Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 5.w,vertical: 10.h),
                           child: Card(
@@ -185,7 +179,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         final transaction = transactionList[index];
                         if(index < transactionList.length)  {
                           return FadeInAnimation(
-                            direction: FadeInDirection.rtl,
+                            direction: FadeInDirection.btt,
                             delay: .5 + index,
                             fadeOffset:
                             index == 0 ? 80 : 80.0 * index,
