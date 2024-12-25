@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UserProfileInfoCard extends StatelessWidget {
   const UserProfileInfoCard({Key? key, required this.user}) : super(key: key);
 
-  final ResponseUser user;
+  final ResponseUser? user;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,13 @@ class UserProfileInfoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          UserProfileField(label: 'Email', value: user.email, icon: Icons.email),
-          UserProfileField(label: 'Phone', value: user.phone, icon: Icons.phone),
-          UserProfileField(label: 'Business Name', value: user.businessName, icon: Icons.business),
-          UserProfileField(label: 'Business Type', value: user.businessType, icon: Icons.category),
-          UserProfileField(label: 'Company ID', value: user.companyId.toString(), icon: Icons.perm_identity),
-          UserProfileField(label: 'Branch ID', value: user.branchId.toString(), icon: Icons.perm_identity),
-          UserProfileField(label: 'Branch', value: user.branch, icon: Icons.location_city),
+          UserProfileField(label: 'Email', value: user?.email ??"johnsmith@gmail.com" , icon: Icons.email),
+          UserProfileField(label: 'Phone', value: user?.phone ?? "+88015545XXXXX", icon: Icons.phone),
+          UserProfileField(label: 'Business Name', value: user?.businessName ?? "Samsung Digital", icon: Icons.business),
+          UserProfileField(label: 'Business Type', value: user?.businessType ?? "Electronics E-Delivery", icon: Icons.category),
+          UserProfileField(label: 'Company ID', value: user?.companyId.toString() ?? '11', icon: Icons.perm_identity),
+          UserProfileField(label: 'Branch ID', value: user?.branchId.toString() ?? '01', icon: Icons.perm_identity),
+          UserProfileField(label: 'Branch', value: user?.branch ?? 'Main Branch', icon: Icons.location_city),
         ],
       ),
     );

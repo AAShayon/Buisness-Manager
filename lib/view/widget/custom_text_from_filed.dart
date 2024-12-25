@@ -44,7 +44,7 @@ class CustomTextFormField extends StatelessWidget {
             borderRadius: const BorderRadius.all(
               Radius.circular(10),
             ),
-            border: Border.all(color: Colors.greenAccent),
+            border: Border.all(color: Colors.black),
           ),
           child: TextFormField(
             style: TextStyle(color: Colors.black),
@@ -54,16 +54,16 @@ class CustomTextFormField extends StatelessWidget {
             inputFormatters: inputFormatters,
             decoration: InputDecoration(
               errorMaxLines: 100,
-              fillColor: Colors.greenAccent,
+              fillColor: Colors.black,
               prefixIcon: Icon(
                 prefixIcon,
-                color: Colors.greenAccent,
+                color: Colors.black,
               ),
               border: const OutlineInputBorder(borderSide: BorderSide.none),
-              hoverColor: Colors.greenAccent,
+              hoverColor: Colors.black,
               hintStyle: const TextStyle(
                 fontSize: 10,
-                color: Colors.greenAccent,
+                color: Colors.black,
               ),
               hintText: hintText,
             ),

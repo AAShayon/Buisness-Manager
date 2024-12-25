@@ -50,7 +50,7 @@ class HeadLineSmallText extends StatelessWidget {
         .textTheme
         .headlineSmall!
         .copyWith(
-        color: color.withOpacity(.7),
+        color: color,
       fontSize: fontsize,
     ),);
   }

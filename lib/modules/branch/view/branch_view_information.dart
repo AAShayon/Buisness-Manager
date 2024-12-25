@@ -22,6 +22,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -131,17 +132,22 @@ class _BranchViewInformationScreenState
                     ? const CircularProgressIndicator(color: Colors.amber)
                     : IconButton(
                   onPressed: () async {
-                    await userProfileViewModel
-                        .getUserProfile(context)
-                        .then((value) {
-                      if (value) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                const UserProfile()));
-                      }
-                    });
+                    // await userProfileViewModel
+                    //     .getUserProfile(context)
+                    //     .then((value) {
+                    //   if (value) {
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //             const UserProfile()));
+                    //   }
+                    // });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                            const UserProfile()));
                   },
                   icon: const Icon(Iconsax.user),
                 ),
@@ -149,7 +155,7 @@ class _BranchViewInformationScreenState
                     child: FadeInAnimation(
                       delay: 10,direction: FadeInDirection.rtl,fadeOffset: 40,
                       child: Text(
-                        'Welcome, ${user?.name ?? ""}',
+                        'Welcome, ${user?.name ?? "MR John Smith"}',
                         style: const TextStyle(fontSize: 20),
                       ),
                     )),
@@ -158,11 +164,12 @@ class _BranchViewInformationScreenState
                       : IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
-                      await authViewModel.logOut(context).then((isLogout) {
-                        if (isLogout) {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
-                        }
-                      });
+                      // await authViewModel.logOut(context).then((isLogout) {
+                      //   if (isLogout) {
+                      //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+                      //   }
+                      // });
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
                     },
                   ),
                 ],
@@ -278,9 +285,19 @@ class _BranchViewInformationScreenState
                                   text: 'My Business ',
                                   color: Colors.white),
                             ),
-                            HeadLineSmallText(
-                              text: user?.businessType ?? 'Not Available',
-                              color: Colors.white,
+                            SizedBox(
+                              height: 20,
+                              child: Marquee(
+                                  text: user?.businessType ?? 'Samsung Digital',style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                color: Colors.white,
+                                fontSize: 15, // Customize font size directly
+                              ),
+                                blankSpace: 300.0, // Space between repetitions
+                                velocity: 40.0, // Scrolling speed
+                                startPadding: 10.0, // Padding at the start
+                                // pauseAfterRound: Duration(seconds: 1),
+
+                              ),
                             ),
                           ],
                         ),),

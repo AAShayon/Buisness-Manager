@@ -51,32 +51,6 @@ class DioService{
       }
     }
   }
-  Future<void> updateHeaders() async{
-   String? bearerToken= await _sharedPreService.read(key:'token')??null;
-    final headers={
-      'Content_type':'application/json',
-    };
-    if(bearerToken != null){
-      headers['Authorization']='Bearer $bearerToken';
-      if (kDebugMode) {
-        print("Bearer token: $bearerToken");
-      }
-    }
-    final options=BaseOptions(
-        baseUrl: ApiUrl.baseUrl,
-        headers: headers,
-        validateStatus: (v){
-          if(v == null){
-            return false;
-          }
-          else {
-            return v< 500 ;
-          }
-        }
-
-    );
-    _dio!.options=options;
-  }
   Future<Response?> post(String path , {Map? data})async{
     log(path);
     try{

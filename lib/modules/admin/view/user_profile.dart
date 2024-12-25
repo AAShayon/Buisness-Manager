@@ -18,7 +18,6 @@ class UserProfile extends StatelessWidget {
       body:Consumer<UserProfileViewModel>(
         builder: (context, userProfileViewModel, child) {
       final user = userProfileViewModel.responseUser;
-      if (user != null) {
         return CustomContainer(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(20.w),
@@ -31,7 +30,7 @@ class UserProfile extends StatelessWidget {
                   backgroundImage: const AssetImage('assets/userimage.png'),
                 ),
                 SizedBox(height: 15.h),
-                HeadlineLargeText(text: user.name, color: Colors.lightGreen),
+                HeadlineLargeText(text: user?.name ?? " Mr John Smith", color: Colors.black),
                 SizedBox(height: 10.h),
                 UserProfileInfoCard(user: user),
                 SizedBox(height: 20.h),
@@ -98,8 +97,6 @@ class UserProfile extends StatelessWidget {
             ),
           ),
         );
-      }
-      return const Center(child: Text('No Data', style: TextStyle(fontSize: 18.0)));
     },
 
     ));

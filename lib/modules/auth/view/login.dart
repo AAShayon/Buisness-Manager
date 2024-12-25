@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.symmetric(vertical: 25.h),
                     child: const HeadlineLargeText(
                       text: 'Please Login',
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   Form(
@@ -87,27 +87,33 @@ class _LoginState extends State<Login> {
                   CustomCircularButton(
                       text: 'Next',
                       onPressed: () async {
-                        if(_loginFormKey.currentState!.validate()){
-                          if (!authViewModel.isLoadingState) {
-                            String identifier = identifierController.text.trim();
-                            if (validateIdentifier(identifier) == null) {
-                              await authViewModel
-                                  .sendOtpForLogin(
-                                SendOtpRequestForLoginModel(identifier: identifier),
-                                context,
-                              )
-                                  .then((value) {
-                                if (value == true) {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => OtpScreen(
-                                        identifier: identifier,
-                                        isLoginPage: true,
-                                      )));
-                                }
-                              });
-                            }
-                          }
-                        }
+                        // if(_loginFormKey.currentState!.validate()){
+                        //   if (!authViewModel.isLoadingState) {
+                        //     String identifier = identifierController.text.trim();
+                        //     if (validateIdentifier(identifier) == null) {
+                        //       await authViewModel
+                        //           .sendOtpForLogin(
+                        //         SendOtpRequestForLoginModel(identifier: identifier),
+                        //         context,
+                        //       )
+                        //           .then((value) {
+                        //         if (value == true) {
+                        //           Navigator.of(context).push(MaterialPageRoute(
+                        //               builder: (context) => OtpScreen(
+                        //                 identifier: identifier,
+                        //                 isLoginPage: true,
+                        //               )));
+                        //         }
+                        //       });
+                        //     }
+                        //   }
+                        // }
+                        String identifier = identifierController.text.trim();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => OtpScreen(
+                              identifier: identifier,
+                              isLoginPage: true,
+                            )));
                       }),
                   SizedBox(
                     height: 25.h,
@@ -122,7 +128,7 @@ class _LoginState extends State<Login> {
                       child: HeadLineSmallText(
                           text:
                           "If you don't have an account yet,please Sign Up",
-                          color: Colors.green)),
+                          color: Colors.black)),
                   SizedBox(
                     height: 25.h,
                   ),

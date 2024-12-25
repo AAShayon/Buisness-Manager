@@ -32,7 +32,7 @@ class OtpReceive extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 50.h),
                   child: HeadlineLargeText(
                     text: 'Enter Your OTP Here',
-                    color: Colors.green,
+                    color: Colors.black,
                   ),
                 ),
                 OtpTextField(
@@ -44,31 +44,32 @@ class OtpReceive extends StatelessWidget {
                     // Handle validation or checks here
                   },
                   onSubmit: (String verificationCode) async {
-                    if (!authViewModel.isLoadingState) {
-                      if(isLoginPage){
-                        LogInRequestModel logInRequestModel = LogInRequestModel(
-                          otpCode: verificationCode,
-                          identifier: identifier,
-                        );
-                        await authViewModel.logInWithOtp(logInRequestModel,context).then((loggedIn) {
-                          if(loggedIn){
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen(),), (route) => false,);
-                          }
-                          return null;
-                        });
-                      }else{
-                        RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel=RegisterVerifyOtpRequestModel(
-                            otpCode: verificationCode,
-                            identifierId: identifier
-                        );
-                        await authViewModel.registrationVerifyOtp(verifyOtpRegisterRequestModel,context).then((registered) {
-                          if(registered){
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Login(),), (route) => false,);
-                          }
-                          return null;
-                        });
-                      }
-                    }
+                    // if (!authViewModel.isLoadingState) {
+                    //   if(isLoginPage){
+                    //     LogInRequestModel logInRequestModel = LogInRequestModel(
+                    //       otpCode: verificationCode,
+                    //       identifier: identifier,
+                    //     );
+                    //     await authViewModel.logInWithOtp(logInRequestModel,context).then((loggedIn) {
+                    //       if(loggedIn){
+                    //         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen(),), (route) => false,);
+                    //       }
+                    //       return null;
+                    //     });
+                    //   }else{
+                    //     RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel=RegisterVerifyOtpRequestModel(
+                    //         otpCode: verificationCode,
+                    //         identifierId: identifier
+                    //     );
+                    //     await authViewModel.registrationVerifyOtp(verifyOtpRegisterRequestModel,context).then((registered) {
+                    //       if(registered){
+                    //         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Login(),), (route) => false,);
+                    //       }
+                    //       return null;
+                    //     });
+                    //   }
+                    // }
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BranchViewInformationScreen(),), (route) => false,);
                   },
                 ),
               ],

@@ -21,7 +21,7 @@ class AuthViewModel extends ChangeNotifier{
   /*
   * --------------------------attributes----------------------------------------
   * */
-  final AuthService _authService =AuthRemoteDataSource();
+  late final AuthRemoteDataSource _authService ;
   final SharedPreService _sharedPreService =SharedPreService();
   bool _isLoadingState = false;
   LogInOtpResponseModel? _logInOtpResponseModel;
@@ -289,7 +289,6 @@ class AuthViewModel extends ChangeNotifier{
           _user = _logInResponseModel!.user;
           String? token = _user?.apiToken;
           _authService.saveAuthToken(token);
-          _authService.updateDioService(_authService.getDioServiceInstance());
           _isLoadingState=false;
           isLogIn=true;
           notifyListeners();
@@ -351,7 +350,6 @@ class AuthViewModel extends ChangeNotifier{
         if (apiResponse.response!.statusCode == 200) {
           setUser(null);
           _authService.clearToken('token');
-          _authService.updateDioService(_authService.getDioServiceInstance());
           if(context.mounted){
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar( SnackBar(

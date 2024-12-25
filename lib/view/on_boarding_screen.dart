@@ -198,17 +198,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
   }
   Future<void> _loginCheck() async{
-    bool isLoggedIn=false;
-    final authViewModel=Provider.of<AuthViewModel>(context ,listen:false);
-    isLoggedIn=await authViewModel.isLoggedIn();
-    if(isLoggedIn){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => BranchViewInformationScreen()));
-    }
-    else{
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
-    }
+    // bool isLoggedIn=false;
+    // final authViewModel=Provider.of<AuthViewModel>(context ,listen:false);
+    // isLoggedIn=await authViewModel.isLoggedIn();
+    // if(isLoggedIn){
+    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+    //       builder: (context) => BranchViewInformationScreen()));
+    // }
+    // else{
+    //   Navigator.of(context)
+    //       .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+    // }
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
   }
   @override
   Widget build(BuildContext context) {

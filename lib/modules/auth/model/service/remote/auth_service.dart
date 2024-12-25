@@ -16,7 +16,6 @@ import 'package:buisness_manager/modules/auth/model/core/request_model/login_sen
 import 'package:dio/dio.dart';
 
 abstract class AuthService{
-  DioService getDioServiceInstance();
   Future<ApiResponse> logInWithOtp(LogInRequestModel logInRequestModel);
   Future<ApiResponse> register(RegisterRequestModel registerRequestModel);
   Future<ApiResponse> verifyOtp(RegisterVerifyOtpRequestModel verifyOtpRegisterRequestModel);
@@ -31,21 +30,10 @@ abstract class AuthService{
 }
 
 class AuthRemoteDataSource extends AuthService{
-  static final AuthRemoteDataSource _singleton = AuthRemoteDataSource._internal();
    SharedPreService _sharedPreService=SharedPreService();
-  late DioService _dioService;
+  final DioService _dioService;
   DioService? get dioService => _dioService;
-  factory AuthRemoteDataSource(){
-  return _singleton;
-  }
-  AuthRemoteDataSource._internal(){
-    _dioService=DioService();
-  }
-
-  @override
-  DioService getDioServiceInstance() {
-   return _dioService;
-  }
+   AuthRemoteDataSource(this._dioService,this._sharedPreService);
 
   @override
   Future<ApiResponse> logInWithOtp(LogInRequestModel logInRequestModel) async{
